@@ -1,14 +1,108 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>FES WEBSITE</title>
+  <meta charset="UTF-8">
+  <title>FES Website Form</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f7f7f7;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #ff69b4;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    .container {
+      max-width: 700px;
+      margin: 30px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    h2 {
+      margin-top: 0;
+      color: #333;
+    }
+    label {
+      display: block;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 16px;
+    }
+    button {
+      margin-top: 30px;
+      background-color: #ff69b4;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      font-size: 16px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #e055a3;
+    }
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 14px;
+      color: #777;
+    }
+  </style>
 </head>
 <body>
-	  <header>
-    <h1>Heqtors Grocery Order 7291847928</h1>
+
+  <header>
+    <h1>FES Website</h1>
     <p>Fresh groceries delivered to your door</p>
   </header>
+
+  <div class="container">
+    <h2>Place Your Order</h2>
+
+    <form>
+      <label for="name">Full Name</label>
+      <input type="text" id="name" placeholder="John Doe" required>
+
+      <label for="phone">Phone Number</label>
+      <input type="tel" id="phone" placeholder="+673 1234567" required>
+
+      <label for="address">Delivery Address</label>
+      <textarea id="address" rows="3" placeholder="Street, City, Postal Code" required></textarea>
+
+      <label for="items">Select Grocery Items</label>
+      <select id="items" multiple>
+        <option>Rice (5kg)</option>
+        <option>Cooking Oil (1L)</option>
+        <option>Eggs (12 pcs)</option>
+        <option>Milk (1L)</option>
+        <option>Apples (1kg)</option>
+        <option>Instant Noodles (5 pack)</option>
+      </select>
+
+      <label for="notes">Additional Notes</label>
+      <textarea id="notes" rows="2" placeholder="E.g. No plastic bags, deliver before 5pm"></textarea>
+
+      <button type="submit">Submit Order</button>
+    </form>
+  </div>
+
+  <footer>
+    &copy; 2025 Heqtors Grocery. Powered by Take App.
+  </footer>
+
 </body>
 </html>
