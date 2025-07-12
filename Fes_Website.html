@@ -1,107 +1,71 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>FES Website FormABC</title>
+  <title>Simple Department Store</title>
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f7f7f7;
+      font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
     }
     header {
-      background-color: #ff69b4;
+      background-color: #2c3e50;
       color: white;
       padding: 20px;
       text-align: center;
     }
-    .container {
-      max-width: 700px;
-      margin: 30px auto;
-      background: white;
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
       padding: 30px;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
-    h2 {
-      margin-top: 0;
-      color: #333;
-    }
-    label {
-      display: block;
-      margin-top: 20px;
-      font-weight: bold;
-    }
-    input, select, textarea {
-      width: 100%;
-      padding: 10px;
-      margin-top: 8px;
+    .product {
       border: 1px solid #ccc;
-      border-radius: 4px;
-      font-size: 16px;
+      padding: 15px;
+      text-align: center;
     }
-    button {
-      margin-top: 30px;
-      background-color: #ff69b4;
-      color: white;
-      border: none;
-      padding: 12px 20px;
-      font-size: 16px;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #e055a3;
+    .product img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
     }
     footer {
+      background-color: #eee;
       text-align: center;
-      padding: 20px;
+      padding: 15px;
       font-size: 14px;
-      color: #777;
     }
   </style>
 </head>
 <body>
 
   <header>
-    <h1>FES Website</h1>
-    <p>Fresh groceries delivered to your door</p>
+    <h1>Welcome to Our Department Store</h1>
+    <p>Shop quality products from all categories</p>
   </header>
 
-  <div class="container">
-    <h2>Place Your Order</h2>
-
-    <form>
-      <label for="name">Full Name</label>
-      <input type="text" id="name" placeholder="John Doe" required>
-
-      <label for="phone">Phone Number</label>
-      <input type="tel" id="phone" placeholder="+673 1234567" required>
-
-      <label for="address">Delivery Address</label>
-      <textarea id="address" rows="3" placeholder="Street, City, Postal Code" required></textarea>
-
-      <label for="items">Select Grocery Items</label>
-      <select id="items" multiple>
-        <option>Rice (5kg)</option>
-        <option>Cooking Oil (1L)</option>
-        <option>Eggs (12 pcs)</option>
-        <option>Milk (1L)</option>
-        <option>Apples (1kg)</option>
-        <option>Instant Noodles (5 pack)</option>
-      </select>
-
-      <label for="notes">Additional Notes</label>
-      <textarea id="notes" rows="2" placeholder="E.g. No plastic bags, deliver before 5pm"></textarea>
-
-      <button type="submit">Submit Order</button>
-    </form>
-  </div>
+  <section class="products">
+    <div class="product">
+      <img src="https://via.placeholder.com/200x150" alt="Product 1">
+      <h3>Clothing</h3>
+      <p>$29.99</p>
+    </div>
+    <div class="product">
+      <img src="https://via.placeholder.com/200x150" alt="Product 2">
+      <h3>Electronics</h3>
+      <p>$199.99</p>
+    </div>
+    <div class="product">
+      <img src="https://via.placeholder.com/200x150" alt="Product 3">
+      <h3>Home Decor</h3>
+      <p>$49.99</p>
+    </div>
+  </section>
 
   <footer>
-    &copy; 2025 Heqtors Grocery. Powered by Take App.
+    &copy; 2025 Department Store. All rights reserved.
   </footer>
 
 </body>
