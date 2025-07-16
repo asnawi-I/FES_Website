@@ -14,11 +14,11 @@
 
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: #FBFCF8;
+            background: #FBFCF8;
             color: #333;
         }
 
-        /* Header Styles */
+        /* sticky header */
         .header {
             background: rgba(134, 190, 78, 1.0);
             backdrop-filter: blur(10px);
@@ -112,38 +112,89 @@
             font-weight: 700;
         }
 
-        /* Hero Section */
+        /* hero banner */
         .hero {
             background: linear-gradient(135deg, #EA3B52 0%, #D81B2E 100%);
             color: white;
-            padding: 60px 0;
+            padding: 80px 0;
             text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 202, 6, 0.15);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -40%;
+            left: -15%;
+            width: 250px;
+            height: 250px;
+            background: rgba(134, 190, 78, 0.1);
+            border-radius: 50%;
+            animation: float 8s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
         }
 
         .hero h2 {
-            font-size: 36px;
+            font-size: 42px;
             font-weight: 700;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
 
         .hero p {
-            font-size: 18px;
-            max-width: 600px;
+            font-size: 20px;
+            max-width: 650px;
             margin: 0 auto;
-            opacity: 0.9;
+            opacity: 0.95;
+            line-height: 1.6;
         }
 
-        /* Navigation */
+        /* navigation section */
         .nav-container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px;
+            position: relative;
+        }
+
+        .nav-container::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, #EA3B52, #FFCA06, #86BE4E);
+            border-radius: 2px;
         }
 
         .nav-tabs {
             display: flex;
             gap: 20px;
-            padding: 20px 0;
+            padding: 30px 0 20px;
             border-bottom: 2px solid #e0e0e0;
             overflow-x: auto;
         }
@@ -158,20 +209,35 @@
             transition: all 0.3s ease;
             white-space: nowrap;
             min-width: fit-content;
+            position: relative;
         }
 
         .nav-tab:hover {
             border-color: #86BE4E;
             color: #86BE4E;
+            transform: translateY(-2px);
         }
 
         .nav-tab.active {
             background: #86BE4E;
             color: white;
             border-color: #86BE4E;
+            transform: translateY(-2px);
         }
 
-        /* Search Bar */
+        .nav-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 8px solid #86BE4E;
+        }
+
         .search-container {
             margin: 20px 0;
         }
@@ -191,7 +257,7 @@
             border-color: #86BE4E;
         }
 
-        /* Products Grid */
+        /* products section */
         .products-container {
             max-width: 1200px;
             margin: 0 auto;
@@ -210,14 +276,14 @@
             border-radius: 15px;
             overflow: hidden;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
+            transition: all 0.4s ease;
             cursor: pointer;
             border: 1px solid rgba(134, 190, 78, 0.1);
         }
 
         .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
         }
 
         .product-image {
@@ -229,10 +295,28 @@
             justify-content: center;
             font-size: 48px;
             color: #ccc;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .product-card:hover .product-image::before {
+            left: 100%;
         }
 
         .product-info {
             padding: 20px;
+            position: relative;
         }
 
         .product-name {
@@ -263,11 +347,32 @@
             border-radius: 8px;
             font-weight: 600;
             cursor: pointer;
-            transition: background 0.3s ease;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
 
         .add-to-cart:hover {
             background: #00693E;
+            transform: translateY(-2px);
+        }
+
+        .add-to-cart::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s ease, height 0.3s ease;
+        }
+
+        .add-to-cart:hover::before {
+            width: 100px;
+            height: 100px;
         }
 
         .quantity-selector {
@@ -301,7 +406,7 @@
             text-align: center;
         }
 
-        /* Cart Modal */
+        /* cart modal styles */
         .cart-modal {
             display: none;
             position: fixed;
@@ -400,8 +505,14 @@
             transition: background 0.3s ease;
         }
 
-        .checkout-btn:hover {
+        .checkout-btn:hover:not(:disabled) {
             background: #D81B2E;
+        }
+
+        .checkout-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            opacity: 0.6;
         }
 
         .empty-cart {
@@ -410,7 +521,7 @@
             color: #666;
         }
 
-        /* Order Form */
+        /* order form styles */
         .order-form {
             display: none;
             max-width: 800px;
@@ -503,7 +614,7 @@
             background: #00693E;
         }
 
-        /* Footer */
+        /* footer */
         .footer {
             background: #2c3e50;
             color: white;
@@ -512,7 +623,176 @@
             margin-top: 60px;
         }
 
-        /* Responsive Design */
+        /* features section */
+        .features {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 80px 0;
+            margin: 60px 0;
+        }
+
+        .features-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .features-title {
+            text-align: center;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 50px;
+            color: #333;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .feature-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .feature-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .feature-description {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* process section */
+        .process {
+            background: #86BE4E;
+            color: white;
+            padding: 80px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .process::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -20%;
+            width: 400px;
+            height: 400px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+
+        .process-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .process-title {
+            text-align: center;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 50px;
+        }
+
+        .process-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+        }
+
+        .process-step {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: #EA3B52;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 700;
+            margin: 0 auto 20px;
+        }
+
+        .step-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .step-description {
+            opacity: 0.9;
+            line-height: 1.5;
+        }
+
+        /* mobile responsiveness */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .hero h2 {
+                font-size: 32px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .process-steps {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
+
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 20px;
+            }
+
+            .cart-content {
+                width: 95%;
+                margin: 20px auto;
+            }
+
+            .features-title, .process-title {
+                font-size: 28px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .process-steps {
+                grid-template-columns: 1fr;
+            }
+        }
         @media (max-width: 768px) {
             .header-content {
                 flex-direction: column;
@@ -555,8 +835,34 @@
 
     <!-- Hero Section -->
     <section class="hero">
-        <h2>Fresh Groceries Delivered</h2>
-        <p>Browse our wide selection of quality supermarket items and place your inquiry. We'll get back to you with pricing and availability via WhatsApp!</p>
+        <div class="hero-content">
+            <h2>Fresh Groceries for Pickup</h2>
+            <p>Browse our wide selection of quality supermarket items and place your inquiry. We'll get back to you with pricing and availability via WhatsApp for store pickup!</p>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="features-container">
+            <h2 class="features-title">Why Choose First Emporium?</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <span class="feature-icon">🌱</span>
+                    <h3 class="feature-title">Fresh & Quality</h3>
+                    <p class="feature-description">We source only the freshest produce and highest quality products for your family.</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">💬</span>
+                    <h3 class="feature-title">WhatsApp Ordering</h3>
+                    <p class="feature-description">Simple and convenient ordering process through WhatsApp with instant responses.</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🚚</span>
+                    <h3 class="feature-title">Easy Pickup</h3>
+                    <p class="feature-description">Convenient store pickup at your preferred time. Order ahead and collect when ready.</p>
+                </div>
+            </div>
+        </div>
     </section>
 
     <!-- Navigation -->
@@ -584,6 +890,35 @@
         </div>
     </div>
 
+    <!-- Process Section -->
+    <section class="process">
+        <div class="process-container">
+            <h2 class="process-title">How It Works</h2>
+            <div class="process-steps">
+                <div class="process-step">
+                    <div class="step-number">1</div>
+                    <h3 class="step-title">Browse & Select</h3>
+                    <p class="step-description">Browse our catalog and add items to your inquiry cart</p>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">2</div>
+                    <h3 class="step-title">Submit Order</h3>
+                    <p class="step-description">Fill out your details and submit your order inquiry</p>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">3</div>
+                    <h3 class="step-title">Get Pricing</h3>
+                    <p class="step-description">Receive pricing and availability via WhatsApp</p>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">4</div>
+                    <h3 class="step-title">Pay & Pickup</h3>
+                    <p class="step-description">Make payment and pickup your fresh groceries from our store</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Cart Modal -->
     <div class="cart-modal" id="cartModal">
         <div class="cart-content">
@@ -594,7 +929,7 @@
             <div class="cart-items" id="cartItems">
                 <!-- Cart items will be populated by JavaScript -->
             </div>
-            <button class="checkout-btn" onclick="showOrderForm()">Proceed to Order</button>
+            <button class="checkout-btn" id="checkoutBtn" onclick="showOrderForm()" disabled>Proceed to Order</button>
         </div>
     </div>
 
@@ -620,16 +955,15 @@
             </div>
             
             <div class="form-group">
-                <label for="customerAddress">Delivery/Pickup Address *</label>
-                <textarea id="customerAddress" name="customerAddress" rows="3" required></textarea>
+                <label for="customerAddress">Pickup Address (Store Location) *</label>
+                <textarea id="customerAddress" name="customerAddress" rows="3" placeholder="Confirm store address for pickup..." required></textarea>
             </div>
             
             <div class="form-group">
-                <label for="deliveryMethod">Delivery Method *</label>
+                <label for="deliveryMethod">Collection Method *</label>
                 <select id="deliveryMethod" name="deliveryMethod" required>
-                    <option value="">Select delivery method</option>
+                    <option value="">Select collection method</option>
                     <option value="pickup">Store Pickup</option>
-                    <option value="delivery">Home Delivery</option>
                 </select>
             </div>
             
@@ -657,46 +991,46 @@
     </footer>
 
     <script>
-        // Product Database
-        const products = [
-            // Fresh Produce
+        // our product database
+        var products = [
+            // fruits and vegetables
             { id: 1, name: "Fresh Bananas", description: "Sweet and ripe bananas, perfect for breakfast", category: "fresh", emoji: "🍌" },
             { id: 2, name: "Red Apples", description: "Crisp and juicy red apples", category: "fresh", emoji: "🍎" },
             { id: 3, name: "Fresh Spinach", description: "Organic spinach leaves", category: "fresh", emoji: "🥬" },
             { id: 4, name: "Carrots", description: "Fresh orange carrots", category: "fresh", emoji: "🥕" },
             { id: 5, name: "Tomatoes", description: "Ripe red tomatoes", category: "fresh", emoji: "🍅" },
             
-            // Dairy & Eggs
+            // dairy products
             { id: 6, name: "Fresh Milk", description: "Full cream milk 1L", category: "dairy", emoji: "🥛" },
             { id: 7, name: "Free Range Eggs", description: "Fresh eggs 12 pieces", category: "dairy", emoji: "🥚" },
             { id: 8, name: "Cheddar Cheese", description: "Aged cheddar cheese block", category: "dairy", emoji: "🧀" },
             { id: 9, name: "Greek Yogurt", description: "Creamy Greek yogurt", category: "dairy", emoji: "🥛" },
             
-            // Meat & Seafood
+            // meat and seafood
             { id: 10, name: "Chicken Breast", description: "Fresh chicken breast fillets", category: "meat", emoji: "🍗" },
             { id: 11, name: "Ground Beef", description: "Fresh ground beef", category: "meat", emoji: "🥩" },
             { id: 12, name: "Salmon Fillet", description: "Fresh salmon fillet", category: "meat", emoji: "🐟" },
             { id: 13, name: "Prawns", description: "Fresh prawns", category: "meat", emoji: "🦐" },
             
-            // Pantry Essentials
+            // pantry items
             { id: 14, name: "Jasmine Rice", description: "Premium jasmine rice 5kg", category: "pantry", emoji: "🍚" },
             { id: 15, name: "Olive Oil", description: "Extra virgin olive oil", category: "pantry", emoji: "🫒" },
             { id: 16, name: "Pasta", description: "Italian pasta 500g", category: "pantry", emoji: "🍝" },
             { id: 17, name: "Canned Tomatoes", description: "Peeled tomatoes in juice", category: "pantry", emoji: "🥫" },
             { id: 18, name: "Bread", description: "Fresh white bread loaf", category: "pantry", emoji: "🍞" },
             
-            // Frozen Foods
+            // frozen stuff
             { id: 19, name: "Frozen Vegetables", description: "Mixed frozen vegetables", category: "frozen", emoji: "🥶" },
             { id: 20, name: "Ice Cream", description: "Vanilla ice cream 1L", category: "frozen", emoji: "🍦" },
             { id: 21, name: "Frozen Pizza", description: "Margherita frozen pizza", category: "frozen", emoji: "🍕" },
             
-            // Snacks & Beverages
+            // snacks and drinks
             { id: 22, name: "Coca Cola", description: "Coca Cola 1.5L", category: "snacks", emoji: "🥤" },
             { id: 23, name: "Potato Chips", description: "Crispy potato chips", category: "snacks", emoji: "🥔" },
             { id: 24, name: "Chocolate Bar", description: "Milk chocolate bar", category: "snacks", emoji: "🍫" },
             { id: 25, name: "Coffee Beans", description: "Premium coffee beans", category: "snacks", emoji: "☕" },
             
-            // Household Items
+            // household stuff
             { id: 26, name: "Laundry Detergent", description: "Liquid laundry detergent", category: "household", emoji: "🧽" },
             { id: 27, name: "Toilet Paper", description: "Soft toilet paper 12 rolls", category: "household", emoji: "🧻" },
             { id: 28, name: "Dish Soap", description: "Lemon dish soap", category: "household", emoji: "🧼" },
@@ -704,103 +1038,129 @@
             { id: 30, name: "Trash Bags", description: "Heavy duty trash bags", category: "household", emoji: "🗑️" }
         ];
 
-        // Cart Management
-        let cart = [];
-        let currentFilter = 'all';
+        // globals
+        var cart = [];
+        var currentFilter = 'all';
 
-        // Initialize the page
+        // start everything up
         function initializePage() {
             renderProducts();
             updateCartCount();
         }
 
-        // Render products based on current filter
+        // show products based on filter
         function renderProducts() {
-            const grid = document.getElementById('productsGrid');
-            let filteredProducts = products;
+            var grid = document.getElementById('productsGrid');
+            var filteredProducts = products;
 
             if (currentFilter !== 'all') {
-                filteredProducts = products.filter(product => product.category === currentFilter);
+                filteredProducts = products.filter(function(product) {
+                    return product.category === currentFilter;
+                });
             }
 
-            grid.innerHTML = filteredProducts.map(product => `
-                <div class="product-card">
-                    <div class="product-image">${product.emoji}</div>
-                    <div class="product-info">
-                        <div class="product-name">${product.name}</div>
-                        <div class="product-description">${product.description}</div>
-                        <div class="product-actions">
-                            <button class="add-to-cart" onclick="addToCart(${product.id})">Add to Cart</button>
-                            <div class="quantity-selector">
-                                <button class="quantity-btn" onclick="changeQuantity(${product.id}, -1)">−</button>
-                                <div class="quantity-display" id="qty-${product.id}">1</div>
-                                <button class="quantity-btn" onclick="changeQuantity(${product.id}, 1)">+</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
+            var html = '';
+            for (var i = 0; i < filteredProducts.length; i++) {
+                var product = filteredProducts[i];
+                html += '<div class="product-card">';
+                html += '<div class="product-image">' + product.emoji + '</div>';
+                html += '<div class="product-info">';
+                html += '<div class="product-name">' + product.name + '</div>';
+                html += '<div class="product-description">' + product.description + '</div>';
+                html += '<div class="product-actions">';
+                html += '<button class="add-to-cart" onclick="addToCart(' + product.id + ')">Add to Cart</button>';
+                html += '<div class="quantity-selector">';
+                html += '<button class="quantity-btn" onclick="changeQuantity(' + product.id + ', -1)">−</button>';
+                html += '<div class="quantity-display" id="qty-' + product.id + '">1</div>';
+                html += '<button class="quantity-btn" onclick="changeQuantity(' + product.id + ', 1)">+</button>';
+                html += '</div>';
+                html += '</div>';
+                html += '</div>';
+                html += '</div>';
+            }
+            grid.innerHTML = html;
         }
 
-        // Filter products by category
+        // filter by category
         function filterProducts(category) {
             currentFilter = category;
             renderProducts();
             
-            // Update active tab
-            document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
+            // update tabs
+            var tabs = document.querySelectorAll('.nav-tab');
+            for (var i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove('active');
+            }
             event.target.classList.add('active');
         }
 
-        // Search products
+        // search function
         function searchProducts(searchTerm) {
-            const grid = document.getElementById('productsGrid');
-            let filteredProducts = products;
+            var grid = document.getElementById('productsGrid');
+            var filteredProducts = products;
 
             if (currentFilter !== 'all') {
-                filteredProducts = products.filter(product => product.category === currentFilter);
+                filteredProducts = products.filter(function(product) {
+                    return product.category === currentFilter;
+                });
             }
 
             if (searchTerm) {
-                filteredProducts = filteredProducts.filter(product => 
-                    product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                    product.description.toLowerCase().includes(searchTerm.toLowerCase())
-                );
+                filteredProducts = filteredProducts.filter(function(product) {
+                    return product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                           product.description.toLowerCase().includes(searchTerm.toLowerCase());
+                });
             }
 
-            grid.innerHTML = filteredProducts.map(product => `
-                <div class="product-card">
-                    <div class="product-image">${product.emoji}</div>
-                    <div class="product-info">
-                        <div class="product-name">${product.name}</div>
-                        <div class="product-description">${product.description}</div>
-                        <div class="product-actions">
-                            <button class="add-to-cart" onclick="addToCart(${product.id})">Add to Cart</button>
-                            <div class="quantity-selector">
-                                <button class="quantity-btn" onclick="changeQuantity(${product.id}, -1)">−</button>
-                                <div class="quantity-display" id="qty-${product.id}">1</div>
-                                <button class="quantity-btn" onclick="changeQuantity(${product.id}, 1)">+</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
+            var html = '';
+            for (var i = 0; i < filteredProducts.length; i++) {
+                var product = filteredProducts[i];
+                html += '<div class="product-card">';
+                html += '<div class="product-image">' + product.emoji + '</div>';
+                html += '<div class="product-info">';
+                html += '<div class="product-name">' + product.name + '</div>';
+                html += '<div class="product-description">' + product.description + '</div>';
+                html += '<div class="product-actions">';
+                html += '<button class="add-to-cart" onclick="addToCart(' + product.id + ')">Add to Cart</button>';
+                html += '<div class="quantity-selector">';
+                html += '<button class="quantity-btn" onclick="changeQuantity(' + product.id + ', -1)">−</button>';
+                html += '<div class="quantity-display" id="qty-' + product.id + '">1</div>';
+                html += '<button class="quantity-btn" onclick="changeQuantity(' + product.id + ', 1)">+</button>';
+                html += '</div>';
+                html += '</div>';
+                html += '</div>';
+                html += '</div>';
+            }
+            grid.innerHTML = html;
         }
 
-        // Change quantity
+        // change quantity
         function changeQuantity(productId, change) {
-            const qtyDisplay = document.getElementById(`qty-${productId}`);
-            let currentQty = parseInt(qtyDisplay.textContent);
-            let newQty = Math.max(1, currentQty + change);
+            var qtyDisplay = document.getElementById('qty-' + productId);
+            var currentQty = parseInt(qtyDisplay.textContent);
+            var newQty = Math.max(1, currentQty + change);
             qtyDisplay.textContent = newQty;
         }
 
-        // Add to cart
+        // add item to cart
         function addToCart(productId) {
-            const product = products.find(p => p.id === productId);
-            const quantity = parseInt(document.getElementById(`qty-${productId}`).textContent);
+            var product = null;
+            for (var i = 0; i < products.length; i++) {
+                if (products[i].id === productId) {
+                    product = products[i];
+                    break;
+                }
+            }
             
-            const existingItem = cart.find(item => item.id === productId);
+            var quantity = parseInt(document.getElementById('qty-' + productId).textContent);
+            
+            var existingItem = null;
+            for (var i = 0; i < cart.length; i++) {
+                if (cart[i].id === productId) {
+                    existingItem = cart[i];
+                    break;
+                }
+            }
             
             if (existingItem) {
                 existingItem.quantity += quantity;
@@ -816,20 +1176,31 @@
             
             updateCartCount();
             
-            // Reset quantity display
-            document.getElementById(`qty-${productId}`).textContent = '1';
+            // reset quantity
+            document.getElementById('qty-' + productId).textContent = '1';
         }
 
-        // Update cart count
+        // update cart counter
         function updateCartCount() {
-            const count = cart.reduce((total, item) => total + item.quantity, 0);
+            var count = 0;
+            for (var i = 0; i < cart.length; i++) {
+                count += cart[i].quantity;
+            }
             document.getElementById('cartCount').textContent = count;
+            
+            // update checkout button state
+            var checkoutBtn = document.getElementById('checkoutBtn');
+            if (cart.length > 0) {
+                checkoutBtn.disabled = false;
+            } else {
+                checkoutBtn.disabled = true;
+            }
         }
 
-        // Toggle cart modal
+        // show/hide cart
         function toggleCart() {
-            const modal = document.getElementById('cartModal');
-            const isVisible = modal.style.display === 'block';
+            var modal = document.getElementById('cartModal');
+            var isVisible = modal.style.display === 'block';
             modal.style.display = isVisible ? 'none' : 'block';
             
             if (!isVisible) {
@@ -837,105 +1208,128 @@
             }
         }
 
-        // Render cart items
+        // show cart items
         function renderCartItems() {
-            const cartItems = document.getElementById('cartItems');
+            var cartItems = document.getElementById('cartItems');
             
             if (cart.length === 0) {
                 cartItems.innerHTML = '<div class="empty-cart">Your cart is empty</div>';
                 return;
             }
             
-            cartItems.innerHTML = cart.map(item => `
-                <div class="cart-item">
-                    <div class="cart-item-info">
-                        <div class="cart-item-name">${item.emoji} ${item.name}</div>
-                        <div style="font-size: 14px; color: #666;">Quantity: ${item.quantity}</div>
-                    </div>
-                    <div class="cart-item-actions">
-                        <button class="quantity-btn" onclick="updateCartQuantity(${item.id}, -1)">−</button>
-                        <span style="margin: 0 10px;">${item.quantity}</span>
-                        <button class="quantity-btn" onclick="updateCartQuantity(${item.id}, 1)">+</button>
-                        <button class="remove-item" onclick="removeFromCart(${item.id})">Remove</button>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        // Update cart quantity
-        function updateCartQuantity(productId, change) {
-            const item = cart.find(item => item.id === productId);
-            if (item) {
-                item.quantity = Math.max(1, item.quantity + change);
-                updateCartCount();
-                renderCartItems();
+            var html = '';
+            for (var i = 0; i < cart.length; i++) {
+                var item = cart[i];
+                html += '<div class="cart-item">';
+                html += '<div class="cart-item-info">';
+                html += '<div class="cart-item-name">' + item.emoji + ' ' + item.name + '</div>';
+                html += '<div style="font-size: 14px; color: #666;">Quantity: ' + item.quantity + '</div>';
+                html += '</div>';
+                html += '<div class="cart-item-actions">';
+                html += '<button class="quantity-btn" onclick="updateCartQuantity(' + item.id + ', -1)">−</button>';
+                html += '<span style="margin: 0 10px;">' + item.quantity + '</span>';
+                html += '<button class="quantity-btn" onclick="updateCartQuantity(' + item.id + ', 1)">+</button>';
+                html += '<button class="remove-item" onclick="removeFromCart(' + item.id + ')">Remove</button>';
+                html += '</div>';
+                html += '</div>';
             }
+            cartItems.innerHTML = html;
         }
 
-        // Remove from cart
-        function removeFromCart(productId) {
-            cart = cart.filter(item => item.id !== productId);
+        // update quantity in cart
+        function updateCartQuantity(productId, change) {
+            for (var i = 0; i < cart.length; i++) {
+                if (cart[i].id === productId) {
+                    cart[i].quantity = Math.max(1, cart[i].quantity + change);
+                    break;
+                }
+            }
             updateCartCount();
             renderCartItems();
         }
 
-        // Show order form
+        // remove item from cart
+        function removeFromCart(productId) {
+            var newCart = [];
+            for (var i = 0; i < cart.length; i++) {
+                if (cart[i].id !== productId) {
+                    newCart.push(cart[i]);
+                }
+            }
+            cart = newCart;
+            updateCartCount();
+            renderCartItems();
+        }
+
+        // go to order form
         function showOrderForm() {
             document.getElementById('cartModal').style.display = 'none';
             document.getElementById('orderForm').style.display = 'block';
             renderOrderSummary();
             
-            // Scroll to form
+            // scroll to form
             document.getElementById('orderForm').scrollIntoView({ behavior: 'smooth' });
         }
 
-        // Render order summary
+        // show order summary
         function renderOrderSummary() {
-            const summary = document.getElementById('orderSummary');
+            var summary = document.getElementById('orderSummary');
             
             if (cart.length === 0) {
                 summary.innerHTML = '<div>No items in cart</div>';
                 return;
             }
             
-            summary.innerHTML = cart.map(item => `
-                <div class="summary-item">
-                    <span>${item.emoji} ${item.name}</span>
-                    <span>Qty: ${item.quantity}</span>
-                </div>
-            `).join('') + `
-                <div class="summary-item" style="font-weight: 600; border-top: 2px solid #EA3B52; margin-top: 15px; padding-top: 15px;">
-                    <span>Total Items:</span>
-                    <span>${cart.reduce((total, item) => total + item.quantity, 0)}</span>
-                </div>
-            `;
+            var html = '';
+            for (var i = 0; i < cart.length; i++) {
+                var item = cart[i];
+                html += '<div class="summary-item">';
+                html += '<span>' + item.emoji + ' ' + item.name + '</span>';
+                html += '<span>Qty: ' + item.quantity + '</span>';
+                html += '</div>';
+            }
+            
+            var totalItems = 0;
+            for (var i = 0; i < cart.length; i++) {
+                totalItems += cart[i].quantity;
+            }
+            
+            html += '<div class="summary-item" style="font-weight: 600; border-top: 2px solid #EA3B52; margin-top: 15px; padding-top: 15px;">';
+            html += '<span>Total Items:</span>';
+            html += '<span>' + totalItems + '</span>';
+            html += '</div>';
+            
+            summary.innerHTML = html;
         }
 
-        // Back to shopping
+        // go back to shopping
         function backToShopping() {
             document.getElementById('orderForm').style.display = 'none';
             document.querySelector('.products-container').scrollIntoView({ behavior: 'smooth' });
         }
 
-        // Handle form submission
+        // handle form submission
         document.getElementById('orderFormElement').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            // Get form data
-            const formData = new FormData(this);
-            const orderData = Object.fromEntries(formData);
+            // get form data
+            var formData = new FormData(this);
+            var orderData = {};
+            for (var pair of formData.entries()) {
+                orderData[pair[0]] = pair[1];
+            }
             
-            // Prepare WhatsApp message
-            const whatsappMessage = generateWhatsAppMessage(orderData);
+            // create whatsapp message
+            var whatsappMessage = generateWhatsAppMessage(orderData);
             
-            // Show success message
+            // show success message
             alert('Order inquiry submitted! You will receive a WhatsApp message shortly with your order details.');
             
-            // Optional: Open WhatsApp (you can customize the phone number)
-            // const whatsappUrl = `https://wa.me/6731234567?text=${encodeURIComponent(whatsappMessage)}`;
+            // uncomment this line to open whatsapp directly (add your phone number)
+            // var whatsappUrl = 'https://wa.me/6731234567?text=' + encodeURIComponent(whatsappMessage);
             // window.open(whatsappUrl, '_blank');
             
-            // Reset form and cart
+            // reset everything
             this.reset();
             cart = [];
             updateCartCount();
@@ -943,56 +1337,61 @@
             document.querySelector('.hero').scrollIntoView({ behavior: 'smooth' });
         });
 
-        // Generate WhatsApp message
+        // create whatsapp message
         function generateWhatsAppMessage(orderData) {
-            let message = `🛒 *NEW ORDER INQUIRY* 🛒\n\n`;
-            message += `👤 *Customer Details:*\n`;
-            message += `Name: ${orderData.customerName}\n`;
-            message += `Phone: ${orderData.customerPhone}\n`;
-            message += `Address: ${orderData.customerAddress}\n`;
-            message += `Delivery Method: ${orderData.deliveryMethod}\n`;
+            var message = '🛒 *NEW ORDER INQUIRY* 🛒\n\n';
+            message += '👤 *Customer Details:*\n';
+            message += 'Name: ' + orderData.customerName + '\n';
+            message += 'Phone: ' + orderData.customerPhone + '\n';
+            message += 'Pickup Address: ' + orderData.customerAddress + '\n';
+            message += 'Collection Method: ' + orderData.deliveryMethod + '\n';
             
             if (orderData.preferredTime) {
-                message += `Preferred Time: ${orderData.preferredTime}\n`;
+                message += 'Preferred Pickup Time: ' + orderData.preferredTime + '\n';
             }
             
-            message += `\n📋 *Order Items:*\n`;
-            cart.forEach(item => {
-                message += `• ${item.name} - Qty: ${item.quantity}\n`;
-            });
+            message += '\n📋 *Order Items:*\n';
+            for (var i = 0; i < cart.length; i++) {
+                var item = cart[i];
+                message += '• ' + item.name + ' - Qty: ' + item.quantity + '\n';
+            }
             
-            message += `\n📊 *Total Items:* ${cart.reduce((total, item) => total + item.quantity, 0)}\n`;
+            var totalItems = 0;
+            for (var i = 0; i < cart.length; i++) {
+                totalItems += cart[i].quantity;
+            }
+            message += '\n📊 *Total Items:* ' + totalItems + '\n';
             
             if (orderData.specialRequests) {
-                message += `\n📝 *Special Requests:*\n${orderData.specialRequests}\n`;
+                message += '\n📝 *Special Requests:*\n' + orderData.specialRequests + '\n';
             }
             
-            message += `\n⏰ *Order Time:* ${new Date().toLocaleString()}\n`;
-            message += `\n✅ Please check availability and pricing for this order.`;
+            message += '\n⏰ *Order Time:* ' + new Date().toLocaleString() + '\n';
+            message += '\n✅ Please check availability and pricing for store pickup.';
             
             return message;
         }
 
-        // Handle clicks outside modals
+        // close modal when clicking outside
         window.addEventListener('click', function(e) {
-            const cartModal = document.getElementById('cartModal');
+            var cartModal = document.getElementById('cartModal');
             if (e.target === cartModal) {
                 cartModal.style.display = 'none';
             }
         });
 
-        // Initialize page when loaded
-        document.addEventListener('DOMContentLoaded', initializePage);
-
-        // Glass effect on scroll
+        // glass effect on scroll
         window.addEventListener('scroll', function() {
-            const header = document.querySelector('.header');
+            var header = document.querySelector('.header');
             if (window.scrollY > 50) {
                 header.classList.add('scrolled');
             } else {
-        header.classList.remove('scrolled');
+                header.classList.remove('scrolled');
             }
         });
+
+        // start everything when page loads
+        document.addEventListener('DOMContentLoaded', initializePage);
 
     </script>
 </body>
