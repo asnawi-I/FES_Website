@@ -231,34 +231,19 @@
             transition: all 0.3s ease;
             border: 2px solid transparent;
             box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            position: relative;
-            overflow: hidden;
         }
 
-        .category-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(134, 190, 78, 0.1), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .category-card:hover::before {
-            left: 100%;
-        }
-
-        .category-card:hover, .category-card.active {
+        .category-card:hover {
             border-color: #86BE4E;
             transform: translateY(-8px);
             box-shadow: 0 12px 30px rgba(134, 190, 78, 0.15);
         }
 
         .category-card.active {
-            background: linear-gradient(135deg, #86BE4E 0%, #00693E 100%);
+            border-color: #86BE4E;
+            background: #86BE4E;
             color: white;
+            transform: translateY(-5px);
         }
 
         .category-card.active .category-name {
@@ -355,25 +340,7 @@
             box-shadow: 0 4px 20px rgba(0,0,0,0.08);
             transition: all 0.4s ease;
             cursor: pointer;
-            position: relative;
             border: 1px solid rgba(0,0,0,0.05);
-        }
-
-        .product-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, rgba(134, 190, 78, 0.05) 0%, rgba(234, 59, 82, 0.05) 100%);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            z-index: 1;
-        }
-
-        .product-card:hover::before {
-            opacity: 1;
         }
 
         .product-card:hover {
@@ -385,27 +352,12 @@
         .product-image {
             width: 100%;
             height: 200px;
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            background: #f8f9fa;
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
             overflow: hidden;
-        }
-
-        .product-image::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
-            transition: left 0.6s ease;
-        }
-
-        .product-card:hover .product-image::after {
-            left: 100%;
         }
 
         .product-image img {
@@ -457,7 +409,7 @@
 
         .add-to-cart {
             flex: 1;
-            background: linear-gradient(135deg, #86BE4E 0%, #00693E 100%);
+            background: #86BE4E;
             color: white;
             border: none;
             padding: 12px 18px;
@@ -466,29 +418,10 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .add-to-cart::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: rgba(255,255,255,0.3);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            transition: all 0.3s ease;
-        }
-
-        .add-to-cart:hover::before {
-            width: 300px;
-            height: 300px;
         }
 
         .add-to-cart:hover {
+            background: #00693E;
             transform: translateY(-2px);
             box-shadow: 0 8px 20px rgba(134, 190, 78, 0.4);
         }
@@ -528,8 +461,8 @@
 
         /* How It Works */
         .how-it-works {
-            padding: 80px 0;
-            background: linear-gradient(135deg, #86BE4E 0%, #00693E 100%);
+            padding: 60px 0;
+            background: #00693E;
             color: white;
         }
 
@@ -537,6 +470,7 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px;
+            margin-top: -30px;
             text-align: center;
         }
 
@@ -717,6 +651,11 @@
             font-weight: 600;
             color: #333;
             font-size: 14px;
+        }
+
+        .form-group select{
+            background-position: right 40px center !important;
+
         }
 
         .form-group input,
@@ -936,7 +875,7 @@
     <header class="header">
         <div class="header-content">
             <div class="logo">
-                <div class="logo-circle">FE</div>
+                <div class="logo-circle">Logo</div>
                 <div class="store-info">
                     <h1>First Emporium</h1>
                     <p>Fresh • Quality • Fast Service</p>
@@ -962,7 +901,7 @@
                 </button>
             </div>
             <div class="hero-image">
-                <div class="hero-visual">img</div>
+                <div class="hero-visual"></div>
             </div>
         </div>
     </section>
@@ -1133,8 +1072,6 @@
                     </optgroup>
                     <optgroup label="Evening">
                         <option value="6:00 PM - 6:30 PM">6:00 PM - 6:30 PM</option>
-                    <optgroup label="Evening">
-                        <option value="6:00 PM - 6:30 PM">6:00 PM - 6:30 PM</option>
                         <option value="6:30 PM - 7:00 PM">6:30 PM - 7:00 PM</option>
                         <option value="7:00 PM - 7:30 PM">7:00 PM - 7:30 PM</option>
                         <option value="7:30 PM - 8:00 PM">7:30 PM - 8:00 PM</option>
@@ -1283,7 +1220,12 @@
             for (var i = 0; i < cards.length; i++) {
                 cards[i].classList.remove('active');
             }
-            event.target.classList.add('active');
+            
+            // Find the clicked category card and make it active
+            var clickedCard = event.target.closest('.category-card');
+            if (clickedCard) {
+                clickedCard.classList.add('active');
+            }
         }
 
         // Search products
