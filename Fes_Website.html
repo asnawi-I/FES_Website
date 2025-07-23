@@ -360,13 +360,17 @@
 
 .search-container {
     text-align: center;
-    margin-top: 70px;
+    margin-bottom: 40px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .search-bar {
     width: 100%;
     max-width: 500px;
-    padding: 18px 25px;
+    padding: 18px 25px 18px 50px;
     border: 2px solid #e0e0e0;
     border-radius: 50px;
     font-size: 16px;
@@ -375,14 +379,39 @@
     box-shadow: 0 4px 15px rgba(0,0,0,0.05);
 }
 
+.search-container:focus-within {
+    transform: translateY(-2px);
+    transition: all 0.3s ease;
+}
+
+.search-container:focus-within .fa-search {
+    color: #86BE4E;
+    transition: all 0.3s ease;
+}
+
 .search-bar:focus {
     border-color: #86BE4E;
     box-shadow: 0 4px 20px rgba(134, 190, 78, 0.2);
-    transform: translateY(-2px);
 }
 
 .search-bar::placeholder {
     color: #999;
+}
+
+.search-container .fa-search {
+    position: absolute;
+    left: calc(50% - 230px);
+    top: 50%;
+    transform: translateY(-50%);
+    color: #999;
+    font-size: 16px;
+    pointer-events: none;
+    z-index: 1;
+    transition: all 0.3s ease;
+}
+
+.search-container .fa-search.active {
+    color: #86BE4E;
 }
 
 /* Products Section */
@@ -1053,7 +1082,7 @@
             </div>
             
             <div class="search-container">
-                <input type="text" class="search-bar" placeholder="Search for products..." onkeyup="searchProducts(this.value)">
+                <input type="text" class="search-bar" placeholder="Search for products..." onkeyup="searchProducts(this.value)" onfocus="document.querySelector('.fa-search').classList.add('active')" onblur="document.querySelector('.fa-search').classList.remove('active')">
                 <i class="fa fa-search"></i>
             </div>
 
