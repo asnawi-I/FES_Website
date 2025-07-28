@@ -192,6 +192,11 @@
     color: #666;
 }
 
+/* Hide original categories when floating is active */
+.categories.hide-original {
+    display: none;
+}
+
 /* Order Form */
 .order-form {
     display: none;
