@@ -1,0 +1,454 @@
+/* Responsive CSS for First Emporium Supermarket */
+/* Mobile-first approach with breakpoints */
+
+/* Tablet Landscape - 1024px and down */
+@media (max-width: 1024px) {
+    .categories-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+    }
+
+    .category-card {
+        padding: 30px 20px;
+    }
+
+    .hero-content {
+        gap: 40px;
+    }
+
+    .hero-text h2 {
+        font-size: 42px;
+    }
+
+    .products-grid {
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 20px;
+    }
+}
+
+/* Tablet Portrait - 768px and down */
+@media (max-width: 768px) {
+    /* Header adjustments */
+    .header-content {
+        flex-direction: column;
+        gap: 15px;
+        padding: 15px 20px;
+    }
+
+    .header {
+        padding: 10px 0;
+        position: relative; /* Remove sticky on mobile for better UX */
+    }
+
+    /* Hero section mobile layout */
+    .hero-content {
+        grid-template-columns: 1fr;
+        gap: 40px;
+        text-align: center;
+        padding: 0 15px;
+    }
+
+    .hero {
+        padding: 40px 0;
+    }
+
+    .hero-text h2 {
+        font-size: 36px;
+    }
+
+    .hero-text p {
+        font-size: 16px;
+    }
+
+    .hero-visual {
+        width: 250px;
+        height: 250px;
+        gap: 12px;
+        padding: 25px;
+    }
+
+    .hero-visual-item {
+        font-size: 30px;
+    }
+
+    /* Categories mobile layout */
+    .categories {
+        padding: 40px 0;
+    }
+
+    .categories-container {
+        padding: 0 15px;
+    }
+
+    .categories-title {
+        font-size: 28px;
+        margin-bottom: 30px;
+    }
+
+    .categories-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+
+    .category-card {
+        padding: 25px 15px;
+    }
+
+    .category-icon {
+        font-size: 36px;
+        margin-bottom: 15px;
+    }
+
+    .category-name {
+        font-size: 14px;
+    }
+
+    /* Search bar mobile */
+    .search-bar {
+        padding: 15px 20px;
+        max-width: 350px;
+        font-size: 14px;
+    }
+
+    .search-container .fa-search {
+        left: calc(50% - 160px);
+    }
+
+    /* Products section mobile */
+    .products-section {
+        padding: 40px 0;
+    }
+
+    .products-container {
+        padding: 0 15px;
+    }
+
+    .section-header {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+
+    .section-title {
+        font-size: 24px;
+    }
+
+    .products-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 20px;
+    }
+
+    .product-card {
+        border-radius: 12px;
+    }
+
+    .product-image {
+        height: 160px;
+    }
+
+    .product-info {
+        padding: 15px;
+    }
+
+    .product-name {
+        font-size: 15px;
+    }
+
+    .product-description {
+        font-size: 12px;
+    }
+
+    /* How it works mobile */
+    .how-it-works {
+        padding: 40px 0;
+    }
+
+    .how-container {
+        padding: 0 15px;
+    }
+
+    .how-title {
+        font-size: 28px;
+        margin-bottom: 30px;
+    }
+
+    .steps-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 30px;
+    }
+
+    .step-number {
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+    }
+
+    .step-title {
+        font-size: 16px;
+    }
+
+    .step-description {
+        font-size: 13px;
+    }
+
+    /* Floating categories mobile */
+    .floating-categories {
+        top: 20px;
+        max-width: 95vw;
+        padding: 8px 15px;
+    }
+
+    .floating-category-pill {
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+
+    /* Cart modal mobile */
+    .cart-content {
+        width: 95%;
+        margin: 20px auto;
+        max-height: 90vh;
+    }
+
+    .cart-header {
+        padding: 15px;
+    }
+
+    .cart-items {
+        padding: 15px;
+    }
+
+    .cart-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 12px 0;
+    }
+
+    .cart-item-actions {
+        align-self: flex-end;
+    }
+
+    /* Order form mobile */
+    .order-form {
+        margin: 20px auto;
+        padding: 25px 20px;
+        border-radius: 12px;
+    }
+
+    .form-buttons {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .back-to-shop {
+        order: 2;
+    }
+
+    .submit-order {
+        order: 1;
+    }
+}
+
+/* Mobile Portrait - 480px and down */
+@media (max-width: 480px) {
+    /* Even smaller mobile screens */
+    .hero-text h2 {
+        font-size: 28px;
+        line-height: 1.3;
+    }
+
+    .hero-text p {
+        font-size: 15px;
+    }
+
+    .hero-visual {
+        width: 200px;
+        height: 200px;
+        gap: 10px;
+        padding: 20px;
+    }
+
+    .hero-visual-item {
+        font-size: 24px;
+    }
+
+    /* Single column categories */
+    .categories-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        max-width: 300px;
+        margin: 0 auto 40px;
+    }
+
+    .category-card {
+        padding: 20px 15px;
+    }
+
+    .category-icon {
+        font-size: 32px;
+    }
+
+    /* Search bar very small mobile */
+    .search-bar {
+        max-width: 280px;
+        padding: 12px 18px 12px 40px;
+        font-size: 13px;
+    }
+
+    .search-container .fa-search {
+        left: calc(50% - 125px);
+        font-size: 14px;
+    }
+
+    /* Products very small mobile */
+    .products-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+        max-width: 320px;
+        margin: 0 auto;
+    }
+
+    .product-card {
+        max-width: 300px;
+        margin: 0 auto;
+    }
+
+    /* Steps single column */
+    .steps-grid {
+        grid-template-columns: 1fr;
+        gap: 25px;
+    }
+
+    /* Very small floating categories */
+    .floating-categories {
+        top: 15px;
+        padding: 6px 10px;
+    }
+
+    .floating-category-pill {
+        padding: 5px 10px;
+        font-size: 11px;
+    }
+
+    /* Form adjustments */
+    .order-form {
+        margin: 15px;
+        padding: 20px 15px;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+        padding: 10px 12px;
+        font-size: 13px;
+    }
+
+    .form-group label {
+        font-size: 13px;
+    }
+
+    /* Footer mobile */
+    .footer {
+        padding: 25px 15px;
+    }
+
+    .footer p {
+        font-size: 13px;
+    }
+}
+
+/* Landscape phone orientation */
+@media (max-height: 500px) and (orientation: landscape) {
+    .hero {
+        padding: 30px 0;
+    }
+
+    .hero-content {
+        gap: 30px;
+    }
+
+    .hero-visual {
+        width: 180px;
+        height: 180px;
+    }
+
+    .categories {
+        padding: 30px 0;
+    }
+
+    .how-it-works {
+        padding: 30px 0;
+    }
+}
+
+/* High DPI displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .product-image img {
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: crisp-edges;
+    }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+    .category-card:hover,
+    .product-card:hover,
+    .floating-category-pill:hover {
+        transform: none;
+        box-shadow: initial;
+    }
+
+    .category-card:active,
+    .product-card:active {
+        transform: scale(0.98);
+    }
+
+    /* Larger touch targets */
+    .cart-button,
+    .hero-button,
+    .add-to-cart,
+    .quantity-btn {
+        min-height: 44px;
+        min-width: 44px;
+    }
+
+    .floating-category-pill {
+        min-height: 36px;
+        padding: 8px 14px;
+    }
+}
+
+/* Accessibility improvements for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    .hero-visual-item:hover,
+    .category-card:hover,
+    .product-card:hover {
+        transform: none;
+    }
+}
+
+/* Print styles */
+@media print {
+    .header,
+    .floating-categories,
+    .cart-modal,
+    .footer {
+        display: none;
+    }
+
+    .hero {
+        background: white;
+        color: black;
+    }
+
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}

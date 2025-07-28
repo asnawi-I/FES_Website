@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>First Emporium Supermarket - Fresh Groceries</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="stylesheet" href="assets/css/responsive.css">
+    <link rel="stylesheet" href="assets/css/animations.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-circle">Logo</div>
+                <div class="store-info">
+                    <h1>First Emporium</h1>
+                    <p>Fresh • Quality • Fast Service</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button class="cart-button" onclick="toggleCart()">
+                    🛒 Cart
+                    <span class="cart-count" id="cartCount">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h2>FRESH FOOD, <span class="highlight">FAIR PRICES</span>, FAST PICKUP</h2>
+                <p>Fresh groceries that's delivered to your needs. Quality produce delivered right to you.</p>
+                <button class="hero-button" onclick="document.querySelector('.categories').scrollIntoView({behavior: 'smooth'})">
+                    SHOP NOW →
+                </button>
+            </div>
+            <div class="hero-image">
+                <div class="hero-visual">
+                    <div class="hero-visual-item">🥬</div>
+                    <div class="hero-visual-item">🥛</div>
+                    <div class="hero-visual-item">🥩</div>
+                    <div class="hero-visual-item">🍚</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Floating Categories -->
+    <div class="floating-categories" id="floatingCategories">
+        <div class="floating-category-scroll">
+            <div class="floating-category-pill active" onclick="filterProductsFloating('all')">🛍️ All</div>
+            <div class="floating-category-pill" onclick="filterProductsFloating('fresh')">🥬 Fresh</div>
+            <div class="floating-category-pill" onclick="filterProductsFloating('dairy')">🥛 Dairy</div>
+            <div class="floating-category-pill" onclick="filterProductsFloating('meat')">🥩 Meat</div>
+            <div class="floating-category-pill" onclick="filterProductsFloating('pantry')">🍚 Pantry</div>
+            <div class="floating-category-pill" onclick="filterProductsFloating('frozen')">🧊 Frozen</div>
+            <div class="floating-category-pill" onclick="filterProductsFloating('snacks')">🍿 Snacks</div>
+            <div class="floating-category-pill" onclick="filterProductsFloating('household')">🧽 Household</div>
+        </div>
+    </div>
+
+    <!-- Categories -->
+    <section class="categories">
+        <div class="categories-container">
+            <h2 class="categories-title">Shop by Category</h2>
+            <div class="categories-grid">
+                <div class="category-card active" onclick="filterProducts('all')">
+                    <span class="category-icon">🛍️</span>
+                    <div class="category-name">All Products</div>
+                </div>
+                <div class="category-card" onclick="filterProducts('fresh')">
+                    <span class="category-icon">🥬</span>
+                    <div class="category-name">Fresh Produce</div>
+                </div>
+                <div class="category-card" onclick="filterProducts('dairy')">
+                    <span class="category-icon">🥛</span>
+                    <div class="category-name">Dairy & Eggs</div>
+                </div>
+                <div class="category-card" onclick="filterProducts('meat')">
+                    <span class="category-icon">🥩</span>
+                    <div class="category-name">Meat & Seafood</div>
+                </div>
+                <div class="category-card" onclick="filterProducts('pantry')">
+                    <span class="category-icon">🍚</span>
+                    <div class="category-name">Pantry</div>
+                </div>
+                <div class="category-card" onclick="filterProducts('frozen')">
+                    <span class="category-icon">🧊</span>
+                    <div class="category-name">Frozen</div>
+                </div>
+                <div class="category-card" onclick="filterProducts('snacks')">
+                    <span class="category-icon">🍿</span>
+                    <div class="category-name">Snacks</div>
+                </div>
+                <div class="category-card" onclick="filterProducts('household')">
+                    <span class="category-icon">🧽</span>
+                    <div class="category-name">Household</div>
+                </div>
+            </div>
+            
+            <div class="search-container">
+                <input type="text" class="search-bar" placeholder="Search for products..." onkeyup="searchProducts(this.value)" onfocus="document.querySelector('.fa-search').classList.add('active')" onblur="document.querySelector('.fa-search').classList.remove('active')">
+                <i class="fa fa-search"></i>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="products-section">
+        <div class="products-container">
+            <div class="section-header">
+                <h2 class="section-title">Available Products</h2>
+                <a href="#" class="view-all">View All Categories</a>
+            </div>
+            <div class="products-grid" id="productsGrid">
+                <!-- Products will be populated by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works">
+        <div class="how-container">
+            <h2 class="how-title">How It Works</h2>
+            <div class="steps-grid">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3 class="step-title">Browse & Select</h3>
+                    <p class="step-description">Browse our catalog and add items to your inquiry cart</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3 class="step-title">Submit Order</h3>
+                    <p class="step-description">Fill out your details and submit your order inquiry</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3 class="step-title">Get Pricing</h3>
+                    <p class="step-description">Receive pricing and availability via WhatsApp</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3 class="step-title">Pay & Pickup</h3>
+                    <p class="step-description">Make payment and pickup your fresh groceries</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cart Modal -->
+    <div class="cart-modal" id="cartModal">
+        <div class="cart-content">
+            <div class="cart-header">
+                <h3>Your Cart</h3>
+                <button class="close-cart" onclick="toggleCart()">×</button>
+            </div>
+            <div class="cart-items" id="cartItems">
+                <!-- Cart items will be populated by JavaScript -->
+            </div>
+            <button class="checkout-btn" id="checkoutBtn" onclick="showOrderForm()" disabled>Proceed to Order</button>
+        </div>
+    </div>
+
+    <!-- Order Form -->
+    <div class="order-form" id="orderForm">
+        <h2>Complete Your Order</h2>
+        <form id="orderFormElement">
+            <div class="order-summary">
+                <h4>Order Summary</h4>
+                <div id="orderSummary">
+                    <!-- Order summary will be populated by JavaScript -->
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="customerName">Full Name *</label>
+                <input type="text" id="customerName" name="customerName" required>
+            </div>
+            <div class="form-group">
+                <label for="customerPhone">WhatsApp Number *</label>
+                <input type="tel" id="customerPhone" name="customerPhone" placeholder="+673 1234567" required>
+            </div>
+            <div class="form-group">
+                <label for="customerAddress">Pickup Location *</label>
+                <select id="customerAddress" name="customerAddress" required>
+                    <option value="">Select pickup location</option>
+                    <option value="Batu Satu Branch">Batu Satu Branch</option>
+                    <option value="Madang Branch">Madang Branch</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="deliveryMethod">Collection Method *</label>
+                <select id="deliveryMethod" name="deliveryMethod" required>
+                    <option value="">Select collection method</option>
+                    <option value="pickup">Store Pickup</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="preferredTime">Preferred Pickup Time *</label>
+                <select id="preferredTime" name="preferredTime" required>
+                    <option value="">Select pickup time</option>
+                    <optgroup label="Morning">
+                        <option value="9:30 AM - 10:00 AM">9:30 AM - 10:00 AM</option>
+                        <option value="10:00 AM - 10:30 AM">10:00 AM - 10:30 AM</option>
+                        <option value="10:30 AM - 11:00 AM">10:30 AM - 11:00 AM</option>
+                        <option value="11:00 AM - 11:30 AM">11:00 AM - 11:30 AM</option>
+                        <option value="11:30 AM - 12:00 PM">11:30 AM - 12:00 PM</option>
+                    </optgroup>
+                    <optgroup label="Afternoon">
+                        <option value="12:00 PM - 12:30 PM">12:00 PM - 12:30 PM</option>
+                        <option value="12:30 PM - 1:00 PM">12:30 PM - 1:00 PM</option>
+                        <option value="1:00 PM - 1:30 PM">1:00 PM - 1:30 PM</option>
+                        <option value="1:30 PM - 2:00 PM">1:30 PM - 2:00 PM</option>
+                        <option value="2:00 PM - 2:30 PM">2:00 PM - 2:30 PM</option>
+                        <option value="2:30 PM - 3:00 PM">2:30 PM - 3:00 PM</option>
+                        <option value="3:00 PM - 3:30 PM">3:00 PM - 3:30 PM</option>
+                        <option value="3:30 PM - 4:00 PM">3:30 PM - 4:00 PM</option>
+                        <option value="4:00 PM - 4:30 PM">4:00 PM - 4:30 PM</option>
+                        <option value="4:30 PM - 5:00 PM">4:30 PM - 5:00 PM</option>
+                        <option value="5:00 PM - 5:30 PM">5:00 PM - 5:30 PM</option>
+                        <option value="5:30 PM - 6:00 PM">5:30 PM - 6:00 PM</option>
+                    </optgroup>
+                    <optgroup label="Evening">
+                        <option value="6:00 PM - 6:30 PM">6:00 PM - 6:30 PM</option>
+                        <option value="6:30 PM - 7:00 PM">6:30 PM - 7:00 PM</option>
+                        <option value="7:00 PM - 7:30 PM">7:00 PM - 7:30 PM</option>
+                        <option value="7:30 PM - 8:00 PM">7:30 PM - 8:00 PM</option>
+                        <option value="8:00 PM - 8:30 PM">8:00 PM - 8:30 PM</option>
+                        <option value="8:30 PM - 9:00 PM">8:30 PM - 9:00 PM</option>
+                        <option value="9:00 PM - 9:30 PM">9:00 PM - 9:30 PM</option>
+                    </optgroup>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="urgencyLevel">Order Priority *</label>
+                <select id="urgencyLevel" name="urgencyLevel" required>
+                    <option value="">Select priority level</option>
+                    <option value="standard">Standard (2-3 hours preparation)</option>
+                    <option value="urgent">Urgent (1 hour preparation) - Priority handling</option>
+                    <option value="express">Express (30 minutes preparation) - Immediate priority</option>
+                </select>
+                <small style="color: #666; font-size: 12px; margin-top: 5px; display: block;">
+                    ⚠️ Urgent and Express orders may have additional fees
+                </small>
+            </div>
+            <div class="form-group">
+                <label for="specialRequests">Special Requests/Notes</label>
+                <textarea id="specialRequests" name="specialRequests" rows="3" placeholder="Any specific requirements or notes for your order"></textarea>
+            </div>
+            <div class="form-buttons">
+                <button type="button" class="back-to-shop" onclick="backToShopping()">← Back</button>
+                <button type="submit" class="submit-order">Submit Order Inquiry</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2025 First Emporium Supermarket. All rights reserved.</p>
+        <p>Fresh groceries • Quality products • Excellent service</p>
+    </footer>
+
+    <!-- JavaScript Files -->
+    <script src="data/products.js"></script>
+    <script src="assets/js/cart.js"></script>
+    <script src="assets/js/orders.js"></script>
+    <script src="assets/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,451 @@
+// Order Processing for First Emporium Supermarket
+// Handles order form, WhatsApp integration, and order management
+
+// Render order summary in the order form
+function renderOrderSummary() {
+    var summaryContainer = document.getElementById('orderSummary');
+    if (!summaryContainer || cart.length === 0) {
+        if (summaryContainer) {
+            summaryContainer.innerHTML = '<div>No items in cart</div>';
+        }
+        return;
+    }
+
+    var html = '';
+    
+    // List all cart items
+    for (var i = 0; i < cart.length; i++) {
+        var item = cart[i];
+        html += '<div class="summary-item">';
+        html += '<span>' + item.name + '</span>';
+        html += '<span>Qty: ' + item.quantity + '</span>';
+        html += '</div>';
+    }
+
+    // Add total items count
+    var totalItems = getTotalCartItems();
+    html += '<div class="summary-item summary-total">';
+    html += '<span>Total Items:</span>';
+    html += '<span>' + totalItems + '</span>';
+    html += '</div>';
+
+    summaryContainer.innerHTML = html;
+}
+
+// Back to shopping function
+function backToShopping() {
+    document.getElementById('orderForm').style.display = 'none';
+    document.querySelector('.products-section').scrollIntoView({ behavior: 'smooth' });
+}
+
+// Generate WhatsApp message from order data
+function generateWhatsAppMessage(orderData) {
+    var message = '🛒 *NEW ORDER INQUIRY* 🛒\n\n';
+    
+    // Customer details
+    message += '*Customer Details:*\n';
+    message += 'Name: ' + orderData.customerName + '\n';
+    message += 'Phone: ' + orderData.customerPhone + '\n';
+    message += 'Pickup Location: ' + orderData.customerAddress + '\n';
+    message += 'Collection Method: ' + orderData.deliveryMethod + '\n';
+    message += 'Preferred Pickup Time: ' + orderData.preferredTime + '\n';
+    message += 'Order Priority: ' + orderData.urgencyLevel + '\n';
+
+    // Order items
+    message += '\n*Order Items:*\n';
+    for (var i = 0; i < cart.length; i++) {
+        var item = cart[i];
+        message += '• ' + item.name + ' - Qty: ' + item.quantity + '\n';
+    }
+
+    // Total items
+    var totalItems = getTotalCartItems();
+    message += '\n*Total Items:* ' + totalItems + '\n';
+
+    // Special requests
+    if (orderData.specialRequests && orderData.specialRequests.trim() !== '') {
+        message += '\n*Special Requests:*\n' + orderData.specialRequests + '\n';
+    }
+
+    // Order timestamp
+    message += '\n*Order Time:* ' + formatDate(new Date()) + '\n';
+
+    // Priority flags
+    if (orderData.urgencyLevel === 'urgent') {
+        message += '\n🚨 *URGENT ORDER* - Customer requests 1 hour preparation time';
+    } else if (orderData.urgencyLevel === 'express') {
+        message += '\n⚡ *EXPRESS ORDER* - Customer requests 30 minutes preparation time';
+    }
+
+    message += '\n\n📋 Please check availability and pricing for store pickup.';
+    message += '\n\n---\n*First Emporium Supermarket*\nFresh • Quality • Fast Service';
+
+    return message;
+}
+
+// Validate order form
+function validateOrderForm(formData) {
+    var errors = [];
+
+    // Required fields validation
+    if (!formData.customerName || formData.customerName.trim() === '') {
+        errors.push('Customer name is required');
+    }
+
+    if (!formData.customerPhone || formData.customerPhone.trim() === '') {
+        errors.push('WhatsApp number is required');
+    }
+
+    if (!formData.customerAddress || formData.customerAddress === '') {
+        errors.push('Pickup location is required');
+    }
+
+    if (!formData.deliveryMethod || formData.deliveryMethod === '') {
+        errors.push('Collection method is required');
+    }
+
+    if (!formData.preferredTime || formData.preferredTime === '') {
+        errors.push('Preferred pickup time is required');
+    }
+
+    if (!formData.urgencyLevel || formData.urgencyLevel === '') {
+        errors.push('Order priority is required');
+    }
+
+    // Phone number format validation
+    if (formData.customerPhone && !isValidPhoneNumber(formData.customerPhone)) {
+        errors.push('Please enter a valid WhatsApp number (e.g., +673 1234567)');
+    }
+
+    // Cart validation
+    if (cart.length === 0) {
+        errors.push('Your cart is empty. Please add items before submitting order.');
+    }
+
+    return errors;
+}
+
+// Validate phone number format
+function isValidPhoneNumber(phone) {
+    // Basic validation for Brunei phone numbers
+    var phoneRegex = /^(\+673)?[\s-]?[2-8]\d{6}$/;
+    return phoneRegex.test(phone.replace(/\s/g, ''));
+}
+
+// Submit order
+function submitOrder(orderData) {
+    // Validate form
+    var errors = validateOrderForm(orderData);
+    if (errors.length > 0) {
+        alert('Please fix the following errors:\n\n• ' + errors.join('\n• '));
+        return false;
+    }
+
+    // Generate WhatsApp message
+    var whatsappMessage = generateWhatsAppMessage(orderData);
+    
+    // Store order data for potential future use
+    var orderRecord = createOrderRecord(orderData);
+    
+    // Log order for debugging
+    debugLog('Order submitted:', orderRecord);
+    
+    return true;
+}
+
+// Create order record
+function createOrderRecord(orderData) {
+    return {
+        id: generateOrderId(),
+        timestamp: new Date().toISOString(),
+        customer: {
+            name: orderData.customerName,
+            phone: orderData.customerPhone,
+            pickupLocation: orderData.customerAddress,
+            collectionMethod: orderData.deliveryMethod,
+            preferredTime: orderData.preferredTime,
+            priority: orderData.urgencyLevel,
+            specialRequests: orderData.specialRequests || ''
+        },
+        items: exportCartForOrder(),
+        summary: {
+            totalItems: getTotalCartItems(),
+            itemCount: cart.length
+        },
+        status: 'pending'
+    };
+}
+
+// Generate unique order ID
+function generateOrderId() {
+    var timestamp = Date.now();
+    var random = Math.floor(Math.random() * 1000);
+    return 'FE' + timestamp.toString().slice(-6) + random.toString().padStart(3, '0');
+}
+
+// Send WhatsApp message (opens WhatsApp with pre-filled message)
+function sendWhatsAppMessage(phoneNumber, message) {
+    // Format phone number for WhatsApp
+    var formattedPhone = formatPhoneForWhatsApp(phoneNumber);
+    
+    // Create WhatsApp URL
+    var encodedMessage = encodeURIComponent(message);
+    var whatsappUrl = 'https://wa.me/' + formattedPhone + '?text=' + encodedMessage;
+    
+    // Open WhatsApp
+    window.open(whatsappUrl, '_blank');
+}
+
+// Format phone number for WhatsApp
+function formatPhoneForWhatsApp(phone) {
+    // Remove spaces, dashes, and other characters
+    var cleaned = phone.replace(/[^\d+]/g, '');
+    
+    // Add +673 if not present (Brunei country code)
+    if (!cleaned.startsWith('+673') && !cleaned.startsWith('673')) {
+        cleaned = '673' + cleaned;
+    }
+    
+    // Remove + sign for WhatsApp URL
+    if (cleaned.startsWith('+')) {
+        cleaned = cleaned.substring(1);
+    }
+    
+    return cleaned;
+}
+
+// Handle urgent order notifications
+function handleUrgentOrder(priority) {
+    if (priority === 'urgent' || priority === 'express') {
+        var warningMessage = priority === 'express' 
+            ? 'Express orders (30 min) may have additional fees. Continue?'
+            : 'Urgent orders (1 hour) may have additional fees. Continue?';
+            
+        return confirm(warningMessage);
+    }
+    return true;
+}
+
+// Order status tracking (for future enhancement)
+function trackOrder(orderId) {
+    // This would integrate with a backend system
+    console.log('Tracking order:', orderId);
+}
+
+// Get order history (for future enhancement)
+function getOrderHistory() {
+    // This would retrieve from backend/localStorage
+    try {
+        var history = localStorage.getItem('firstEmporiumOrderHistory');
+        return history ? JSON.parse(history) : [];
+    } catch (error) {
+        console.warn('Could not load order history:', error);
+        return [];
+    }
+}
+
+// Save order to history (for future enhancement)
+function saveOrderToHistory(orderRecord) {
+    try {
+        var history = getOrderHistory();
+        history.push(orderRecord);
+        
+        // Keep only last 10 orders
+        if (history.length > 10) {
+            history = history.slice(-10);
+        }
+        
+        localStorage.setItem('firstEmporiumOrderHistory', JSON.stringify(history));
+        debugLog('Order saved to history');
+    } catch (error) {
+        console.warn('Could not save order to history:', error);
+    }
+}
+
+// Calculate estimated preparation time
+function getEstimatedPrepTime(priority, itemCount) {
+    var baseTime = 30; // minutes
+    var itemTime = itemCount * 2; // 2 minutes per item
+    
+    switch (priority) {
+        case 'express':
+            return Math.max(30, baseTime);
+        case 'urgent':
+            return Math.max(60, baseTime + itemTime * 0.5);
+        case 'standard':
+        default:
+            return Math.max(120, baseTime + itemTime);
+    }
+}
+
+// Get pickup time recommendations
+function getPickupTimeRecommendations(priority) {
+    var now = new Date();
+    var prepTime = getEstimatedPrepTime(priority, getTotalCartItems());
+    var earliestPickup = new Date(now.getTime() + prepTime * 60000);
+    
+    return {
+        earliest: earliestPickup,
+        recommended: new Date(earliestPickup.getTime() + 30 * 60000), // 30 min buffer
+        prepTimeMinutes: prepTime
+    };
+}
+
+// Format time for display
+function formatTimeForDisplay(date) {
+    return date.toLocaleTimeString('en-US', {
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true
+    });
+}
+
+// Show order confirmation modal (for future enhancement)
+function showOrderConfirmation(orderRecord) {
+    var confirmationHtml = `
+        <div class="order-confirmation-modal">
+            <div class="confirmation-content">
+                <h3>Order Submitted Successfully!</h3>
+                <p><strong>Order ID:</strong> ${orderRecord.id}</p>
+                <p><strong>Estimated Preparation:</strong> ${getEstimatedPrepTime(orderRecord.customer.priority, orderRecord.summary.totalItems)} minutes</p>
+                <p>You will receive pricing and availability via WhatsApp shortly.</p>
+                <button onclick="closeConfirmation()">Close</button>
+            </div>
+        </div>
+    `;
+    
+    document.body.insertAdjacentHTML('beforeend', confirmationHtml);
+}
+
+// Close confirmation modal
+function closeConfirmation() {
+    var modal = document.querySelector('.order-confirmation-modal');
+    if (modal) {
+        modal.remove();
+    }
+}
+
+// Export order data for admin system (future enhancement)
+function exportOrderForAdmin(orderRecord) {
+    return {
+        orderId: orderRecord.id,
+        timestamp: orderRecord.timestamp,
+        customer: orderRecord.customer,
+        items: orderRecord.items,
+        summary: orderRecord.summary,
+        estimatedPrepTime: getEstimatedPrepTime(
+            orderRecord.customer.priority, 
+            orderRecord.summary.totalItems
+        ),
+        status: orderRecord.status
+    };
+}
+
+// Handle order form submission with validation
+function processOrderSubmission(formData) {
+    // Validate cart first
+    if (!validateCart()) {
+        return false;
+    }
+    
+    // Check for urgent order confirmation
+    if (!handleUrgentOrder(formData.urgencyLevel)) {
+        return false;
+    }
+    
+    // Submit order
+    if (submitOrder(formData)) {
+        // Create order record
+        var orderRecord = createOrderRecord(formData);
+        
+        // Save to history
+        saveOrderToHistory(orderRecord);
+        
+        // Generate and potentially send WhatsApp message
+        var whatsappMessage = generateWhatsAppMessage(formData);
+        
+        // For now, just show the message (could be enhanced to auto-send)
+        console.log('WhatsApp message generated:', whatsappMessage);
+        
+        return true;
+    }
+    
+    return false;
+}
+
+// Initialize order form with dynamic content
+function initializeOrderForm() {
+    // Populate pickup locations
+    populatePickupLocations();
+    
+    // Populate time slots
+    populateTimeSlots();
+    
+    // Add event listeners for dynamic form updates
+    setupOrderFormListeners();
+}
+
+// Populate pickup locations dropdown
+function populatePickupLocations() {
+    var locationSelect = document.getElementById('customerAddress');
+    if (!locationSelect) return;
+    
+    // Clear existing options except first
+    var firstOption = locationSelect.querySelector('option[value=""]');
+    locationSelect.innerHTML = '';
+    if (firstOption) {
+        locationSelect.appendChild(firstOption);
+    }
+    
+    // Add store locations
+    for (var i = 0; i < storeLocations.length; i++) {
+        var location = storeLocations[i];
+        var option = document.createElement('option');
+        option.value = location.name;
+        option.textContent = location.name;
+        locationSelect.appendChild(option);
+    }
+}
+
+// Populate time slots dropdown
+function populateTimeSlots() {
+    var timeSelect = document.getElementById('preferredTime');
+    if (!timeSelect) return;
+    
+    // This is already handled in the HTML, but could be made dynamic
+    // based on store hours, current time, etc.
+}
+
+// Setup dynamic form listeners
+function setupOrderFormListeners() {
+    var prioritySelect = document.getElementById('urgencyLevel');
+    if (prioritySelect) {
+        prioritySelect.addEventListener('change', function() {
+            updateTimeRecommendations(this.value);
+        });
+    }
+}
+
+// Update time recommendations based on priority
+function updateTimeRecommendations(priority) {
+    var recommendations = getPickupTimeRecommendations(priority);
+    var timeSelect = document.getElementById('preferredTime');
+    
+    if (timeSelect) {
+        // Could highlight recommended times or add notes
+        var note = document.getElementById('time-recommendation-note');
+        if (!note) {
+            note = document.createElement('small');
+            note.id = 'time-recommendation-note';
+            note.style.cssText = 'color: #666; font-size: 12px; margin-top: 5px; display: block;';
+            timeSelect.parentNode.appendChild(note);
+        }
+        
+        note.textContent = `Estimated preparation: ${recommendations.prepTimeMinutes} minutes. Earliest pickup: ${formatTimeForDisplay(recommendations.earliest)}`;
+    }
+}
+
+// Initialize when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    initializeOrderForm();
+});

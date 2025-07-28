@@ -1,0 +1,359 @@
+/* Animations and Transitions for First Emporium Supermarket */
+
+/* Loading animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInFromRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInFromLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes bounce {
+    0%, 20%, 53%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40%, 43% {
+        transform: translateY(-8px);
+    }
+    70% {
+        transform: translateY(-4px);
+    }
+    90% {
+        transform: translateY(-2px);
+    }
+}
+
+@keyframes shake {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    10%, 30%, 50%, 70%, 90% {
+        transform: translateX(-2px);
+    }
+    20%, 40%, 60%, 80% {
+        transform: translateX(2px);
+    }
+}
+
+/* Page load animations */
+.hero-text {
+    animation: slideInFromLeft 0.8s ease-out;
+}
+
+.hero-image {
+    animation: slideInFromRight 0.8s ease-out 0.2s both;
+}
+
+.categories-grid .category-card {
+    animation: fadeIn 0.6s ease-out;
+}
+
+.categories-grid .category-card:nth-child(1) { animation-delay: 0.1s; }
+.categories-grid .category-card:nth-child(2) { animation-delay: 0.2s; }
+.categories-grid .category-card:nth-child(3) { animation-delay: 0.3s; }
+.categories-grid .category-card:nth-child(4) { animation-delay: 0.4s; }
+.categories-grid .category-card:nth-child(5) { animation-delay: 0.5s; }
+.categories-grid .category-card:nth-child(6) { animation-delay: 0.6s; }
+.categories-grid .category-card:nth-child(7) { animation-delay: 0.7s; }
+.categories-grid .category-card:nth-child(8) { animation-delay: 0.8s; }
+
+/* Product cards staggered animation */
+.products-grid .product-card {
+    animation: scaleIn 0.5s ease-out;
+}
+
+.products-grid .product-card:nth-child(odd) {
+    animation-delay: 0.1s;
+}
+
+.products-grid .product-card:nth-child(even) {
+    animation-delay: 0.2s;
+}
+
+/* Button hover animations */
+.cart-button,
+.hero-button,
+.add-to-cart,
+.submit-order,
+.back-to-shop,
+.checkout-btn {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.cart-button::before,
+.hero-button::before,
+.add-to-cart::before,
+.submit-order::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.cart-button:hover::before,
+.hero-button:hover::before,
+.add-to-cart:hover::before,
+.submit-order:hover::before {
+    left: 100%;
+}
+
+/* Interactive feedback */
+.cart-button:active,
+.add-to-cart:active,
+.quantity-btn:active {
+    transform: scale(0.95);
+    transition: transform 0.1s ease;
+}
+
+/* Cart count animation */
+.cart-count {
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.cart-count.updated {
+    animation: bounce 0.6s ease;
+}
+
+/* Modal animations */
+.cart-modal {
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.cart-modal[style*="block"] {
+    opacity: 1;
+    visibility: visible;
+}
+
+.cart-content {
+    transform: translateY(-50px) scale(0.9);
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.cart-modal[style*="block"] .cart-content {
+    transform: translateY(0) scale(1);
+}
+
+/* Order form animation */
+.order-form {
+    transform: translateY(30px);
+    opacity: 0;
+    transition: all 0.5s ease;
+}
+
+.order-form[style*="block"] {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+/* Floating categories animation */
+.floating-categories {
+    transform: translateX(-50%) translateY(-20px);
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.floating-categories.show {
+    transform: translateX(-50%) translateY(0);
+}
+
+/* Search bar focus animation */
+.search-container {
+    transition: transform 0.3s ease;
+}
+
+.search-container:focus-within {
+    transform: translateY(-2px);
+}
+
+.search-bar {
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.search-bar:focus {
+    transform: scale(1.02);
+}
+
+/* Loading skeleton animation */
+@keyframes skeleton-loading {
+    0% {
+        background-position: -200px 0;
+    }
+    100% {
+        background-position: calc(200px + 100%) 0;
+    }
+}
+
+.skeleton {
+    background-color: #eee;
+    background-image: linear-gradient(90deg, #eee, #f5f5f5, #eee);
+    background-size: 200px 100%;
+    background-repeat: no-repeat;
+    animation: skeleton-loading 1.5s infinite;
+}
+
+/* Form validation animations */
+.form-group.error input,
+.form-group.error select,
+.form-group.error textarea {
+    border-color: #EA3B52;
+    animation: shake 0.5s ease-in-out;
+}
+
+.form-group.success input,
+.form-group.success select,
+.form-group.success textarea {
+    border-color: #86BE4E;
+}
+
+/* Success feedback animation */
+@keyframes checkmark {
+    0% {
+        transform: scale(0) rotate(45deg);
+    }
+    50% {
+        transform: scale(0.8) rotate(45deg);
+    }
+    100% {
+        transform: scale(1) rotate(45deg);
+    }
+}
+
+.success-checkmark {
+    animation: checkmark 0.5s ease-in-out;
+}
+
+/* Scroll reveal animation */
+.scroll-reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.6s ease;
+}
+
+.scroll-reveal.revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Staggered animation for multiple elements */
+.stagger-animation {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.5s ease;
+}
+
+.stagger-animation.animate {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.stagger-animation:nth-child(1) { transition-delay: 0.1s; }
+.stagger-animation:nth-child(2) { transition-delay: 0.2s; }
+.stagger-animation:nth-child(3) { transition-delay: 0.3s; }
+.stagger-animation:nth-child(4) { transition-delay: 0.4s; }
+.stagger-animation:nth-child(5) { transition-delay: 0.5s; }
+
+/* Smooth page transitions */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+    .cart-button:hover::before,
+    .hero-button:hover::before,
+    .add-to-cart:hover::before,
+    .submit-order:hover::before {
+        left: -100%;
+    }
+}
+
+/* Performance optimizations */
+.product-card,
+.category-card,
+.floating-category-pill {
+    will-change: transform;
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+
+/* Custom easing functions */
+.ease-out-back {
+    transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.ease-in-out-quart {
+    transition-timing-function: cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.ease-out-expo {
+    transition-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
+}
