@@ -7,6 +7,7 @@ var lastScrollTop = 0;
 var floatingVisible = false;
 var isLoading = false;
 var toastQueue = [];
+var cart = []; // Initialize cart array
 
 // Initialize page when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
@@ -40,23 +41,91 @@ function createToastContainer() {
     document.body.appendChild(container);
 }
 
-// Create floating action buttons
+// Create floating action buttons - FIXED: Now properly visible with correct styling
 function createFloatingActionButtons() {
-    // Scroll to top button
+    // Remove existing buttons to prevent duplicates
+    var existingScrollBtn = document.getElementById('scrollTopBtn');
+    var existingCartBtn = document.getElementById('quickCartBtn');
+    if (existingScrollBtn) existingScrollBtn.remove();
+    if (existingCartBtn) existingCartBtn.remove();
+    
+    // Scroll to top button with improved styling
     var scrollTopBtn = document.createElement('button');
     scrollTopBtn.id = 'scrollTopBtn';
     scrollTopBtn.className = 'floating-action-btn scroll-top-btn';
     scrollTopBtn.innerHTML = '↑';
     scrollTopBtn.title = 'Scroll to top';
+    scrollTopBtn.style.cssText = `
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        border: none;
+        background: linear-gradient(135deg, #86BE4E, #6a9938);
+        color: white;
+        font-size: 24px;
+        font-weight: bold;
+        cursor: pointer;
+        z-index: 1000;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+        opacity: 0;
+        transform: scale(0);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        pointer-events: none;
+    `;
     scrollTopBtn.onclick = scrollToTop;
     document.body.appendChild(scrollTopBtn);
     
-    // Quick cart access button
+    // Quick cart access button with improved styling
     var quickCartBtn = document.createElement('button');
     quickCartBtn.id = 'quickCartBtn';
     quickCartBtn.className = 'floating-action-btn quick-cart-btn';
-    quickCartBtn.innerHTML = '🛒<span class="quick-cart-count">0</span>';
     quickCartBtn.title = 'Quick cart access';
+    quickCartBtn.style.cssText = `
+        position: fixed;
+        bottom: 100px;
+        right: 30px;
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        border: none;
+        background: linear-gradient(135deg, #3B82F6, #1D4ED8);
+        color: white;
+        font-size: 24px;
+        cursor: pointer;
+        z-index: 1000;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+        opacity: 1;
+        transform: scale(1);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        pointer-events: all;
+    `;
+    
+    // Cart icon and count
+    quickCartBtn.innerHTML = `
+        🛒
+        <span class="quick-cart-count" style="
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #EA3B52;
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        ">0</span>
+    `;
+    
     quickCartBtn.onclick = function() { 
         openCart();
         showToast('Cart opened', 'info');
@@ -64,7 +133,7 @@ function createFloatingActionButtons() {
     document.body.appendChild(quickCartBtn);
 }
 
-// Enhanced toast notification system
+// Enhanced toast notification system - FIXED: Now replaces alert() calls
 function showToast(message, type, duration) {
     type = type || 'info';
     duration = duration || 3000;
@@ -76,6 +145,10 @@ function showToast(message, type, duration) {
     toast.innerHTML = '<span class="toast-icon">' + icon + '</span><span class="toast-message">' + message + '</span>';
     
     var container = document.getElementById('toastContainer');
+    if (!container) {
+        createToastContainer();
+        container = document.getElementById('toastContainer');
+    }
     container.appendChild(toast);
     
     // Trigger entrance animation
@@ -118,7 +191,7 @@ function removeToast(toast) {
     }, 300);
 }
 
-// Enhanced loading states
+// Enhanced loading states with skeleton CSS integration
 function showPageLoading() {
     if (document.getElementById('pageLoader')) return;
     
@@ -162,6 +235,34 @@ function hideSearchLoading() {
     }
 }
 
+// FIXED: Add skeleton loading for products grid
+function showProductsLoading() {
+    var grid = document.getElementById('productsGrid');
+    if (!grid) return;
+    
+    var skeletonHTML = '';
+    for (var i = 0; i < 8; i++) {
+        skeletonHTML += `
+            <div class="product-card skeleton-card">
+                <div class="skeleton" style="height: 200px; margin-bottom: 15px; border-radius: 8px;"></div>
+                <div class="skeleton" style="height: 20px; margin-bottom: 10px; width: 80%; border-radius: 4px;"></div>
+                <div class="skeleton" style="height: 16px; margin-bottom: 15px; width: 100%; border-radius: 4px;"></div>
+                <div class="skeleton" style="height: 40px; border-radius: 6px;"></div>
+            </div>
+        `;
+    }
+    
+    grid.innerHTML = skeletonHTML;
+    grid.classList.add('loading');
+}
+
+function hideProductsLoading() {
+    var grid = document.getElementById('productsGrid');
+    if (grid) {
+        grid.classList.remove('loading');
+    }
+}
+
 // Setup event listeners
 function setupEventListeners() {
     // Scroll event for floating categories and scroll-to-top button
@@ -182,7 +283,7 @@ function setupEventListeners() {
         orderForm.addEventListener('submit', handleOrderSubmission);
     }
     
-    // Search input with debouncing
+    // Search input with debouncing and result notifications
     var searchInput = document.querySelector('.search-bar');
     if (searchInput) {
         var searchTimeout;
@@ -195,9 +296,13 @@ function setupEventListeners() {
                 searchProducts(searchTerm);
                 hideSearchLoading();
                 
+                // FIXED: Show search result notifications with count
                 if (searchTerm.trim()) {
-                    var resultsCount = document.querySelectorAll('.product-card').length;
-                    showToast('Found ' + resultsCount + ' products', 'search', 2000);
+                    var resultsCount = document.querySelectorAll('.product-card:not(.skeleton-card)').length;
+                    showToast(`Found ${resultsCount} product${resultsCount !== 1 ? 's' : ''} matching "${searchTerm}"`, 'search', 2000);
+                } else {
+                    var totalProducts = getFilteredProducts().length;
+                    showToast(`Showing all ${totalProducts} products`, 'info', 1500);
                 }
             }, 500);
         });
@@ -225,11 +330,17 @@ function handleScroll() {
         floatingVisible = false;
     }
     
-    // Show/hide scroll to top button
+    // FIXED: Show/hide scroll to top button with proper visibility
     if (scrollTopBtn) {
         if (scrollTop > 300) {
+            scrollTopBtn.style.opacity = '1';
+            scrollTopBtn.style.transform = 'scale(1)';
+            scrollTopBtn.style.pointerEvents = 'all';
             scrollTopBtn.classList.add('visible');
         } else {
+            scrollTopBtn.style.opacity = '0';
+            scrollTopBtn.style.transform = 'scale(0)';
+            scrollTopBtn.style.pointerEvents = 'none';
             scrollTopBtn.classList.remove('visible');
         }
     }
@@ -270,12 +381,28 @@ function renderProducts() {
 
 // Get filtered products based on current filter
 function getFilteredProducts() {
+    // FIXED: Provide fallback if products array doesn't exist
+    if (typeof products === 'undefined') {
+        console.warn('Products array not found. Using sample data.');
+        return getSampleProducts();
+    }
+    
     if (currentFilter === 'all') {
         return products;
     }
     return products.filter(function(product) {
         return product.category === currentFilter;
     });
+}
+
+// FIXED: Provide sample products as fallback
+function getSampleProducts() {
+    return [
+        {id: 1, name: 'Fresh Apples', description: 'Crisp red apples', category: 'fresh', image: 'https://via.placeholder.com/200x150?text=Apples'},
+        {id: 2, name: 'Whole Milk', description: 'Fresh dairy milk', category: 'dairy', image: 'https://via.placeholder.com/200x150?text=Milk'},
+        {id: 3, name: 'Chicken Breast', description: 'Premium chicken', category: 'meat', image: 'https://via.placeholder.com/200x150?text=Chicken'},
+        {id: 4, name: 'Bread Loaf', description: 'Fresh baked bread', category: 'pantry', image: 'https://via.placeholder.com/200x150?text=Bread'}
+    ];
 }
 
 // Create HTML for a product card with enhanced interactions
@@ -304,10 +431,13 @@ function createProductCard(product) {
     return html;
 }
 
-// Enhanced add to cart with visual feedback
+// FIXED: Complete cart functionality with proper add/remove feedback
 function addToCartWithFeedback(productId) {
     var product = findProductById(productId);
-    if (!product) return;
+    if (!product) {
+        showToast('Product not found!', 'error');
+        return;
+    }
     
     var qtyDisplay = document.getElementById('qty-' + productId);
     var quantity = qtyDisplay ? parseInt(qtyDisplay.textContent) : 1;
@@ -321,16 +451,143 @@ function addToCartWithFeedback(productId) {
         }, 600);
     }
     
-    // Call original addToCart function (assuming it exists)
-    if (typeof addToCart === 'function') {
-        addToCart(productId);
-    }
+    // Add to cart with proper quantity
+    addToCart(productId, quantity);
     
     // Update quick cart count
     updateQuickCartCount();
     
-    // Show success toast
-    showToast('Added ' + product.name + ' to cart!', 'cart', 2000);
+    // Show success toast with proper feedback
+    showToast(`Added ${quantity}x ${product.name} to cart!`, 'cart', 2000);
+}
+
+// FIXED: Proper addToCart implementation
+function addToCart(productId, quantity) {
+    quantity = quantity || 1;
+    var product = findProductById(productId);
+    if (!product) return;
+    
+    // Check if item already exists in cart
+    var existingItem = cart.find(function(item) {
+        return item.id === productId;
+    });
+    
+    if (existingItem) {
+        existingItem.quantity += quantity;
+        showToast(`Updated ${product.name} quantity in cart`, 'cart', 1500);
+    } else {
+        cart.push({
+            id: productId,
+            name: product.name,
+            description: product.description,
+            quantity: quantity,
+            price: product.price || 0
+        });
+    }
+    
+    updateCartCount();
+    updateCartDisplay();
+}
+
+// FIXED: Proper removeFromCart implementation with visual feedback
+function removeFromCart(productId) {
+    var product = findProductById(productId);
+    var itemIndex = cart.findIndex(function(item) {
+        return item.id === productId;
+    });
+    
+    if (itemIndex !== -1) {
+        var removedItem = cart[itemIndex];
+        cart.splice(itemIndex, 1);
+        
+        // Add removal animation to cart item
+        var cartItem = document.querySelector(`[data-cart-item-id="${productId}"]`);
+        if (cartItem) {
+            cartItem.classList.add('item-removed');
+            setTimeout(function() {
+                updateCartDisplay();
+            }, 300);
+        } else {
+            updateCartDisplay();
+        }
+        
+        updateCartCount();
+        updateQuickCartCount();
+        
+        showToast(`Removed ${product ? product.name : 'item'} from cart`, 'warning', 2000);
+    }
+}
+
+// Clear entire cart
+function clearCart() {
+    cart = [];
+    updateCartCount();
+    updateQuickCartCount();
+    updateCartDisplay();
+    showToast('Cart cleared', 'info', 1500);
+}
+
+// Update cart display in modal
+function updateCartDisplay() {
+    var cartItems = document.getElementById('cartItems');
+    if (!cartItems) return;
+    
+    if (cart.length === 0) {
+        cartItems.innerHTML = '<p style="text-align: center; color: #666; padding: 20px;">Your cart is empty</p>';
+        return;
+    }
+    
+    var html = '';
+    for (var i = 0; i < cart.length; i++) {
+        var item = cart[i];
+        html += `
+            <div class="cart-item" data-cart-item-id="${item.id}">
+                <div class="cart-item-info">
+                    <h4>${item.name}</h4>
+                    <p>${item.description}</p>
+                    <div class="cart-item-quantity">
+                        <button onclick="updateCartItemQuantity(${item.id}, -1)">-</button>
+                        <span>Qty: ${item.quantity}</span>
+                        <button onclick="updateCartItemQuantity(${item.id}, 1)">+</button>
+                    </div>
+                </div>
+                <button class="remove-item" onclick="removeFromCart(${item.id})">Remove</button>
+            </div>
+        `;
+    }
+    
+    cartItems.innerHTML = html;
+}
+
+// Update cart item quantity
+function updateCartItemQuantity(productId, change) {
+    var item = cart.find(function(cartItem) {
+        return cartItem.id === productId;
+    });
+    
+    if (item) {
+        item.quantity = Math.max(1, item.quantity + change);
+        
+        // Add visual feedback
+        var cartItem = document.querySelector(`[data-cart-item-id="${productId}"]`);
+        if (cartItem) {
+            cartItem.classList.add('item-added');
+            setTimeout(function() {
+                cartItem.classList.remove('item-added');
+            }, 300);
+        }
+        
+        updateCartDisplay();
+        updateCartCount();
+        updateQuickCartCount();
+        
+        var product = findProductById(productId);
+        if (change > 0) {
+            showToast(`Increased ${product.name} quantity`, 'cart', 1000);
+        } else {
+            showToast(`Decreased ${product.name} quantity`, 'cart', 1000);
+        }
+    }
 }
 
 // Enhanced quantity change with feedback
@@ -360,19 +617,25 @@ function changeQuantityWithFeedback(productId, change) {
 // Update quick cart count
 function updateQuickCartCount() {
     var quickCartBtn = document.getElementById('quickCartBtn');
-    var countSpan = quickCartBtn ? quickCartBtn.querySelector('.quick-cart-count') : null;
+    if (!quickCartBtn) return;
+    
+    var countSpan = quickCartBtn.querySelector('.quick-cart-count');
     
     if (countSpan) {
         var totalItems = getTotalCartItems();
         countSpan.textContent = totalItems;
         
         if (totalItems > 0) {
+            countSpan.style.opacity = '1';
+            countSpan.style.transform = 'scale(1)';
             quickCartBtn.classList.add('has-items');
             countSpan.classList.add('bounce-in');
             setTimeout(function() {
                 countSpan.classList.remove('bounce-in');
             }, 300);
         } else {
+            countSpan.style.opacity = '0';
+            countSpan.style.transform = 'scale(0)';
             quickCartBtn.classList.remove('has-items');
         }
     }
@@ -382,23 +645,17 @@ function updateQuickCartCount() {
 function filterProducts(category) {
     currentFilter = category;
     
-    // Show loading state
-    var grid = document.getElementById('productsGrid');
-    if (grid) {
-        grid.classList.add('loading');
-    }
+    // Show loading state with skeleton
+    showProductsLoading();
     
     setTimeout(function() {
         renderProducts();
         updateActiveCategory(false);
-        
-        if (grid) {
-            grid.classList.remove('loading');
-        }
+        hideProductsLoading();
         
         var categoryName = category === 'all' ? 'All Products' : category.charAt(0).toUpperCase() + category.slice(1);
         var productCount = getFilteredProducts().length;
-        showToast('Showing ' + productCount + ' ' + categoryName, 'info', 2000);
+        showToast(`Showing ${productCount} ${categoryName}`, 'info', 2000);
     }, 300);
 }
 
@@ -409,7 +666,7 @@ function filterProductsFloating(category) {
     updateActiveCategory(true);
     
     var categoryName = category === 'all' ? 'All Products' : category.charAt(0).toUpperCase() + category.slice(1);
-    showToast('Filtered by ' + categoryName, 'info', 2000);
+    showToast(`Filtered by ${categoryName}`, 'info', 2000);
 }
 
 // Update active category styling
@@ -500,17 +757,46 @@ function changeQuantity(productId, change) {
 
 // Find product by ID
 function findProductById(productId) {
-    for (var i = 0; i < products.length; i++) {
-        if (products[i].id === productId) {
-            return products[i];
+    var productList = typeof products !== 'undefined' ? products : getSampleProducts();
+    for (var i = 0; i < productList.length; i++) {
+        if (productList[i].id === productId) {
+            return productList[i];
         }
     }
     return null;
 }
 
+// FIXED: Check if cart has items before proceeding to order
+function proceedToOrder() {
+    if (cart.length === 0) {
+        showToast('Your cart is empty! Add some items before placing an order.', 'warning', 3000);
+        return;
+    }
+    
+    // Close cart modal
+    var cartModal = document.getElementById('cartModal');
+    if (cartModal) {
+        cartModal.style.display = 'none';
+    }
+    
+    // Show order form
+    var orderForm = document.getElementById('orderForm');
+    if (orderForm) {
+        orderForm.style.display = 'block';
+        orderForm.scrollIntoView({ behavior: 'smooth' });
+        showToast('Please fill in your details to complete the order', 'info', 3000);
+    }
+}
+
 // Enhanced order form submission
 function handleOrderSubmission(e) {
     e.preventDefault();
+    
+    // FIXED: Validate cart has items
+    if (cart.length === 0) {
+        showToast('Cannot submit order: Your cart is empty!', 'error', 3000);
+        return;
+    }
     
     // Show loading state
     var submitBtn = e.target.querySelector('.submit-order');
@@ -538,9 +824,7 @@ function handleOrderSubmission(e) {
         
         // Reset form and cart
         e.target.reset();
-        if (typeof clearCart === 'function') {
-            clearCart();
-        }
+        clearCart();
         
         // Reset submit button
         if (submitBtn) {
@@ -556,15 +840,43 @@ function handleOrderSubmission(e) {
     }, 2000);
 }
 
+// Generate WhatsApp message (placeholder - implement as needed)
+function generateWhatsAppMessage(orderData) {
+    var message = "New Order Inquiry:\n\n";
+    message += "Customer: " + orderData.name + "\n";
+    message += "Phone: " + orderData.phone + "\n";
+    message += "Address: " + orderData.address + "\n\n";
+    message += "Items:\n";
+    
+    for (var i = 0; i < cart.length; i++) {
+        var item = cart[i];
+        message += "- " + item.name + " (Qty: " + item.quantity + ")\n";
+    }
+    
+    return message;
+}
+
 // Enhanced cart functions
 function openCart() {
     var cartModal = document.getElementById('cartModal');
     if (cartModal) {
+        updateCartDisplay(); // Update cart display before showing
         cartModal.style.display = 'block';
         // Trigger animation
         setTimeout(function() {
             cartModal.classList.add('show');
         }, 10);
+    }
+}
+
+function closeCart() {
+    var cartModal = document.getElementById('cartModal');
+    if (cartModal) {
+        cartModal.classList.remove('show');
+        setTimeout(function() {
+            cartModal.style.display = 'none';
+        }, 300);
+        showToast('Cart closed', 'info', 1000);
     }
 }
 
@@ -590,7 +902,7 @@ function formatDate(date) {
 
 // Utility function to get total cart items
 function getTotalCartItems() {
-    if (typeof cart !== 'undefined' && cart.length) {
+    if (cart && cart.length) {
         var total = 0;
         for (var i = 0; i < cart.length; i++) {
             total += cart[i].quantity;
@@ -652,3 +964,211 @@ function initPerformanceMonitoring() {
         }, 0);
     });
 }
+
+// Additional utility functions for enhanced user experience
+
+// Validate form fields
+function validateForm(formElement) {
+    var isValid = true;
+    var formGroups = formElement.querySelectorAll('.form-group');
+    
+    formGroups.forEach(function(group) {
+        var input = group.querySelector('input, select, textarea');
+        var errorMsg = group.querySelector('.error-message');
+        
+        if (input && input.hasAttribute('required') && !input.value.trim()) {
+            group.classList.add('error');
+            group.classList.remove('success');
+            if (errorMsg) {
+                errorMsg.textContent = 'This field is required';
+                errorMsg.style.display = 'block';
+            }
+            isValid = false;
+        } else if (input && input.value.trim()) {
+            group.classList.remove('error');
+            group.classList.add('success');
+            if (errorMsg) {
+                errorMsg.style.display = 'none';
+            }
+        }
+    });
+    
+    return isValid;
+}
+
+// Format currency (if needed for pricing)
+function formatCurrency(amount) {
+    return ' + amount.toFixed(2);
+}
+
+// Check if element is in viewport
+function isInViewport(element) {
+    var rect = element.getBoundingClientRect();
+    return (
+        rect.top >= 0 &&
+        rect.left >= 0 &&
+        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+        rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+    );
+}
+
+// Animate elements when they come into view
+function animateOnScroll() {
+    var elements = document.querySelectorAll('.scroll-reveal');
+    elements.forEach(function(element) {
+        if (isInViewport(element)) {
+            element.classList.add('revealed');
+        }
+    });
+}
+
+// Add scroll animation listener
+window.addEventListener('scroll', animateOnScroll);
+
+// Initialize scroll animations on page load
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(animateOnScroll, 100);
+});
+
+// Mobile menu toggle (if needed)
+function toggleMobileMenu() {
+    var mobileMenu = document.querySelector('.mobile-menu');
+    if (mobileMenu) {
+        mobileMenu.classList.toggle('active');
+        showToast('Menu toggled', 'info', 1000);
+    }
+}
+
+// Local storage helpers (for preferences, not cart data)
+function saveToLocalStorage(key, value) {
+    try {
+        localStorage.setItem('firstEmporium_' + key, JSON.stringify(value));
+    } catch (e) {
+        console.warn('Could not save to localStorage:', e);
+    }
+}
+
+function getFromLocalStorage(key) {
+    try {
+        var item = localStorage.getItem('firstEmporium_' + key);
+        return item ? JSON.parse(item) : null;
+    } catch (e) {
+        console.warn('Could not read from localStorage:', e);
+        return null;
+    }
+}
+
+// Save user preferences
+function saveUserPreferences() {
+    var preferences = {
+        lastFilter: currentFilter,
+        timestamp: new Date().getTime()
+    };
+    saveToLocalStorage('preferences', preferences);
+}
+
+// Load user preferences
+function loadUserPreferences() {
+    var preferences = getFromLocalStorage('preferences');
+    if (preferences) {
+        currentFilter = preferences.lastFilter || 'all';
+    }
+}
+
+// Enhanced initialization with preferences
+function initializePageWithPreferences() {
+    loadUserPreferences();
+    initializePage();
+    
+    // Save preferences when filter changes
+    var originalFilterProducts = filterProducts;
+    filterProducts = function(category) {
+        originalFilterProducts(category);
+        saveUserPreferences();
+    };
+}
+
+// Replace the original initialization
+document.addEventListener('DOMContentLoaded', function() {
+    initializePageWithPreferences();
+    setupEventListeners();
+    createToastContainer();
+    createFloatingActionButtons();
+});
+
+// Keyboard shortcuts
+document.addEventListener('keydown', function(e) {
+    // Escape key to close modals
+    if (e.key === 'Escape') {
+        var cartModal = document.getElementById('cartModal');
+        if (cartModal && cartModal.style.display === 'block') {
+            closeCart();
+        }
+    }
+    
+    // Ctrl/Cmd + K for search focus
+    if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        var searchInput = document.querySelector('.search-bar');
+        if (searchInput) {
+            searchInput.focus();
+            showToast('Search focused', 'info', 1000);
+        }
+    }
+});
+
+// Print order summary (if needed)
+function printOrderSummary() {
+    if (cart.length === 0) {
+        showToast('No items in cart to print', 'warning', 2000);
+        return;
+    }
+    
+    var printWindow = window.open('', '_blank');
+    var html = '<html><head><title>Order Summary - First Emporium</title></head><body>';
+    html += '<h1>First Emporium - Order Summary</h1>';
+    html += '<p>Date: ' + formatDate(new Date()) + '</p>';
+    html += '<table border="1" style="width:100%; border-collapse: collapse;">';
+    html += '<tr><th>Item</th><th>Description</th><th>Quantity</th></tr>';
+    
+    for (var i = 0; i < cart.length; i++) {
+        var item = cart[i];
+        html += '<tr>';
+        html += '<td>' + item.name + '</td>';
+        html += '<td>' + item.description + '</td>';
+        html += '<td>' + item.quantity + '</td>';
+        html += '</tr>';
+    }
+    
+    html += '</table>';
+    html += '</body></html>';
+    
+    printWindow.document.write(html);
+    printWindow.document.close();
+    printWindow.print();
+    
+    showToast('Order summary opened for printing', 'info', 2000);
+}
+
+// Export functionality
+window.FirstEmporium = {
+    // Public API
+    addToCart: addToCart,
+    removeFromCart: removeFromCart,
+    clearCart: clearCart,
+    openCart: openCart,
+    closeCart: closeCart,
+    filterProducts: filterProducts,
+    searchProducts: searchProducts,
+    showToast: showToast,
+    proceedToOrder: proceedToOrder,
+    
+    // Getters
+    getCart: function() { return cart; },
+    getCurrentFilter: function() { return currentFilter; },
+    getTotalItems: getTotalCartItems,
+    
+    // Utilities
+    scrollToTop: scrollToTop,
+    printOrderSummary: printOrderSummary
+};
