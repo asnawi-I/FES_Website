@@ -998,7 +998,7 @@ function validateForm(formElement) {
 
 // Format currency (if needed for pricing)
 function formatCurrency(amount) {
-    return '$' + amount.toFixed(2);
+    return ' + amount.toFixed(2);
 }
 
 // Check if element is in viewport
