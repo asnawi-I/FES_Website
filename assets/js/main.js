@@ -1,5 +1,4 @@
 // Main JavaScript for First Emporium Supermarket
-// Core application logic and initialization
 
 // Global variables
 var currentFilter = 'all';
@@ -89,16 +88,22 @@ function createProductCard(product) {
     var html = '<div class="product-card">';
     html += '<div class="product-image">';
     html += '<img src="' + product.image + '" alt="' + product.name + '" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\'">';
-    html += '<div class="placeholder" style="display: none; flex-direction: column;">';
+    html += '<div class="placeholder" style="display: none;">';
     html += '<div>📦</div>';
-    html += '<div class="placeholder-text">img</div>';
+    html += '<div>img</div>';
     html += '</div>';
+    html += '<div class="price-badge">Price on Inquiry</div>';
     html += '</div>';
     html += '<div class="product-info">';
-    html += '<div class="product-name">' + product.name + '</div>';
-    html += '<div class="product-description">' + product.description + '</div>';
+    html += '<h3 class="product-name">' + product.name + '</h3>';
+    html += '<p class="product-description">' + product.description + '</p>';
     html += '<div class="product-actions">';
-    html += '<button class="add-to-cart" onclick="addToCart(' + product.id + ')">Add to Cart</button>';
+    html += '<button class="add-to-cart" onclick="addToCart(' + product.id + ')" data-product-id="' + product.id + '">';
+    html += '<span class="cart-text add-text">Add to Cart</span>';
+    html += '<span class="cart-text added-text">Added!</span>';
+    html += '<i class="fas fa-shopping-cart"></i>';
+    html += '<i class="fas fa-box"></i>';
+    html += '</button>';
     html += '<div class="quantity-selector">';
     html += '<button class="quantity-btn" onclick="changeQuantity(' + product.id + ', -1)">−</button>';
     html += '<div class="quantity-display" id="qty-' + product.id + '">1</div>';
@@ -174,6 +179,62 @@ function searchProducts(searchTerm) {
     grid.innerHTML = html;
 }
 
+
+function animateAddToCart(button, product, quantity, originalText) {
+    // Phase 1: Loading state
+    button.classList.add('loading', 'ripple');
+    button.textContent = '';
+    
+    // Create floating item effect
+    createFloatingItem(button, product.name, quantity);
+    
+    setTimeout(function() {
+        // Phase 2: Success state
+        button.classList.remove('loading', 'ripple');
+        button.classList.add('success', 'pulse');
+        button.textContent = 'Added!';
+        
+        // Animate cart button
+        animateCartButton();
+        
+    }, 800);
+    
+    setTimeout(function() {
+        // Phase 3: Reset to original state
+        button.classList.remove('success', 'pulse');
+        button.textContent = originalText;
+        
+    }, 2000);
+}
+
+function createFloatingItem(button, productName, quantity) {
+    var rect = button.getBoundingClientRect();
+    var floatingItem = document.createElement('div');
+    floatingItem.className = 'floating-item';
+    floatingItem.textContent = '+' + quantity;
+    floatingItem.style.left = rect.left + rect.width / 2 + 'px';
+    floatingItem.style.top = rect.top + 'px';
+    
+    document.body.appendChild(floatingItem);
+    
+    // Remove after animation
+    setTimeout(function() {
+        if (floatingItem.parentNode) {
+            floatingItem.parentNode.removeChild(floatingItem);
+        }
+    }, 1000);
+}
+
+function animateCartButton() {
+    var cartButton = document.querySelector('.cart-button');
+    if (cartButton) {
+        cartButton.classList.add('bounce');
+        setTimeout(function() {
+            cartButton.classList.remove('bounce');
+        }, 800);
+    }
+}
+
 // Change quantity for a product
 function changeQuantity(productId, change) {
     var qtyDisplay = document.getElementById('qty-' + productId);
@@ -194,37 +255,6 @@ function findProductById(productId) {
     return null;
 }
 
-// Handle order form submission
-function handleOrderSubmission(e) {
-    e.preventDefault();
-    
-    var formData = new FormData(e.target);
-    var orderData = {};
-    
-    // Convert FormData to regular object
-    for (var pair of formData.entries()) {
-        orderData[pair[0]] = pair[1];
-    }
-
-    // Generate WhatsApp message
-    var whatsappMessage = generateWhatsAppMessage(orderData);
-    
-    // Show success message
-    alert('Order inquiry submitted! You will receive a WhatsApp message shortly with your order details.');
-    
-    // Reset form and cart
-    e.target.reset();
-    clearCart();
-    
-    // Hide order form and scroll to top
-    document.getElementById('orderForm').style.display = 'none';
-    document.querySelector('.hero').scrollIntoView({ behavior: 'smooth' });
-}
-
-// Utility function to format date
-function formatDate(date) {
-    return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
-}
 
 // Utility function to get total cart items
 function getTotalCartItems() {

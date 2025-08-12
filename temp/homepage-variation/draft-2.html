@@ -444,19 +444,20 @@
         .cart-sidebar {
             position: fixed;
             top: 0;
-            right: -500px;
-            width: 500px;
+            right: 0;
+            width: 400px;
             height: 100vh;
             background: white;
-            box-shadow: -10px 0 50px rgba(0, 0, 0, 0.1);
+            box-shadow: -4px 0 20px rgba(0, 0, 0, 0.1);
             z-index: 1000;
-            transition: right 0.3s ease;
+            transform: translateX(100%);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             flex-direction: column;
         }
 
         .cart-sidebar.open {
-            right: 0;
+            transform: translateX(0);
         }
 
         .cart-header {
@@ -889,8 +890,8 @@
     <header class="header">
         <div class="header-container">
             <div class="logo">
-                <div class="logo-icon">FE</div>
-                <div class="logo-text">First Emporium</div>
+                <div class="logo-icon">FM</div>
+                <div class="logo-text">First Mart</div>
             </div>
             
             <nav>
@@ -923,7 +924,7 @@
         <div class="hero-container">
             <div class="hero-content">
                 <h1>Your One-Stop Shop<br>For <span class="highlight">Quality Groceries</span></h1>
-                <p>Fresh groceries delivered to your needs. Premium products with exceptional quality and unbeatable service every time.</p>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent laoreet massa ut felis semper porttitor.</p>
                 <div class="hero-buttons">
                     <button class="btn-primary" onclick="document.querySelector('.categories').scrollIntoView({behavior: 'smooth'})">
                         Shop Now
@@ -932,7 +933,7 @@
                 </div>
             </div>
             <div class="hero-image">
-                <div class="hero-placeholder">Hero Image</div>
+                <div class="hero-placeholder">Image</div>
             </div>
         </div>
     </section>
@@ -1116,50 +1117,50 @@
         let products = [
             {
                 id: 1,
-                name: "Fresh Strawberry",
-                description: "Sweet and juicy strawberries",
+                name: "lorem ipsum1",
+                description: "lorem ipsum dolor sit amet",
                 category: "fresh"
             },
             {
                 id: 2,
-                name: "Fresh Cauliflower",
-                description: "Organic white cauliflower",
+                name: "lorem ipsum2",
+                description: "lorem ipsum dolor sit amet",
                 category: "fresh"
             },
             {
                 id: 3,
-                name: "Fresh Yellow Lemon",
-                description: "Citrus fresh lemons",
+                name: "lorem ipsum3",
+                description: "lorem ipsum dolor sit amet",
                 category: "fresh"
             },
             {
                 id: 4,
-                name: "Free Range Eggs",
-                description: "Farm fresh organic eggs",
+                name: "lorem ipsum4",
+                description: "lorem ipsum dolor sit amet",
                 category: "dairy"
             },
             {
                 id: 5,
-                name: "Premium Ground Beef",
-                description: "Fresh lean ground beef",
+                name: "lorem ipsum5",
+                description: "lorem ipsum dolor sit amet",
                 category: "meat"
             },
             {
                 id: 6,
-                name: "Whole Grain Bread",
-                description: "Freshly baked whole grain",
+                name: "lorem ipsum6",
+                description: "lorem ipsum dolor sit amet",
                 category: "pantry"
             },
             {
                 id: 7,
-                name: "Greek Yogurt",
-                description: "Creamy natural yogurt",
+                name: "lorem ipsum7",
+                description: "lorem ipsum dolor sit amet",
                 category: "dairy"
             },
             {
                 id: 8,
-                name: "Cleaning Supplies",
-                description: "Multi-purpose cleaner",
+                name: "lorem ipsum8",
+                description: "lorem ipsum dolor sit amet",
                 category: "household"
             }
         ];
@@ -1172,7 +1173,7 @@
             if (productsToRender.length === 0) {
                 grid.innerHTML = `
                     <div class="empty-state" style="grid-column: 1 / -1;">
-                        <div class="empty-icon">🔍</div>
+                        <div class="empty-icon"></div>
                         <div class="empty-title">No products found</div>
                         <div class="empty-description">Try searching with different keywords</div>
                     </div>
@@ -1283,7 +1284,7 @@
             if (cart.length === 0) {
                 cartItems.innerHTML = `
                     <div class="empty-state">
-                        <div class="empty-icon">🛒</div>
+                        <div class="empty-icon"></div>
                         <div class="empty-title">Your cart is empty</div>
                         <div class="empty-description">Add some products to get started</div>
                     </div>

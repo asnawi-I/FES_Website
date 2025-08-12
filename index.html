@@ -6,7 +6,7 @@
     <title>First Emporium Supermarket - Fresh Groceries</title>
     
     <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
     
     <!-- Stylesheets -->
@@ -16,46 +16,6 @@
     <link rel="stylesheet" href="assets/css/animation.css">
 </head>
 <body>
-    <!-- Header -->
-    <header class="header">
-        <div class="header-content">
-            <div class="logo">
-                <div class="logo-circle">Logo</div>
-                <div class="store-info">
-                    <h1>First Emporium</h1>
-                    <p>Fresh • Quality • Fast Service</p>
-                </div>
-            </div>
-            <div class="header-actions">
-                <button class="cart-button" onclick="toggleCart()">
-                    🛒 Cart
-                    <span class="cart-count" id="cartCount">0</span>
-                </button>
-            </div>
-        </div>
-    </header>
-
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-content">
-            <div class="hero-text">
-                <h2>FRESH FOOD, <span class="highlight">FAIR PRICES</span>, FAST PICKUP</h2>
-                <p>Fresh groceries that's delivered to your needs. Quality produce delivered right to you.</p>
-                <button class="hero-button" onclick="document.querySelector('.categories').scrollIntoView({behavior: 'smooth'})">
-                    SHOP NOW →
-                </button>
-            </div>
-            <div class="hero-image">
-                <div class="hero-visual">
-                    <div class="hero-visual-item">img</div>
-                    <div class="hero-visual-item">img</div>
-                    <div class="hero-visual-item">img</div>
-                    <div class="hero-visual-item">img</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- Floating Categories -->
     <div class="floating-categories" id="floatingCategories">
         <div class="floating-category-scroll">
@@ -70,10 +30,90 @@
         </div>
     </div>
 
-    <!-- Categories -->
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <div class="logo">
+                <div class="logo-text">First<span class="logo-highlight">Emporium</span></div>
+            </div>
+            
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="#" class="nav-item active" onclick="scrollToSection('.hero')">Home</a></li>
+                    <li><a href="#" class="nav-item" onclick="scrollToSection('.products-showcase')">Shop</a></li>
+                    <li><a href="#" class="nav-item" onclick="scrollToSection('.categories')">Categories</a></li>
+                    <li><a href="#" class="nav-item" onclick="scrollToSection('.collections-section')">Collections</a></li>
+                    <li><a href="#" class="nav-item" onclick="scrollToSection('.how-it-works')">How It Works</a></li>
+                </ul>
+            </nav>
+            
+            <div class="header-actions">
+                <button class="search-btn" onclick="focusSearch()">
+                    <i class="fas fa-search"></i>
+                </button>
+                
+                <button class="cart-button" onclick="toggleCart()">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count" id="cartCount" style="display: none;">0</span>
+                </button>
+                
+                <button class="get-started-btn" onclick="scrollToSection('.categories')">Get Started</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <div class="hero-badge">FRESH GROCERIES DAILY</div>
+                <h1 class="hero-title">Find Your <span class="highlight">Fresh Groceries</span></h1>
+                <p class="hero-subtitle">Premium quality groceries delivered fresh to your door. Browse our wide selection of fresh produce, dairy, meat, and household essentials at competitive prices with our inquiry-based system.</p>
+                <button class="hero-button" onclick="scrollToSection('.categories')">
+                    Shop Now
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+            
+            <div class="hero-image">
+                <div class="hero-visual">
+                    <div class="hero-product">
+                        img
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="stats-container">
+            <div class="stat-item">
+                <div class="stat-number">5K+</div>
+                <div class="stat-label">Happy Customers</div>
+                <div class="stat-stars">★★★★★</div>
+            </div>
+            
+            <div class="stat-item">
+                <div class="stat-number">50+</div>
+                <div class="stat-label">Product Categories</div>
+            </div>
+            
+            <div class="stat-item">
+                <div class="stat-number">2</div>
+                <div class="stat-label">Store Locations</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
     <section class="categories">
         <div class="categories-container">
-            <h2 class="categories-title">Shop by Category</h2>
+            <div class="section-header">
+                <h2 class="section-title">Shop by Category</h2>
+                <p class="section-subtitle">Browse our wide range of grocery categories carefully organized for your convenience</p>
+            </div>
+            
             <div class="categories-grid">
                 <div class="category-card active" onclick="filterProducts('all')">
                     <span class="category-icon">🛍️</span>
@@ -110,21 +150,147 @@
             </div>
             
             <div class="search-container">
-                <input type="text" class="search-bar" placeholder="Search for products..." onkeyup="searchProducts(this.value)" onfocus="document.querySelector('.fa-search').classList.add('active')" onblur="document.querySelector('.fa-search').classList.remove('active')">
+                <input type="text" class="search-bar" id="searchBar" placeholder="Search for products..." onkeyup="searchProducts(this.value)" onfocus="document.querySelector('.fa-search').classList.add('active')" onblur="document.querySelector('.fa-search').classList.remove('active')">
                 <i class="fa fa-search"></i>
             </div>
         </div>
     </section>
 
-    <!-- Products Section -->
-    <section class="products-section">
+    <!-- Products Showcase -->
+    <section class="products-showcase">
         <div class="products-container">
             <div class="section-header">
-                <h2 class="section-title">Available Products</h2>
-                <a href="#" class="view-all">View All Categories</a>
+                <h2 class="section-title">Featured Products</h2>
+                <p class="section-subtitle">Discover our wide range of fresh groceries and premium products carefully selected for quality</p>
             </div>
+            
             <div class="products-grid" id="productsGrid">
                 <!-- Products will be populated by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- What Makes Us Different -->
+    <section class="difference-section">
+        <div class="difference-container">
+            <div class="difference-content">
+                <h2>What Makes Us Different?</h2>
+                <p>We're committed to providing the freshest groceries with exceptional quality and unbeatable service. Our unique inquiry-based approach ensures you get the best products at competitive prices.</p>
+                
+                <div class="difference-features">
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-leaf"></i>
+                        </div>
+                        <div class="feature-text">100% Fresh & Organic Products</div>
+                    </div>
+                    
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-truck"></i>
+                        </div>
+                        <div class="feature-text">Fast & Reliable Pickup Service</div>
+                    </div>
+                    
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div class="feature-text">Quality Guarantee</div>
+                    </div>
+                    
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-headset"></i>
+                        </div>
+                        <div class="feature-text">WhatsApp Customer Support</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="difference-visual">
+                img
+            </div>
+        </div>
+    </section>
+
+    <!-- Explore Our Collections -->
+    <section class="collections-section">
+        <div class="products-container">
+            <div class="section-header">
+                <h2 class="section-title">Explore Our Collections</h2>
+                <p class="section-subtitle">Browse our wide range of grocery categories carefully organized for your convenience</p>
+            </div>
+            
+            <div class="collections-grid">
+                <div class="collection-card" onclick="filterProducts('fresh')">
+                    <div class="collection-icon">
+                        <i class="fas fa-carrot"></i>
+                    </div>
+                    <h3 class="collection-title">Fresh Produce</h3>
+                    <p class="collection-description">Premium fresh fruits and vegetables sourced directly from local farms</p>
+                    <button class="collection-btn">Shop Collection</button>
+                </div>
+                
+                <div class="collection-card" onclick="filterProducts('dairy')">
+                    <div class="collection-icon">
+                        <i class="fas fa-cheese"></i>
+                    </div>
+                    <h3 class="collection-title">Dairy & Eggs</h3>
+                    <p class="collection-description">Fresh dairy products and farm eggs delivered daily for maximum freshness</p>
+                    <button class="collection-btn">Shop Collection</button>
+                </div>
+                
+                <div class="collection-card" onclick="filterProducts('meat')">
+                    <div class="collection-icon">
+                        <i class="fas fa-drumstick-bite"></i>
+                    </div>
+                    <h3 class="collection-title">Meat & Seafood</h3>
+                    <p class="collection-description">Premium quality meat and fresh seafood from trusted suppliers</p>
+                    <button class="collection-btn">Shop Collection</button>
+                </div>
+                
+                <div class="collection-card" onclick="filterProducts('pantry')">
+                    <div class="collection-icon">
+                        <i class="fas fa-bread-slice"></i>
+                    </div>
+                    <h3 class="collection-title">Pantry Essentials</h3>
+                    <p class="collection-description">Stock up on pantry staples and household essentials for everyday needs</p>
+                    <button class="collection-btn">Shop Collection</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials-section">
+        <div class="testimonials-container">
+            <div class="section-header">
+                <h2 class="section-title">Trusted by Thousands of Happy Customers</h2>
+                <p class="section-subtitle">See what our satisfied customers have to say about their experience with us</p>
+            </div>
+            
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-avatar">JD</div>
+                    <p class="testimonial-text">"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent laoreet massa ut felis semper porttitor. Cras aliquet lorem sit amet sapien volutpat, vitae tempus mi."</p>
+                    <div class="testimonial-name">John Doe</div>
+                    <div class="testimonial-stars">★★★★★</div>
+                </div>
+                
+                <div class="testimonial-card">
+                    <div class="testimonial-avatar">SM</div>
+                    <p class="testimonial-text">"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent laoreet massa ut felis semper porttitor. Cras aliquet lorem sit amet sapien volutpat, vitae tempus mi."</p>
+                    <div class="testimonial-name">Sarah Miller</div>
+                    <div class="testimonial-stars">★★★★★</div>
+                </div>
+                
+                <div class="testimonial-card">
+                    <div class="testimonial-avatar">RJ</div>
+                    <p class="testimonial-text">"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent laoreet massa ut felis semper porttitor. Cras aliquet lorem sit amet sapien volutpat, vitae tempus mi."</p>
+                    <div class="testimonial-name">Robert Johnson</div>
+                    <div class="testimonial-stars">★★★★★</div>
+                </div>
             </div>
         </div>
     </section>
@@ -132,7 +298,10 @@
     <!-- How It Works -->
     <section class="how-it-works">
         <div class="how-container">
-            <h2 class="how-title">How It Works</h2>
+            <div class="section-header">
+                <h2 class="section-title">How It Works</h2>
+                <p class="section-subtitle">Simple steps to get fresh groceries delivered to you</p>
+            </div>
             <div class="steps-grid">
                 <div class="step">
                     <div class="step-number">1</div>
@@ -158,110 +327,119 @@
         </div>
     </section>
 
-    <!-- Cart Modal -->
-    <div class="cart-modal" id="cartModal">
-        <div class="cart-content">
-            <div class="cart-header">
-                <h3>Your Cart</h3>
-                <button class="close-cart" onclick="toggleCart()">×</button>
-            </div>
-            <div class="cart-items" id="cartItems">
-                <!-- Cart items will be populated by JavaScript -->
-            </div>
-            <button class="checkout-btn" id="checkoutBtn" onclick="showOrderForm()" disabled>Proceed to Order</button>
-        </div>
-    </div>
 
-    <!-- Order Form -->
-    <div class="order-form" id="orderForm">
-        <h2>Complete Your Order</h2>
-        <form id="orderFormElement">
-            <div class="order-summary">
-                <h4>Order Summary</h4>
-                <div id="orderSummary">
-                    <!-- Order summary will be populated by JavaScript -->
-                </div>
+    <!-- Order Form Modal -->
+    <div class="order-modal" id="orderModal">
+        <div class="order-form">
+            <div class="order-header">
+                <h2 class="order-title">Complete Your Order Inquiry</h2>
             </div>
-            <div class="form-group">
-                <label for="customerName">Full Name *</label>
-                <input type="text" id="customerName" name="customerName" required>
+            
+            <div class="order-content">
+                <form id="orderFormElement">
+                    <div class="form-section">
+                        <h3 class="form-section-title">Order Summary</h3>
+                        <div class="order-summary" id="orderSummary">
+                            <!-- Order summary will be populated by JavaScript -->
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3 class="form-section-title">Personal Information</h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label" for="customerName">Full Name *</label>
+                                <input type="text" class="form-input" id="customerName" name="customerName" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="customerPhone">WhatsApp Number *</label>
+                                <input type="tel" class="form-input" id="customerPhone" name="customerPhone" placeholder="+673 1234567" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3 class="form-section-title">Pickup Details</h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label" for="customerAddress">Pickup Location *</label>
+                                <select class="form-select" id="customerAddress" name="customerAddress" required>
+                                    <option value="">Select pickup location</option>
+                                    <option value="Batu Satu Branch">Batu Satu Branch</option>
+                                    <option value="Madang Branch">Madang Branch</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="preferredTime">Preferred Pickup Time *</label>
+                                <select class="form-select" id="preferredTime" name="preferredTime" required>
+                                    <option value="">Select pickup time</option>
+                                    <optgroup label="Morning">
+                                        <option value="10:30 AM - 11:00 AM">10:30 AM - 11:00 AM</option>
+                                        <option value="11:00 AM - 11:30 AM">11:00 AM - 11:30 AM</option>
+                                        <option value="11:30 AM - 12:00 PM">11:30 AM - 12:00 PM</option>
+                                    </optgroup>
+                                    <optgroup label="Afternoon">
+                                        <option value="12:00 PM - 12:30 PM">12:00 PM - 12:30 PM</option>
+                                        <option value="12:30 PM - 1:00 PM">12:30 PM - 1:00 PM</option>
+                                        <option value="1:00 PM - 1:30 PM">1:00 PM - 1:30 PM</option>
+                                        <option value="1:30 PM - 2:00 PM">1:30 PM - 2:00 PM</option>
+                                        <option value="2:00 PM - 2:30 PM">2:00 PM - 2:30 PM</option>
+                                        <option value="2:30 PM - 3:00 PM">2:30 PM - 3:00 PM</option>
+                                        <option value="3:00 PM - 3:30 PM">3:00 PM - 3:30 PM</option>
+                                        <option value="3:30 PM - 4:00 PM">3:30 PM - 4:00 PM</option>
+                                        <option value="4:00 PM - 4:30 PM">4:00 PM - 4:30 PM</option>
+                                        <option value="4:30 PM - 5:00 PM">4:30 PM - 5:00 PM</option>
+                                        <option value="5:00 PM - 5:30 PM">5:00 PM - 5:30 PM</option>
+                                        <option value="5:30 PM - 6:00 PM">5:30 PM - 6:00 PM</option>
+                                    </optgroup>
+                                    <optgroup label="Evening">
+                                        <option value="6:00 PM - 6:30 PM">6:00 PM - 6:30 PM</option>
+                                        <option value="6:30 PM - 7:00 PM">6:30 PM - 7:00 PM</option>
+                                        <option value="7:00 PM - 7:30 PM">7:00 PM - 7:30 PM</option>
+                                        <option value="7:30 PM - 8:00 PM">7:30 PM - 8:00 PM</option>
+                                        <option value="8:00 PM - 8:30 PM">8:00 PM - 8:30 PM</option>
+                                    </optgroup>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="urgencyLevel">Order Priority *</label>
+                            <select class="form-select" id="urgencyLevel" name="urgencyLevel" required>
+                                <option value="">Select priority level</option>
+                                <option value="standard">Standard (2-3 hours preparation)</option>
+                                <option value="urgent">Urgent (1 hour preparation) - Priority handling</option>
+                                <option value="express">Express (30 minutes preparation) - Immediate priority</option>
+                            </select>
+                            <small style="color: #718096; font-size: 12px; margin-top: 5px; display: block;">
+                                ⚠️ Urgent and Express orders may have additional fees
+                            </small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="deliveryMethod">Collection Method *</label>
+                            <select class="form-select" id="deliveryMethod" name="deliveryMethod" required>
+                                <option value="">Select collection method</option>
+                                <option value="pickup">Store Pickup</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3 class="form-section-title">Additional Information</h3>
+                        <div class="form-group">
+                            <label class="form-label" for="specialRequests">Special Requests (Optional)</label>
+                            <textarea class="form-textarea" id="specialRequests" name="specialRequests" rows="3" placeholder="Any specific requirements or notes for your order"></textarea>
+                        </div>
+                    </div>
+                </form>
             </div>
-            <div class="form-group">
-                <label for="customerPhone">WhatsApp Number *</label>
-                <input type="tel" id="customerPhone" name="customerPhone" placeholder="+673 1234567" required>
+            
+            <div class="order-footer">
+                <button type="button" class="btn-cancel" id="btn-cancel" onclick="hideOrderForm()">Cancel</button>
+                <button type="submit" class="btn-submit" form="orderFormElement">Submit Order Inquiry</button>
             </div>
-            <div class="form-group">
-                <label for="customerAddress">Pickup Location *</label>
-                <select id="customerAddress" name="customerAddress" required>
-                    <option value="">Select pickup location</option>
-                    <option value="Batu Satu Branch">Batu Satu Branch</option>
-                    <option value="Madang Branch">Madang Branch</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="deliveryMethod">Collection Method *</label>
-                <select id="deliveryMethod" name="deliveryMethod" required>
-                    <option value="">Select collection method</option>
-                    <option value="pickup">Store Pickup</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="preferredTime">Preferred Pickup Time *</label>
-                <select id="preferredTime" name="preferredTime" required>
-                    <option value="">Select pickup time</option>
-                    <optgroup label="Morning">
-                        <option value="9:30 AM - 10:00 AM">9:30 AM - 10:00 AM</option>
-                        <option value="10:00 AM - 10:30 AM">10:00 AM - 10:30 AM</option>
-                        <option value="10:30 AM - 11:00 AM">10:30 AM - 11:00 AM</option>
-                        <option value="11:00 AM - 11:30 AM">11:00 AM - 11:30 AM</option>
-                        <option value="11:30 AM - 12:00 PM">11:30 AM - 12:00 PM</option>
-                    </optgroup>
-                    <optgroup label="Afternoon">
-                        <option value="12:00 PM - 12:30 PM">12:00 PM - 12:30 PM</option>
-                        <option value="12:30 PM - 1:00 PM">12:30 PM - 1:00 PM</option>
-                        <option value="1:00 PM - 1:30 PM">1:00 PM - 1:30 PM</option>
-                        <option value="1:30 PM - 2:00 PM">1:30 PM - 2:00 PM</option>
-                        <option value="2:00 PM - 2:30 PM">2:00 PM - 2:30 PM</option>
-                        <option value="2:30 PM - 3:00 PM">2:30 PM - 3:00 PM</option>
-                        <option value="3:00 PM - 3:30 PM">3:00 PM - 3:30 PM</option>
-                        <option value="3:30 PM - 4:00 PM">3:30 PM - 4:00 PM</option>
-                        <option value="4:00 PM - 4:30 PM">4:00 PM - 4:30 PM</option>
-                        <option value="4:30 PM - 5:00 PM">4:30 PM - 5:00 PM</option>
-                        <option value="5:00 PM - 5:30 PM">5:00 PM - 5:30 PM</option>
-                        <option value="5:30 PM - 6:00 PM">5:30 PM - 6:00 PM</option>
-                    </optgroup>
-                    <optgroup label="Evening">
-                        <option value="6:00 PM - 6:30 PM">6:00 PM - 6:30 PM</option>
-                        <option value="6:30 PM - 7:00 PM">6:30 PM - 7:00 PM</option>
-                        <option value="7:00 PM - 7:30 PM">7:00 PM - 7:30 PM</option>
-                        <option value="7:30 PM - 8:00 PM">7:30 PM - 8:00 PM</option>
-                        <option value="8:00 PM - 8:30 PM">8:00 PM - 8:30 PM</option>
-                        <option value="8:30 PM - 9:00 PM">8:30 PM - 9:00 PM</option>
-                        <option value="9:00 PM - 9:30 PM">9:00 PM - 9:30 PM</option>
-                    </optgroup>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="urgencyLevel">Order Priority *</label>
-                <select id="urgencyLevel" name="urgencyLevel" required>
-                    <option value="">Select priority level</option>
-                    <option value="standard">Standard (2-3 hours preparation)</option>
-                    <option value="urgent">Urgent (1 hour preparation) - Priority handling</option>
-                    <option value="express">Express (30 minutes preparation) - Immediate priority</option>
-                </select>
-                <small style="color: #666; font-size: 12px; margin-top: 5px; display: block;">
-                    ⚠️ Urgent and Express orders may have additional fees
-                </small>
-            </div>
-            <div class="form-group">
-                <label for="specialRequests">Special Requests/Notes</label>
-                <textarea id="specialRequests" name="specialRequests" rows="3" placeholder="Any specific requirements or notes for your order"></textarea>
-            </div>
-            <div class="form-buttons">
-                <button type="button" class="back-to-shop" onclick="backToShopping()">← Back</button>
-                <button type="submit" class="submit-order">Submit Order Inquiry</button>
-            </div>
-        </form>
+        </div>
     </div>
 
     <!-- Footer -->
@@ -270,12 +448,40 @@
         <p>Fresh groceries • Quality products • Excellent service</p>
     </footer>
 
+    <!-- Cart Overlay -->
+<div class="overlay" id="cartOverlay"></div>
+
+<!-- Cart Sidebar -->
+<div class="cart-sidebar" id="cartSidebar">
+    <div class="cart-header">
+        <h3 class="cart-title">Your Order Inquiry</h3>
+        <button class="close-cart" onclick="toggleCart()">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+    
+    <div class="cart-items" id="cartItems">
+        <!-- Cart items will be populated by JavaScript -->
+    </div>
+    
+    <div class="cart-footer">
+        <div class="cart-actions">
+            <div class="cart-total">
+                Total Items: <span id="cartTotal">0</span>
+            </div>
+            <button class="clear-cart" onclick="clearCart()">Clear All</button>
+        </div>
+        <button class="checkout-btn" id="checkoutBtn" onclick="showOrderForm()" disabled>
+            Proceed to Checkout
+        </button>
+    </div>
+</div>
+
     <!-- JavaScript Files -->
     <script src="data/products.js"></script>
     <script src="assets/js/cart.js"></script>
     <script src="assets/js/orders.js"></script>
-    <script src="assets/js/main.js"></script>
     <script src="assets/js/product-image-system.js"></script>
-    
+    <script src="assets/js/main.js"></script>
 </body>
 </html>

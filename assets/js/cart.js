@@ -1,3 +1,5 @@
+
+//cart.js
 // Cart Management for First Emporium Supermarket
 // Handles all cart-related functionality
 
@@ -36,7 +38,17 @@ function addToCart(productId) {
         qtyElement.textContent = '1';
     }
 
+    // Add animation
+    var button = event.target.closest('.add-to-cart');
+    if (button) {
+        button.classList.add('clicked');
+        setTimeout(function() {
+            button.classList.remove('clicked');
+        }, 2000);
+    }
+
     updateCartCount();
+    renderCartItems();
     showAddToCartFeedback(product.name);
     
     debugLog('Added to cart:', { productId: productId, quantity: quantity });
@@ -87,49 +99,127 @@ function clearCart() {
 
 // Update cart count display
 function updateCartCount() {
-    var cartCountElement = document.getElementById('cartCount');
-    if (!cartCountElement) return;
-
-    var totalItems = getTotalCartItems();
-    cartCountElement.textContent = totalItems;
-
-    // Update checkout button state
+    var cartCount = document.getElementById('cartCount');
+    var cartTotal = document.getElementById('cartTotal');
     var checkoutBtn = document.getElementById('checkoutBtn');
-    if (checkoutBtn) {
-        checkoutBtn.disabled = cart.length === 0;
+    
+    var totalItems = getTotalCartItems();
+    
+    if (totalItems > 0) {
+        cartCount.textContent = totalItems;
+        cartCount.style.display = 'flex';
+        cartCount.classList.add('updated');
+        
+        // Remove animation class after animation
+        setTimeout(function() {
+            cartCount.classList.remove('updated');
+        }, 600);
+        
+        if (checkoutBtn) checkoutBtn.disabled = false;
+    } else {
+        cartCount.style.display = 'none';
+        if (checkoutBtn) checkoutBtn.disabled = true;
+    }
+    
+    // Update cart total in sidebar
+    if (cartTotal) {
+        cartTotal.textContent = totalItems;
     }
 }
 
-// Toggle cart modal visibility
 function toggleCart() {
-    var modal = document.getElementById('cartModal');
-    if (!modal) return;
+ const sidebar = document.getElementById('cartSidebar');
+ const overlay = document.getElementById('cartOverlay');
+ const isOpening = !sidebar.classList.contains('open');
+ 
+ if (isOpening) {
+   // OPENING the cart
+   sidebar.classList.add('opening');
+   sidebar.classList.add('open');
+   overlay.classList.add('active');
+   renderCartItems();
+   
+   setTimeout(() => {
+     sidebar.classList.remove('opening');
+   }, 400);
+ } else {
+   // CLOSING the cart
+   sidebar.classList.add('closing');
+   sidebar.classList.remove('open');
+   overlay.classList.remove('active');
+   
+   setTimeout(() => {
+     sidebar.classList.remove('closing');
+   }, 400);
+ }
 
-    var isVisible = modal.style.display === 'block';
-    modal.style.display = isVisible ? 'none' : 'block';
-
-    if (!isVisible) {
-        renderCartItems();
-    }
+ // Close when clicking overlay
+ overlay.onclick = function() {
+   if (sidebar.classList.contains('open')) {
+     sidebar.classList.add('closing');
+     sidebar.classList.remove('open');
+     overlay.classList.remove('active');
+     
+     setTimeout(() => {
+       sidebar.classList.remove('closing');
+     }, 400);
+   }
+ };
 }
 
-// Render cart items in the modal
+
+
+
+// renderCartItems function to show empty state properly
 function renderCartItems() {
     var cartItemsContainer = document.getElementById('cartItems');
+    console.log('renderCartItems called - container:', cartItemsContainer);
+    
     if (!cartItemsContainer) return;
 
     if (cart.length === 0) {
-        cartItemsContainer.innerHTML = '<div class="empty-cart">Your cart is empty</div>';
+        cartItemsContainer.innerHTML = '<div class="empty-cart"><div style="text-align: center; padding: 40px 20px; color: #718096;"><div style="font-size: 48px; margin-bottom: 250px;"></div><div style="font-size: 16px; font-weight: 600; margin-bottom: 8px;">Your cart is empty</div><div style="font-size: 14px;">Add some products to get started</div></div></div>';
         return;
     }
 
     var html = '';
     for (var i = 0; i < cart.length; i++) {
         var item = cart[i];
-        html += createCartItemHTML(item);
+        html += '<div class="cart-item">';
+        html += '<div class="cart-item-image">img</div>';
+        html += '<div class="cart-item-details">';
+        html += '<div class="cart-item-name">' + item.name + '</div>';
+        html += '<div class="cart-item-description">' + item.description + '</div>';
+        html += '<div class="quantity-controls">';
+        html += '<button class="quantity-btn" onclick="updateCartQuantity(' + item.id + ', -1)">−</button>';
+        html += '<span class="quantity">' + item.quantity + '</span>';
+        html += '<button class="quantity-btn" onclick="updateCartQuantity(' + item.id + ', 1)">+</button>';
+        html += '</div>';
+        html += '<button class="remove-item" onclick="removeFromCart(' + item.id + ')">Remove</button>';
+        html += '</div>';
+        html += '</div>';
     }
     
+    // Set the HTML and prevent it from being cleared
     cartItemsContainer.innerHTML = html;
+    
+    // Verify it was set correctly
+    setTimeout(function() {
+        if (cartItemsContainer.innerHTML === html) {
+            console.log('HTML successfully set and preserved');
+        } else {
+            console.log('HTML was cleared by something else');
+            console.log('Expected:', html);
+            console.log('Actual:', cartItemsContainer.innerHTML);
+        }
+    }, 100);
+}
+
+// clear the cart
+function clearCart() {
+    cart = [];
+    updateCartCount();
+    renderCartItems();
 }
 
 // Create HTML for cart item
@@ -228,6 +318,7 @@ function exportCartForOrder() {
             id: item.id,
             name: item.name,
             quantity: item.quantity,
+            description: item.description,
             category: item.category
         };
     });
@@ -251,24 +342,21 @@ function validateCart() {
     return true;
 }
 
+
 // Proceed to checkout
 function showOrderForm() {
     if (!validateCart()) {
         return;
     }
     
-    // Hide cart modal
-    document.getElementById('cartModal').style.display = 'none';
+    // Hide cart sidebar
+    toggleCart();
     
     // Show order form
-    var orderForm = document.getElementById('orderForm');
-    orderForm.style.display = 'block';
+    var orderModal = document.getElementById('orderModal');
+    orderModal.style.display = 'flex';
     
-    // Render order summary
     renderOrderSummary();
-    
-    // Scroll to order form
-    orderForm.scrollIntoView({ behavior: 'smooth' });
     
     debugLog('Proceeding to checkout with cart:', cart);
 }
