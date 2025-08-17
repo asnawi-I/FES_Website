@@ -297,3 +297,148 @@ function debugLog(message, data) {
         console.log('[First Emporium Debug]', message, data || '');
     }
 }
+
+// Function to handle swipe gestures on the product grid
+function initSwipeGestures() {
+  const productGrid = document.querySelector('.products-grid');
+  let touchstartX = 0;
+  let touchendX = 0;
+
+  function handleGesture() {
+    // If the swipe is less than 50 pixels, do nothing
+    if (Math.abs(touchendX - touchstartX) < 50) return;
+
+    // Swipe right (go to previous product)
+    if (touchendX < touchstartX) {
+      console.log('Swiped left - next product');
+      // Logic to navigate to the next product goes here
+      // For a carousel, you would change the active slide
+    }
+
+    // Swipe left (go to next product)
+    if (touchendX > touchstartX) {
+      console.log('Swiped right - previous product');
+      // Logic to navigate to the previous product goes here
+    }
+  }
+
+  productGrid.addEventListener('touchstart', e => {
+    touchstartX = e.changedTouches[0].screenX;
+  });
+
+  productGrid.addEventListener('touchend', e => {
+    touchendX = e.changedTouches[0].screenX;
+    handleGesture();
+  });
+}
+
+// Call the function to initialize the swipe gestures
+document.addEventListener('DOMContentLoaded', initSwipeGestures);
+
+// Barcode function
+
+function initBarcodeScanner() {
+  const barcodeScannerBtn = document.getElementById('barcode-scanner-btn');
+
+  if (!barcodeScannerBtn) return;
+
+  barcodeScannerBtn.addEventListener('click', () => {
+    // Check if the browser supports media devices
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      console.error('Barcode scanner not supported on this device.');
+      alert('Your device does not support camera access.');
+      return;
+    }
+
+    // Start the barcode scanner
+    Quagga.init({
+      inputStream: {
+        name: "Live",
+        type: "LiveStream",
+        target: document.querySelector('#interactive'), // A div to display the video feed
+        constraints: {
+          width: 640,
+          height: 480,
+          facingMode: "environment" // Use the back camera
+        },
+      },
+      decoder: {
+        readers: ["ean_reader"] // Specify the type of barcode to read (EAN is for most retail products)
+      }
+    }, function(err) {
+      if (err) {
+        console.error(err);
+        return
+      }
+      console.log("Initialization finished. Ready to start.");
+      Quagga.start();
+    });
+
+    // Listen for detected barcodes
+    Quagga.onDetected(function(result) {
+      const code = result.codeResult.code;
+      console.log("Barcode detected and processed: " + code);
+      alert('Barcode found: ' + code);
+      Quagga.stop(); // Stop the scanner once a barcode is found
+    });
+  });
+}
+
+// Ensure the scanner initializes after the DOM is loaded
+document.addEventListener('DOMContentLoaded', initBarcodeScanner);
+
+// Location Based store selection
+function initLocationServices() {
+  const locationBtn = document.getElementById('location-btn');
+  const storeInfo = document.getElementById('store-info');
+
+  if (!locationBtn || !storeInfo) return;
+
+  locationBtn.addEventListener('click', () => {
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(position => {
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
+        console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
+
+        // From AI = This is a placeholder for a real API call
+        // In a real application, you would send these coordinates to your server
+        // to get a list of nearby stores.
+        storeInfo.innerHTML = `
+          <p>Finding stores near your location...</p>
+          <p>Latitude: ${latitude.toFixed(4)}, Longitude: ${longitude.toFixed(4)}</p>
+          <p>Showing stores in your area.</p>
+        `;
+      }, error => {
+        console.error('Geolocation error:', error);
+        storeInfo.innerHTML = '<p>Unable to retrieve your location. Please enable location services.</p>';
+      });
+    } else {
+      console.error('Geolocation not supported by this browser.');
+      storeInfo.innerHTML = '<p>Your browser does not support location services.</p>';
+    }
+  });
+}
+
+// Call the function to initialize location services
+document.addEventListener('DOMContentLoaded', initLocationServices);
+
+// Get the button
+const scrollToTopBtn = document.getElementById("scrollToTopBtn");
+
+// When the user scrolls down 20px from the top of the document, show the button
+window.onscroll = function() {
+  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+    scrollToTopBtn.style.display = "block";
+  } else {
+    scrollToTopBtn.style.display = "none";
+  }
+};
+
+// When the user clicks on the button, scroll to the top of the document
+scrollToTopBtn.addEventListener("click", () => {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  });
+});
