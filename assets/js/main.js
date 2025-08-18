@@ -25,7 +25,7 @@ function setupEventListeners() {
     
     // Close modal when clicking outside
     window.addEventListener('click', function(e) {
-        var cartModal = document.getElementById('cartModal');
+        var orderModal = document.getElementById('orderModal');
         if (e.target === cartModal) {
             cartModal.style.display = 'none';
         }
@@ -253,6 +253,13 @@ function findProductById(productId) {
         }
     }
     return null;
+}
+
+function focusSearch() {
+    var searchBar = document.getElementById('searchBar');
+    if (searchBar) {
+        searchBar.focus();
+    }
 }
 
 
