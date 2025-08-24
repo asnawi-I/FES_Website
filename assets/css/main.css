@@ -232,9 +232,11 @@ body {
     align-items: center;
 }
 
+/* === MODIFIED: HERO IMAGE RESPONSIVENESS FIX === */
 .hero-visual {
-    width: 400px;
-    height: 400px;
+    width: 100%; /* Use full width of the container */
+    max-width: 400px; /* Set a maximum size */
+    aspect-ratio: 1 / 1; /* Maintain a square ratio, which becomes a circle with border-radius */
     background: white;
     border-radius: 50%;
     display: flex;
@@ -242,12 +244,17 @@ body {
     justify-content: center;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
     position: relative;
+    transition: transform 0.3s ease;
+}
+
+.hero-visual:hover {
+    transform: scale(1.02); /* Subtle hover effect */
 }
 
 .hero-product {
-    width: 300px;
-    height: 300px;
-    background: #00693E;
+    width: 75%; /* Relative to the parent circle */
+    aspect-ratio: 1 / 1; /* Maintain square shape */
+    background: linear-gradient(135deg, #00693E, #86BE4E); /* MODIFIED: Nicer gradient background */
     border-radius: 20px;
     display: flex;
     align-items: center;
@@ -256,6 +263,8 @@ body {
     font-size: 18px;
     font-weight: 600;
 }
+/* === END OF MODIFICATION === */
+
 
 /* Stats Section */
 .stats-section {
