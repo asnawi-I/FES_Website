@@ -1,4 +1,3 @@
-
 //cart.js
 // Cart Management for First Emporium Supermarket
 // Handles all cart-related functionality
@@ -173,7 +172,6 @@ function toggleCart() {
 // renderCartItems function to show empty state properly
 function renderCartItems() {
     var cartItemsContainer = document.getElementById('cartItems');
-    console.log('renderCartItems called - container:', cartItemsContainer);
     
     if (!cartItemsContainer) return;
 
@@ -182,37 +180,31 @@ function renderCartItems() {
         return;
     }
 
+    // MODIFIED: This function is completely updated to generate the new compact HTML structure.
     var html = '';
     for (var i = 0; i < cart.length; i++) {
         var item = cart[i];
         html += '<div class="cart-item">';
-        html += '<div class="cart-item-image">img</div>';
-        html += '<div class="cart-item-details">';
-        html += '<div class="cart-item-name">' + item.name + '</div>';
-        html += '<div class="cart-item-description">' + item.description + '</div>';
-        html += '<div class="quantity-controls">';
-        html += '<button class="quantity-btn" onclick="updateCartQuantity(' + item.id + ', -1)">−</button>';
-        html += '<span class="quantity">' + item.quantity + '</span>';
-        html += '<button class="quantity-btn" onclick="updateCartQuantity(' + item.id + ', 1)">+</button>';
+        html += '<div class="cart-item-image">';
+        html += '   <img src="' + item.image + '" alt="' + item.name + '" onerror="this.style.display=\'none\'; this.parentElement.innerHTML = \'📦\';">';
         html += '</div>';
-        html += '<button class="remove-item" onclick="removeFromCart(' + item.id + ')">Remove</button>';
+        html += '<div class="cart-item-details">';
+        html += '   <div class="cart-item-info">';
+        html += '       <div class="cart-item-name">' + item.name + '</div>';
+        html += '   </div>';
+        html += '   <div class="cart-item-actions">';
+        html += '       <div class="quantity-controls">';
+        html += '           <button class="quantity-btn" onclick="updateCartQuantity(' + item.id + ', -1)">−</button>';
+        html += '           <span class="quantity">' + item.quantity + '</span>';
+        html += '           <button class="quantity-btn" onclick="updateCartQuantity(' + item.id + ', 1)">+</button>';
+        html += '       </div>';
+        html += '       <button class="remove-item" onclick="removeFromCart(' + item.id + ')" title="Remove item">&times;</button>';
+        html += '   </div>';
         html += '</div>';
         html += '</div>';
     }
     
-    // Set the HTML and prevent it from being cleared
     cartItemsContainer.innerHTML = html;
-    
-    // Verify it was set correctly
-    setTimeout(function() {
-        if (cartItemsContainer.innerHTML === html) {
-            console.log('HTML successfully set and preserved');
-        } else {
-            console.log('HTML was cleared by something else');
-            console.log('Expected:', html);
-            console.log('Actual:', cartItemsContainer.innerHTML);
-        }
-    }, 100);
 }
 
 // clear the cart
