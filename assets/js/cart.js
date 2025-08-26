@@ -5,53 +5,7 @@
 // Global cart variable
 var cart = [];
 
-// Add item to cart
-function addToCart(productId) {
-    var product = findProductById(productId);
-    if (!product) {
-        console.error('Product not found:', productId);
-        return;
-    }
-
-    var qtyElement = document.getElementById('qty-' + productId);
-    var quantity = qtyElement ? parseInt(qtyElement.textContent) : 1;
-
-    // Check if item already exists in cart
-    var existingItem = findCartItem(productId);
-    
-    if (existingItem) {
-        existingItem.quantity += quantity;
-    } else {
-        cart.push({
-            id: productId,
-            name: product.name,
-            description: product.description,
-            image: product.image,
-            category: product.category,
-            quantity: quantity
-        });
-    }
-
-    // Reset quantity selector back to 1
-    if (qtyElement) {
-        qtyElement.textContent = '1';
-    }
-
-    // Add animation
-    var button = event.target.closest('.add-to-cart');
-    if (button) {
-        button.classList.add('clicked');
-        setTimeout(function() {
-            button.classList.remove('clicked');
-        }, 2000);
-    }
-
-    updateCartCount();
-    renderCartItems();
-    showAddToCartFeedback(product.name);
-    
-    debugLog('Added to cart:', { productId: productId, quantity: quantity });
-}
+// Add item to cart - LOGIC MOVED TO MAIN.JS for better state management
 
 // Find cart item by product ID
 function findCartItem(productId) {
@@ -63,19 +17,28 @@ function findCartItem(productId) {
     return null;
 }
 
-// Update cart item quantity
+// === MODIFIED: `updateCartQuantity` now syncs back to the product card on the main page ===
 function updateCartQuantity(productId, change) {
     var item = findCartItem(productId);
     if (!item) return;
 
-    item.quantity = Math.max(1, item.quantity + change);
-    updateCartCount();
-    renderCartItems();
-    
-    debugLog('Updated cart quantity:', { productId: productId, newQuantity: item.quantity });
-}
+    const newQuantity = item.quantity + change;
 
-// Remove item from cart
+    if (newQuantity <= 0) {
+        removeFromCart(productId);
+    } else {
+        item.quantity = newQuantity;
+        updateCartCount();
+        renderCartItems();
+        // Sync change with the main product card display
+        if (typeof updateProductCardDisplay === 'function') {
+            updateProductCardDisplay(productId);
+        }
+    }
+}
+// === END OF MODIFICATION ===
+
+// === MODIFIED: `removeFromCart` now syncs back to the product card on the main page ===
 function removeFromCart(productId) {
     cart = cart.filter(function(item) {
         return item.id !== productId;
@@ -83,18 +46,24 @@ function removeFromCart(productId) {
     
     updateCartCount();
     renderCartItems();
-    
-    debugLog('Removed from cart:', productId);
+    // Sync change with the main product card display
+    if (typeof updateProductCardDisplay === 'function') {
+        updateProductCardDisplay(productId);
+    }
 }
+// === END OF MODIFICATION ===
 
-// Clear entire cart
+// === MODIFIED: `clearCart` now re-renders the product grid to reset all cards ===
 function clearCart() {
     cart = [];
     updateCartCount();
     renderCartItems();
-    
-    debugLog('Cart cleared');
+    // Re-render all products to show "Add to Cart" buttons again
+    if (typeof renderProducts === 'function') {
+        renderProducts();
+    }
 }
+// === END OF MODIFICATION ===
 
 // Update cart count display
 function updateCartCount() {
@@ -109,7 +78,6 @@ function updateCartCount() {
         cartCount.style.display = 'flex';
         cartCount.classList.add('updated');
         
-        // Remove animation class after animation
         setTimeout(function() {
             cartCount.classList.remove('updated');
         }, 600);
@@ -120,7 +88,6 @@ function updateCartCount() {
         if (checkoutBtn) checkoutBtn.disabled = true;
     }
     
-    // Update cart total in sidebar
     if (cartTotal) {
         cartTotal.textContent = totalItems;
     }
@@ -132,42 +99,21 @@ function toggleCart() {
  const isOpening = !sidebar.classList.contains('open');
  
  if (isOpening) {
-   // OPENING the cart
-   sidebar.classList.add('opening');
    sidebar.classList.add('open');
    overlay.classList.add('active');
    renderCartItems();
-   
-   setTimeout(() => {
-     sidebar.classList.remove('opening');
-   }, 400);
  } else {
-   // CLOSING the cart
-   sidebar.classList.add('closing');
    sidebar.classList.remove('open');
    overlay.classList.remove('active');
-   
-   setTimeout(() => {
-     sidebar.classList.remove('closing');
-   }, 400);
  }
 
- // Close when clicking overlay
  overlay.onclick = function() {
    if (sidebar.classList.contains('open')) {
-     sidebar.classList.add('closing');
      sidebar.classList.remove('open');
      overlay.classList.remove('active');
-     
-     setTimeout(() => {
-       sidebar.classList.remove('closing');
-     }, 400);
    }
  };
 }
-
-
-
 
 // renderCartItems function to show empty state properly
 function renderCartItems() {
@@ -180,7 +126,6 @@ function renderCartItems() {
         return;
     }
 
-    // MODIFIED: This function is completely updated to generate the new compact HTML structure.
     var html = '';
     for (var i = 0; i < cart.length; i++) {
         var item = cart[i];
@@ -207,68 +152,6 @@ function renderCartItems() {
     cartItemsContainer.innerHTML = html;
 }
 
-// clear the cart
-function clearCart() {
-    cart = [];
-    updateCartCount();
-    renderCartItems();
-}
-
-// Create HTML for cart item
-function createCartItemHTML(item) {
-    var html = '<div class="cart-item">';
-    html += '<div class="cart-item-info">';
-    html += '<div class="cart-item-name">' + item.name + '</div>';
-    html += '<div style="font-size: 12px; color: #666;">Quantity: ' + item.quantity + '</div>';
-    html += '</div>';
-    html += '<div class="cart-item-actions">';
-    html += '<button class="quantity-btn" onclick="updateCartQuantity(' + item.id + ', -1)">−</button>';
-    html += '<span style="margin: 0 8px; font-size: 12px;">' + item.quantity + '</span>';
-    html += '<button class="quantity-btn" onclick="updateCartQuantity(' + item.id + ', 1)">+</button>';
-    html += '<button class="remove-item" onclick="removeFromCart(' + item.id + ')">Remove</button>';
-    html += '</div>';
-    html += '</div>';
-    return html;
-}
-
-// Show feedback when item is added to cart
-function showAddToCartFeedback(productName) {
-    // Create a simple toast notification
-    var toast = document.createElement('div');
-    toast.style.cssText = `
-        position: fixed;
-        top: 100px;
-        right: 20px;
-        background: #86BE4E;
-        color: white;
-        padding: 12px 20px;
-        border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-        z-index: 1001;
-        font-size: 14px;
-        font-weight: 500;
-        transition: all 0.3s ease;
-        transform: translateX(100%);
-    `;
-    toast.textContent = productName + ' added to cart!';
-    document.body.appendChild(toast);
-
-    // Animate in
-    setTimeout(function() {
-        toast.style.transform = 'translateX(0)';
-    }, 100);
-
-    // Remove after delay
-    setTimeout(function() {
-        toast.style.transform = 'translateX(100%)';
-        setTimeout(function() {
-            if (toast.parentNode) {
-                toast.parentNode.removeChild(toast);
-            }
-        }, 300);
-    }, 2000);
-}
-
 // Get cart summary for order
 function getCartSummary() {
     return {
@@ -276,31 +159,6 @@ function getCartSummary() {
         totalItems: getTotalCartItems(),
         itemCount: cart.length
     };
-}
-
-// Save cart to localStorage (for future enhancement)
-function saveCartToStorage() {
-    try {
-        localStorage.setItem('firstEmporiumCart', JSON.stringify(cart));
-        debugLog('Cart saved to storage');
-    } catch (error) {
-        console.warn('Could not save cart to storage:', error);
-    }
-}
-
-// Load cart from localStorage (for future enhancement)
-function loadCartFromStorage() {
-    try {
-        var savedCart = localStorage.getItem('firstEmporiumCart');
-        if (savedCart) {
-            cart = JSON.parse(savedCart);
-            updateCartCount();
-            debugLog('Cart loaded from storage');
-        }
-    } catch (error) {
-        console.warn('Could not load cart from storage:', error);
-        cart = [];
-    }
 }
 
 // Export cart data for order processing
@@ -323,7 +181,6 @@ function validateCart() {
         return false;
     }
     
-    // Check for any invalid items
     for (var i = 0; i < cart.length; i++) {
         if (cart[i].quantity <= 0) {
             alert('Invalid quantity detected. Please check your cart.');
@@ -341,14 +198,10 @@ function showOrderForm() {
         return;
     }
     
-    // Hide cart sidebar
     toggleCart();
     
-    // Show order form
     var orderModal = document.getElementById('orderModal');
     orderModal.style.display = 'flex';
     
     renderOrderSummary();
-    
-    debugLog('Proceeding to checkout with cart:', cart);
 }

@@ -93,7 +93,7 @@
     }
 
     .category-card {
-        padding: 24px 16px;
+        padding: 20px 12px; /* Reduced padding */
     }
     
     .category-icon {
@@ -149,7 +149,7 @@
 
     /* Difference section mobile */
     .difference-section {
-        padding: 60px 0;
+        padding: 40px 0; /* Reduced padding */
     }
     
     .difference-container {
@@ -186,11 +186,11 @@
 
     /* Collections section mobile */
     .collections-section {
-        padding: 60px 0;
+        padding: 40px 0;
     }
 
     .collection-card {
-        padding: 32px 24px;
+        padding: 24px 20px; /* Reduced padding */
     }
     
     .collection-icon {
@@ -210,7 +210,7 @@
 
     /* Testimonials mobile */
     .testimonials-section {
-        padding: 60px 0;
+        padding: 40px 0;
     }
     
     .testimonials-container {
@@ -238,7 +238,7 @@
 
     /* How it works mobile */
     .how-it-works {
-        padding: 60px 0;
+        padding: 40px 0;
     }
     
     .how-container {
@@ -247,21 +247,21 @@
 
     .steps-grid {
         grid-template-columns: repeat(2, 1fr);
-        gap: 32px;
+        gap: 24px;
     }
 
     .step-number {
-        width: 50px;
-        height: 50px;
-        font-size: 20px;
+        width: 45px; /* Reduced size */
+        height: 45px;
+        font-size: 18px;
     }
     
     .step-title {
-        font-size: 17px;
+        font-size: 16px;
     }
     
     .step-description {
-        font-size: 14px;
+        font-size: 13px;
     }
 
     /* Floating categories mobile */
@@ -364,7 +364,7 @@
     }
 }
 
-/* === MODIFIED: Styles for small mobile screens to be more compact === */
+/* Mobile Portrait - 480px and down */
 @media (max-width: 480px) {
     /* Very small mobile screens */
     .hero-title {
@@ -412,14 +412,13 @@
         font-size: 14px;
     }
 
-    /* === MODIFICATION: Force 2-column grid on small mobile and make cards more compact === */
     .products-grid {
-        grid-template-columns: repeat(2, 1fr); /* ALWAYS 2 columns on mobile */
-        gap: 12px; /* Tighter gap */
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
     }
     
     .product-info {
-        padding: 8px; /* Tighter padding */
+        padding: 8px;
     }
 
     .product-name {
@@ -429,27 +428,21 @@
 
     .product-description {
         font-size: 11px;
-        height: 28px; /* Force 2 lines max */
+        height: 28px;
         margin-bottom: 8px;
-    }
-
-    .product-actions {
-        flex-direction: column; /* Stack actions vertically */
-        align-items: stretch; /* Make buttons full width */
-        gap: 6px;
     }
 
     .add-to-cart {
         height: 34px;
         font-size: 12px;
         min-width: auto;
+        width: 100%;
     }
 
     .quantity-selector {
+        width: 100%;
         justify-content: space-between;
     }
-    /* === END OF MODIFICATION === */
-
 
     /* Steps single column */
     .steps-grid {

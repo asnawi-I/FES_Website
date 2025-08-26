@@ -83,11 +83,32 @@ function getFilteredProducts() {
     });
 }
 
-// Create HTML for a product card
+
+// === MODIFIED: createProductCard function to handle conditional button/selector visibility ===
 function createProductCard(product) {
-    var html = '<div class="product-card">';
+    const existingItem = findCartItem(product.id);
+    const quantity = existingItem ? existingItem.quantity : 1;
+    
+    // Conditionally show add button or quantity selector
+    const actionButtonHtml = !existingItem
+        ? `<button class="add-to-cart" onclick="addToCart(${product.id})">Add to Cart</button>`
+        : '';
+        
+    const quantitySelectorHtml = existingItem
+        ? `<div class="quantity-selector" style="display: flex;">
+               <button class="quantity-btn" onclick="updateQuantityOnCard(${product.id}, -1)">−</button>
+               <div class="quantity-display" id="qty-${product.id}">${quantity}</div>
+               <button class="quantity-btn" onclick="updateQuantityOnCard(${product.id}, 1)">+</button>
+           </div>`
+        : `<div class="quantity-selector">
+               <button class="quantity-btn" onclick="updateQuantityOnCard(${product.id}, -1)">−</button>
+               <div class="quantity-display" id="qty-${product.id}">${quantity}</div>
+               <button class="quantity-btn" onclick="updateQuantityOnCard(${product.id}, 1)">+</button>
+           </div>`; // Render hidden selector for smooth transition
+
+    var html = `<div class="product-card" data-product-id="${product.id}">`;
     html += '<div class="product-image">';
-    html += '<img src="' + product.image + '" alt="' + product.name + '" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\'">';
+    html += `<img src="${product.image}" alt="${product.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">`;
     html += '<div class="placeholder" style="display: none;">';
     html += '<div>📦</div>';
     html += '<div>img</div>';
@@ -95,25 +116,75 @@ function createProductCard(product) {
     html += '<div class="price-badge">Price on Inquiry</div>';
     html += '</div>';
     html += '<div class="product-info">';
-    html += '<h3 class="product-name">' + product.name + '</h3>';
-    html += '<p class="product-description">' + product.description + '</p>';
+    html += `<h3 class="product-name">${product.name}</h3>`;
+    html += `<p class="product-description">${product.description}</p>`;
     html += '<div class="product-actions">';
-    html += '<button class="add-to-cart" onclick="addToCart(' + product.id + ')" data-product-id="' + product.id + '">';
-    html += '<span class="cart-text add-text">Add to Cart</span>';
-    html += '<span class="cart-text added-text">Added!</span>';
-    html += '<i class="fas fa-shopping-cart"></i>';
-    html += '<i class="fas fa-box"></i>';
-    html += '</button>';
-    html += '<div class="quantity-selector">';
-    html += '<button class="quantity-btn" onclick="changeQuantity(' + product.id + ', -1)">−</button>';
-    html += '<div class="quantity-display" id="qty-' + product.id + '">1</div>';
-    html += '<button class="quantity-btn" onclick="changeQuantity(' + product.id + ', 1)">+</button>';
-    html += '</div>';
+    html += actionButtonHtml;
+    html += quantitySelectorHtml;
     html += '</div>';
     html += '</div>';
     html += '</div>';
     return html;
 }
+// === END OF MODIFICATION ===
+
+// === MODIFIED: Function to update the display of a single product card ===
+function updateProductCardDisplay(productId) {
+    const product = findProductById(productId);
+    if (!product) return;
+    
+    const cardElement = document.querySelector(`.product-card[data-product-id="${productId}"]`);
+    if (cardElement) {
+        // Re-render only this card
+        cardElement.outerHTML = createProductCard(product);
+    }
+}
+// === END OF MODIFICATION ===
+
+// === MODIFIED: `addToCart` now calls `updateProductCardDisplay` to swap the button ===
+function addToCart(productId) {
+    const product = findProductById(productId);
+    if (!product) return;
+
+    const existingItem = findCartItem(productId);
+
+    if (existingItem) {
+        existingItem.quantity += 1;
+    } else {
+        cart.push({
+            id: productId, name: product.name, description: product.description,
+            image: product.image, category: product.category, quantity: 1
+        });
+    }
+
+    updateCartCount();
+    renderCartItems();
+    updateProductCardDisplay(productId); // Update the card to show the selector
+    
+    // Animate cart button
+    animateCartButton();
+}
+// === END OF MODIFICATION ===
+
+// === MODIFIED: A new function to handle quantity changes directly from the product card ===
+function updateQuantityOnCard(productId, change) {
+    const item = findCartItem(productId);
+    if (!item) return;
+
+    const newQuantity = item.quantity + change;
+
+    if (newQuantity <= 0) {
+        // If quantity is zero or less, remove from cart
+        removeFromCart(productId);
+    } else {
+        item.quantity = newQuantity;
+        updateCartCount();
+        renderCartItems();
+        updateProductCardDisplay(productId);
+    }
+}
+// === END OF MODIFICATION ===
+
 
 // Filter products by category
 function filterProducts(category) {
@@ -131,30 +202,20 @@ function filterProductsFloating(category) {
 
 // Update active category styling
 function updateActiveCategory(isFloating) {
-    // Update main categories
     var mainCards = document.querySelectorAll('.category-card');
-    for (var i = 0; i < mainCards.length; i++) {
-        mainCards[i].classList.remove('active');
-    }
+    mainCards.forEach(card => card.classList.remove('active'));
 
-    // Update floating categories
     var floatingPills = document.querySelectorAll('.floating-category-pill');
-    for (var i = 0; i < floatingPills.length; i++) {
-        floatingPills[i].classList.remove('active');
-    }
+    floatingPills.forEach(pill => pill.classList.remove('active'));
 
-    // Find and activate the correct category
-    var categoryIndex = ['all', 'fresh', 'dairy', 'meat', 'pantry', 'frozen', 'snacks', 'household'].indexOf(currentFilter);
-    
-    if (categoryIndex !== -1) {
-        if (mainCards[categoryIndex]) {
-            mainCards[categoryIndex].classList.add('active');
-        }
-        if (floatingPills[categoryIndex]) {
-            floatingPills[categoryIndex].classList.add('active');
-        }
-    }
+    const categorySelector = isFloating
+        ? `.floating-category-pill[onclick*="('${currentFilter}')"]`
+        : `.category-card[onclick*="('${currentFilter}')"]`;
+        
+    document.querySelector(`.category-card[onclick*="('${currentFilter}')"]`)?.classList.add('active');
+    document.querySelector(`.floating-category-pill[onclick*="('${currentFilter}')"]`)?.classList.add('active');
 }
+
 
 // Search products
 function searchProducts(searchTerm) {
@@ -179,52 +240,6 @@ function searchProducts(searchTerm) {
     grid.innerHTML = html;
 }
 
-
-function animateAddToCart(button, product, quantity, originalText) {
-    // Phase 1: Loading state
-    button.classList.add('loading', 'ripple');
-    button.textContent = '';
-    
-    // Create floating item effect
-    createFloatingItem(button, product.name, quantity);
-    
-    setTimeout(function() {
-        // Phase 2: Success state
-        button.classList.remove('loading', 'ripple');
-        button.classList.add('success', 'pulse');
-        button.textContent = 'Added!';
-        
-        // Animate cart button
-        animateCartButton();
-        
-    }, 800);
-    
-    setTimeout(function() {
-        // Phase 3: Reset to original state
-        button.classList.remove('success', 'pulse');
-        button.textContent = originalText;
-        
-    }, 2000);
-}
-
-function createFloatingItem(button, productName, quantity) {
-    var rect = button.getBoundingClientRect();
-    var floatingItem = document.createElement('div');
-    floatingItem.className = 'floating-item';
-    floatingItem.textContent = '+' + quantity;
-    floatingItem.style.left = rect.left + rect.width / 2 + 'px';
-    floatingItem.style.top = rect.top + 'px';
-    
-    document.body.appendChild(floatingItem);
-    
-    // Remove after animation
-    setTimeout(function() {
-        if (floatingItem.parentNode) {
-            floatingItem.parentNode.removeChild(floatingItem);
-        }
-    }, 1000);
-}
-
 function animateCartButton() {
     var cartButton = document.querySelector('.cart-button');
     if (cartButton) {
@@ -233,16 +248,6 @@ function animateCartButton() {
             cartButton.classList.remove('bounce');
         }, 800);
     }
-}
-
-// Change quantity for a product
-function changeQuantity(productId, change) {
-    var qtyDisplay = document.getElementById('qty-' + productId);
-    if (!qtyDisplay) return;
-
-    var currentQty = parseInt(qtyDisplay.textContent);
-    var newQty = Math.max(1, currentQty + change);
-    qtyDisplay.textContent = newQty;
 }
 
 // Find product by ID
@@ -277,31 +282,6 @@ function scrollToSection(selector) {
     var element = document.querySelector(selector);
     if (element) {
         element.scrollIntoView({ behavior: 'smooth' });
-    }
-}
-
-// Show loading state
-function showLoading() {
-    // Implementation for loading states
-    console.log('Loading...');
-}
-
-// Hide loading state
-function hideLoading() {
-    // Implementation for hiding loading states
-    console.log('Loading complete');
-}
-
-// Error handling
-function handleError(error) {
-    console.error('Error:', error);
-    alert('An error occurred. Please try again.');
-}
-
-// Debug function for development
-function debugLog(message, data) {
-    if (typeof console !== 'undefined') {
-        console.log('[First Emporium Debug]', message, data || '');
     }
 }
 
