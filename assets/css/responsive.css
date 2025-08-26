@@ -67,8 +67,6 @@
         font-size: 16px;
     }
 
-    /* MODIFIED: Removed fixed width/height for .hero-visual as it's now fluid */
-
     /* Stats section mobile */
     .stats-container {
         flex-direction: column;
@@ -136,20 +134,17 @@
         border-radius: 12px;
     }
 
-    .product-image {
-        height: 160px;
-    }
-
     .product-info {
-        padding: 16px;
+        padding: 12px;
     }
 
     .product-name {
-        font-size: 15px;
+        font-size: 14px;
     }
 
     .product-description {
-        font-size: 13px;
+        font-size: 12px;
+        height: 34px; /* 2 lines */
     }
 
     /* Difference section mobile */
@@ -369,7 +364,7 @@
     }
 }
 
-/* Mobile Portrait - 480px and down */
+/* === MODIFIED: Styles for small mobile screens to be more compact === */
 @media (max-width: 480px) {
     /* Very small mobile screens */
     .hero-title {
@@ -381,8 +376,6 @@
         font-size: 15px;
     }
     
-    /* MODIFIED: Removed fixed width/height for .hero-visual */
-
     .section-title {
         font-size: 24px;
     }
@@ -419,18 +412,44 @@
         font-size: 14px;
     }
 
-    /* Products very small mobile */
+    /* === MODIFICATION: Force 2-column grid on small mobile and make cards more compact === */
     .products-grid {
-        grid-template-columns: 1fr;
-        gap: 16px;
-        max-width: 320px;
-        margin: 0 auto;
+        grid-template-columns: repeat(2, 1fr); /* ALWAYS 2 columns on mobile */
+        gap: 12px; /* Tighter gap */
+    }
+    
+    .product-info {
+        padding: 8px; /* Tighter padding */
     }
 
-    .product-card {
-        max-width: 300px;
-        margin: 0 auto;
+    .product-name {
+        font-size: 13px;
+        margin-bottom: 2px;
     }
+
+    .product-description {
+        font-size: 11px;
+        height: 28px; /* Force 2 lines max */
+        margin-bottom: 8px;
+    }
+
+    .product-actions {
+        flex-direction: column; /* Stack actions vertically */
+        align-items: stretch; /* Make buttons full width */
+        gap: 6px;
+    }
+
+    .add-to-cart {
+        height: 34px;
+        font-size: 12px;
+        min-width: auto;
+    }
+
+    .quantity-selector {
+        justify-content: space-between;
+    }
+    /* === END OF MODIFICATION === */
+
 
     /* Steps single column */
     .steps-grid {
