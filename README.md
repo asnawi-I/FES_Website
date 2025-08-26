@@ -1,6 +1,6 @@
 # First Emporium Supermarket - Grocery Ordering System
 
-Professional inquiry-based grocery ordering website for Brunei market.
+Professional inquiry-based grocery ordering website.
 
 ## Features
 - 48+ products across 8 categories
