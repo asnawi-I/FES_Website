@@ -18,10 +18,7 @@
         grid-template-columns: repeat(3, 1fr);
     }
     
-    .collections-grid {
-        grid-template-columns: 1fr;
-        gap: 24px;
-    }
+    /* MODIFIED: Removed the single-column rule for collections grid */
     
     .categories-grid {
         grid-template-columns: repeat(3, 1fr);
@@ -67,11 +64,27 @@
         font-size: 16px;
     }
 
-    /* Stats section mobile */
+    /* Stats section mobile layout */
     .stats-container {
-        flex-direction: column;
-        gap: 32px;
+        flex-direction: row;
+        justify-content: space-around;
+        gap: 16px;
         padding: 0 16px;
+    }
+
+    .stat-number {
+        font-size: 28px;
+        margin-bottom: 4px;
+    }
+
+    .stat-label {
+        font-size: 12px;
+        line-height: 1.2;
+    }
+
+    .stat-stars {
+        font-size: 16px;
+        margin-top: 4px;
     }
 
     /* Categories mobile layout */
@@ -93,7 +106,7 @@
     }
 
     .category-card {
-        padding: 20px 12px; /* Reduced padding */
+        padding: 20px 12px;
     }
     
     .category-icon {
@@ -149,7 +162,7 @@
 
     /* Difference section mobile */
     .difference-section {
-        padding: 40px 0; /* Reduced padding */
+        padding: 40px 0;
     }
     
     .difference-container {
@@ -184,13 +197,17 @@
         font-size: 16px;
     }
 
-    /* Collections section mobile */
+    /* === MODIFIED: Collections section mobile === */
     .collections-section {
         padding: 40px 0;
     }
 
+    .collections-grid {
+        gap: 16px; /* Reduced gap for mobile */
+    }
+
     .collection-card {
-        padding: 24px 20px; /* Reduced padding */
+        padding: 24px 20px;
     }
     
     .collection-icon {
@@ -207,6 +224,8 @@
     .collection-description {
         font-size: 15px;
     }
+    /* === END OF MODIFICATION === */
+
 
     /* Testimonials mobile */
     .testimonials-section {
@@ -251,7 +270,7 @@
     }
 
     .step-number {
-        width: 45px; /* Reduced size */
+        width: 45px;
         height: 45px;
         font-size: 18px;
     }
@@ -384,12 +403,10 @@
         font-size: 15px;
     }
 
-    /* Single column categories */
+    /* Categories: Changed to a 2-column grid */
     .categories-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 1fr);
         gap: 12px;
-        max-width: 300px;
-        margin: 0 auto 40px;
     }
 
     .category-card {
@@ -450,12 +467,7 @@
         gap: 24px;
     }
 
-    /* Collections single column */
-    .collections-grid {
-        grid-template-columns: 1fr;
-        gap: 24px;
-    }
-
+    /* MODIFIED: Removed single column rule for collections */
     .collection-card {
         padding: 24px 20px;
     }
