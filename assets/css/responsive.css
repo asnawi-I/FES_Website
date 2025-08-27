@@ -236,11 +236,6 @@
         padding: 0 16px;
     }
 
-    .testimonials-grid {
-        grid-template-columns: 1fr;
-        gap: 24px;
-    }
-
     .testimonial-card {
         padding: 24px 20px;
     }

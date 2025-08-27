@@ -9,6 +9,7 @@ var floatingVisible = false;
 document.addEventListener('DOMContentLoaded', function() {
     initializePage();
     setupEventListeners();
+    initializeTestimonialCarousel();
 });
 
 // Initialize the application
@@ -304,3 +305,64 @@ scrollToTopBtn.addEventListener("click", () => {
     behavior: 'smooth'
   });
 });
+
+// Testimonial Carousel Logic
+function initializeTestimonialCarousel() {
+    const carousel = document.getElementById('testimonialCarousel');
+    if (!carousel) return;
+
+    const slides = carousel.querySelectorAll('.testimonial-card');
+    const prevBtn = document.getElementById('testimonialPrevBtn');
+    const nextBtn = document.getElementById('testimonialNextBtn');
+    const dotsContainer = document.getElementById('testimonialDots');
+    
+    let currentIndex = 0;
+    const totalSlides = slides.length;
+
+    if (totalSlides <= 1) {
+        prevBtn.style.display = 'none';
+        nextBtn.style.display = 'none';
+        return;
+    }
+
+    // Create dots
+    for (let i = 0; i < totalSlides; i++) {
+        const dot = document.createElement('span');
+        dot.classList.add('dot');
+        dot.addEventListener('click', () => {
+            showSlide(i);
+        });
+        dotsContainer.appendChild(dot);
+    }
+    const dots = dotsContainer.querySelectorAll('.dot');
+
+    function showSlide(index) {
+        if (index >= totalSlides) {
+            currentIndex = 0;
+        } else if (index < 0) {
+            currentIndex = totalSlides - 1;
+        } else {
+            currentIndex = index;
+        }
+
+        const offset = -currentIndex * 100;
+        carousel.style.transform = `translateX(${offset}%)`;
+
+        dots.forEach(dot => dot.classList.remove('active'));
+        dots[currentIndex].classList.add('active');
+    }
+
+    nextBtn.addEventListener('click', () => {
+        showSlide(currentIndex + 1);
+    });
+
+    prevBtn.addEventListener('click', () => {
+        showSlide(currentIndex - 1);
+    });
+    
+    setInterval(() => {
+        showSlide(currentIndex + 1);
+    }, 5000); // Change slide every 5 seconds
+
+    showSlide(currentIndex);
+}

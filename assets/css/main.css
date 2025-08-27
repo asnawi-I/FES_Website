@@ -747,13 +747,6 @@ body {
     padding: 0 24px;
 }
 
-.testimonials-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 32px;
-    margin-top: 40px;
-}
-
 .testimonial-card {
     background: white;
     padding: 32px;

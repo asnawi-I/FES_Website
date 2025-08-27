@@ -5,18 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>First Emporium Supermarket - Fresh Groceries</title>
     
-    <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
     
-    <!-- Stylesheets -->
     <link rel="stylesheet" href="assets/css/main.css">
     <link rel="stylesheet" href="assets/css/components.css">
     <link rel="stylesheet" href="assets/css/responsive.css">
     <link rel="stylesheet" href="assets/css/animation.css">
 </head>
 <body>
-    <!-- Floating Categories -->
     <div class="floating-categories" id="floatingCategories">
         <div class="floating-category-scroll">
             <div class="floating-category-pill active" onclick="filterProductsFloating('all')">🛍️ All</div>
@@ -30,7 +27,6 @@
         </div>
     </div>
 
-    <!-- Header -->
     <header class="header">
         <div class="header-container">
             <div class="logo">
@@ -62,7 +58,6 @@
         </div>
     </header>
 
-    <!-- Hero Section -->
     <section class="hero">
         <div class="hero-container">
             <div class="hero-content">
@@ -85,7 +80,6 @@
         </div>
     </section>
 
-    <!-- Stats Section -->
     <section class="stats-section">
         <div class="stats-container">
             <div class="stat-item">
@@ -106,7 +100,6 @@
         </div>
     </section>
 
-    <!-- Categories Section -->
     <section class="categories">
         <div class="categories-container">
             <div class="section-header">
@@ -156,7 +149,6 @@
         </div>
     </section>
 
-    <!-- Products Showcase -->
     <section class="products-showcase">
         <div class="products-container">
             <div class="section-header">
@@ -165,12 +157,10 @@
             </div>
             
             <div class="products-grid" id="productsGrid">
-                <!-- Products will be populated by JavaScript -->
-            </div>
+                </div>
         </div>
     </section>
 
-    <!-- What Makes Us Different -->
     <section class="difference-section">
         <div class="difference-container">
             <div class="difference-content">
@@ -214,7 +204,6 @@
         </div>
     </section>
 
-    <!-- Explore Our Collections -->
     <section class="collections-section">
         <div class="products-container">
             <div class="section-header">
@@ -262,7 +251,6 @@
         </div>
     </section>
 
-    <!-- Testimonials -->
     <section class="testimonials-section">
         <div class="testimonials-container">
             <div class="section-header">
@@ -270,32 +258,36 @@
                 <p class="section-subtitle">See what our satisfied customers have to say about their experience with us</p>
             </div>
             
-            <div class="testimonials-grid">
-                <div class="testimonial-card">
-                    <div class="testimonial-avatar">JD</div>
-                    <p class="testimonial-text">"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent laoreet massa ut felis semper porttitor. Cras aliquet lorem sit amet sapien volutpat, vitae tempus mi."</p>
-                    <div class="testimonial-name">John Doe</div>
-                    <div class="testimonial-stars">★★★★★</div>
+            <div class="testimonial-carousel-wrapper">
+                <div class="testimonial-carousel" id="testimonialCarousel">
+                    <div class="testimonial-card">
+                        <div class="testimonial-avatar">JD</div>
+                        <p class="testimonial-text">"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent laoreet massa ut felis semper porttitor. Cras aliquet lorem sit amet sapien volutpat, vitae tempus mi."</p>
+                        <div class="testimonial-name">John Doe</div>
+                        <div class="testimonial-stars">★★★★★</div>
+                    </div>
+                    
+                    <div class="testimonial-card">
+                        <div class="testimonial-avatar">SM</div>
+                        <p class="testimonial-text">"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent laoreet massa ut felis semper porttitor. Cras aliquet lorem sit amet sapien volutpat, vitae tempus mi."</p>
+                        <div class="testimonial-name">Sarah Miller</div>
+                        <div class="testimonial-stars">★★★★★</div>
+                    </div>
+                    
+                    <div class="testimonial-card">
+                        <div class="testimonial-avatar">RJ</div>
+                        <p class="testimonial-text">"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent laoreet massa ut felis semper porttitor. Cras aliquet lorem sit amet sapien volutpat, vitae tempus mi."</p>
+                        <div class="testimonial-name">Robert Johnson</div>
+                        <div class="testimonial-stars">★★★★★</div>
+                    </div>
                 </div>
-                
-                <div class="testimonial-card">
-                    <div class="testimonial-avatar">SM</div>
-                    <p class="testimonial-text">"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent laoreet massa ut felis semper porttitor. Cras aliquet lorem sit amet sapien volutpat, vitae tempus mi."</p>
-                    <div class="testimonial-name">Sarah Miller</div>
-                    <div class="testimonial-stars">★★★★★</div>
-                </div>
-                
-                <div class="testimonial-card">
-                    <div class="testimonial-avatar">RJ</div>
-                    <p class="testimonial-text">"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent laoreet massa ut felis semper porttitor. Cras aliquet lorem sit amet sapien volutpat, vitae tempus mi."</p>
-                    <div class="testimonial-name">Robert Johnson</div>
-                    <div class="testimonial-stars">★★★★★</div>
-                </div>
+                <button class="carousel-btn prev" id="testimonialPrevBtn">❮</button>
+                <button class="carousel-btn next" id="testimonialNextBtn">❯</button>
             </div>
+            <div class="testimonial-dots" id="testimonialDots"></div>
         </div>
     </section>
 
-    <!-- How It Works -->
     <section class="how-it-works">
         <div class="how-container">
             <div class="section-header">
@@ -328,7 +320,6 @@
     </section>
 
 
-    <!-- Order Form Modal -->
     <div class="order-modal" id="orderModal">
         <div class="order-form">
             <div class="order-header">
@@ -340,8 +331,7 @@
                     <div class="form-section">
                         <h3 class="form-section-title">Order Summary</h3>
                         <div class="order-summary" id="orderSummary">
-                            <!-- Order summary will be populated by JavaScript -->
-                        </div>
+                            </div>
                     </div>
 
                     <div class="form-section">
@@ -442,16 +432,13 @@
         </div>
     </div>
 
-    <!-- Footer -->
     <footer class="footer">
         <p>&copy; 2025 First Emporium Supermarket. All rights reserved.</p>
         <p>Fresh groceries • Quality products • Excellent service</p>
     </footer>
 
-    <!-- Cart Overlay -->
-<div class="overlay" id="cartOverlay"></div>
+    <div class="overlay" id="cartOverlay"></div>
 
-<!-- Cart Sidebar -->
 <div class="cart-sidebar" id="cartSidebar">
     <div class="cart-header">
         <h3 class="cart-title">Your Order Inquiry</h3>
@@ -461,8 +448,7 @@
     </div>
     
     <div class="cart-items" id="cartItems">
-        <!-- Cart items will be populated by JavaScript -->
-    </div>
+        </div>
     
     <div class="cart-footer">
         <div class="cart-actions">
@@ -477,10 +463,8 @@
     </div>
 </div>
 
-    <!-- Button -->
     <button id="scrollToTopBtn" title="Go to top">▲</button>
 
-    <!-- JavaScript Files -->
     <script src="data/products.js"></script>
     <script src="assets/js/cart.js"></script>
     <script src="assets/js/orders.js"></script>
