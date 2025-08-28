@@ -271,16 +271,14 @@ body {
     padding: 40px 0;
 }
 
-/* === MODIFIED: Stats container alignment fix === */
 .stats-container {
     max-width: 1400px;
     margin: 0 auto;
     padding: 0 24px;
     display: flex;
     justify-content: space-between;
-    align-items: baseline; /* Changed from center to baseline */
+    align-items: baseline; 
 }
-/* === END OF MODIFICATION === */
 
 .stat-item {
     text-align: center;
@@ -825,11 +823,9 @@ body {
     transform: scale(1.2);
 }
 
-/* === MODIFIED: Hide carousel arrow buttons === */
 .carousel-btn {
     display: none;
 }
-/* === END OF MODIFICATION === */
 
 
 .how-it-works {

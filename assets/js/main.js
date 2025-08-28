@@ -9,13 +9,13 @@ var floatingVisible = false;
 document.addEventListener('DOMContentLoaded', function() {
     initializePage();
     setupEventListeners();
-    initializeTestimonialCarousel();
 });
 
 // Initialize the application
 function initializePage() {
     renderProducts();
     updateCartCount();
+    initializeTestimonialCarousel(); // Initialize the carousel on page load
     console.log('First Emporium initialized successfully');
 }
 
@@ -85,12 +85,10 @@ function getFilteredProducts() {
 }
 
 
-// === MODIFIED: createProductCard function to handle conditional button/selector visibility ===
 function createProductCard(product) {
     const existingItem = findCartItem(product.id);
     const quantity = existingItem ? existingItem.quantity : 1;
     
-    // Conditionally show add button or quantity selector
     const actionButtonHtml = !existingItem
         ? `<button class="add-to-cart" onclick="addToCart(${product.id})">Add to Cart</button>`
         : '';
@@ -105,7 +103,7 @@ function createProductCard(product) {
                <button class="quantity-btn" onclick="updateQuantityOnCard(${product.id}, -1)">−</button>
                <div class="quantity-display" id="qty-${product.id}">${quantity}</div>
                <button class="quantity-btn" onclick="updateQuantityOnCard(${product.id}, 1)">+</button>
-           </div>`; // Render hidden selector for smooth transition
+           </div>`;
 
     var html = `<div class="product-card" data-product-id="${product.id}">`;
     html += '<div class="product-image">';
@@ -127,22 +125,17 @@ function createProductCard(product) {
     html += '</div>';
     return html;
 }
-// === END OF MODIFICATION ===
 
-// === MODIFIED: Function to update the display of a single product card ===
 function updateProductCardDisplay(productId) {
     const product = findProductById(productId);
     if (!product) return;
     
     const cardElement = document.querySelector(`.product-card[data-product-id="${productId}"]`);
     if (cardElement) {
-        // Re-render only this card
         cardElement.outerHTML = createProductCard(product);
     }
 }
-// === END OF MODIFICATION ===
 
-// === MODIFIED: `addToCart` now calls `updateProductCardDisplay` to swap the button ===
 function addToCart(productId) {
     const product = findProductById(productId);
     if (!product) return;
@@ -160,14 +153,11 @@ function addToCart(productId) {
 
     updateCartCount();
     renderCartItems();
-    updateProductCardDisplay(productId); // Update the card to show the selector
+    updateProductCardDisplay(productId);
     
-    // Animate cart button
     animateCartButton();
 }
-// === END OF MODIFICATION ===
 
-// === MODIFIED: A new function to handle quantity changes directly from the product card ===
 function updateQuantityOnCard(productId, change) {
     const item = findCartItem(productId);
     if (!item) return;
@@ -175,7 +165,6 @@ function updateQuantityOnCard(productId, change) {
     const newQuantity = item.quantity + change;
 
     if (newQuantity <= 0) {
-        // If quantity is zero or less, remove from cart
         removeFromCart(productId);
     } else {
         item.quantity = newQuantity;
@@ -184,7 +173,6 @@ function updateQuantityOnCard(productId, change) {
         updateProductCardDisplay(productId);
     }
 }
-// === END OF MODIFICATION ===
 
 
 // Filter products by category
@@ -306,63 +294,66 @@ scrollToTopBtn.addEventListener("click", () => {
   });
 });
 
-// Testimonial Carousel Logic
+// === MODIFIED: Testimonial Carousel Logic with Swipe and no Autoplay ===
 function initializeTestimonialCarousel() {
-    const carousel = document.getElementById('testimonialCarousel');
-    if (!carousel) return;
-
-    const slides = carousel.querySelectorAll('.testimonial-card');
-    const prevBtn = document.getElementById('testimonialPrevBtn');
-    const nextBtn = document.getElementById('testimonialNextBtn');
+    const slider = document.getElementById('testimonialSlider');
     const dotsContainer = document.getElementById('testimonialDots');
-    
-    let currentIndex = 0;
-    const totalSlides = slides.length;
+    if (!slider || !dotsContainer) return;
 
-    if (totalSlides <= 1) {
-        prevBtn.style.display = 'none';
-        nextBtn.style.display = 'none';
-        return;
-    }
+    const slides = slider.querySelectorAll('.testimonial-card');
+    if (slides.length === 0) return;
+
+    let currentIndex = 0;
+    let startX = 0;
+    let endX = 0;
 
     // Create dots
-    for (let i = 0; i < totalSlides; i++) {
-        const dot = document.createElement('span');
-        dot.classList.add('dot');
+    dotsContainer.innerHTML = ''; // Clear existing dots
+    slides.forEach((_, i) => {
+        const dot = document.createElement('div');
+        dot.classList.add('testimonial-dot');
+        if (i === 0) dot.classList.add('active');
         dot.addEventListener('click', () => {
-            showSlide(i);
+            goToSlide(i);
         });
         dotsContainer.appendChild(dot);
-    }
-    const dots = dotsContainer.querySelectorAll('.dot');
+    });
+    const dots = dotsContainer.querySelectorAll('.testimonial-dot');
 
-    function showSlide(index) {
-        if (index >= totalSlides) {
-            currentIndex = 0;
-        } else if (index < 0) {
-            currentIndex = totalSlides - 1;
-        } else {
-            currentIndex = index;
-        }
-
+    function goToSlide(index) {
+        currentIndex = index;
         const offset = -currentIndex * 100;
-        carousel.style.transform = `translateX(${offset}%)`;
-
-        dots.forEach(dot => dot.classList.remove('active'));
-        dots[currentIndex].classList.add('active');
+        slider.style.transform = `translateX(${offset}%)`;
+        dots.forEach((dot, i) => {
+            dot.classList.toggle('active', i === currentIndex);
+        });
     }
 
-    nextBtn.addEventListener('click', () => {
-        showSlide(currentIndex + 1);
+    // Swipe functionality for touch devices
+    slider.addEventListener('touchstart', (e) => {
+        startX = e.touches[0].clientX;
+    }, { passive: true });
+
+    slider.addEventListener('touchend', (e) => {
+        endX = e.changedTouches[0].clientX;
+        const diff = startX - endX;
+
+        if (Math.abs(diff) > 50) { // Swipe threshold
+            if (diff > 0) {
+                // Swiped left
+                if (currentIndex < slides.length - 1) {
+                    goToSlide(currentIndex + 1);
+                }
+            } else {
+                // Swiped right
+                if (currentIndex > 0) {
+                    goToSlide(currentIndex - 1);
+                }
+            }
+        }
     });
 
-    prevBtn.addEventListener('click', () => {
-        showSlide(currentIndex - 1);
-    });
-    
-    setInterval(() => {
-        showSlide(currentIndex + 1);
-    }, 5000); // Change slide every 5 seconds
-
-    showSlide(currentIndex);
+    // Ensure initial state is correct
+    goToSlide(0);
 }
+// === END OF MODIFICATION ===
