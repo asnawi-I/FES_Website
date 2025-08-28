@@ -5,8 +5,6 @@
 // Global cart variable
 var cart = [];
 
-// Add item to cart - LOGIC MOVED TO MAIN.JS for better state management
-
 // Find cart item by product ID
 function findCartItem(productId) {
     for (var i = 0; i < cart.length; i++) {
@@ -17,7 +15,7 @@ function findCartItem(productId) {
     return null;
 }
 
-// === MODIFIED: `updateCartQuantity` now syncs back to the product card on the main page ===
+// Update quantity from cart sidebar, syncs with product card
 function updateCartQuantity(productId, change) {
     var item = findCartItem(productId);
     if (!item) return;
@@ -30,15 +28,13 @@ function updateCartQuantity(productId, change) {
         item.quantity = newQuantity;
         updateCartCount();
         renderCartItems();
-        // Sync change with the main product card display
         if (typeof updateProductCardDisplay === 'function') {
             updateProductCardDisplay(productId);
         }
     }
 }
-// === END OF MODIFICATION ===
 
-// === MODIFIED: `removeFromCart` now syncs back to the product card on the main page ===
+// Remove item from cart, syncs with product card
 function removeFromCart(productId) {
     cart = cart.filter(function(item) {
         return item.id !== productId;
@@ -46,26 +42,22 @@ function removeFromCart(productId) {
     
     updateCartCount();
     renderCartItems();
-    // Sync change with the main product card display
     if (typeof updateProductCardDisplay === 'function') {
         updateProductCardDisplay(productId);
     }
 }
-// === END OF MODIFICATION ===
 
-// === MODIFIED: `clearCart` now re-renders the product grid to reset all cards ===
+// Clear cart, syncs with all product cards
 function clearCart() {
     cart = [];
     updateCartCount();
     renderCartItems();
-    // Re-render all products to show "Add to Cart" buttons again
     if (typeof renderProducts === 'function') {
         renderProducts();
     }
 }
-// === END OF MODIFICATION ===
 
-// Update cart count display
+// Update cart count display in the header
 function updateCartCount() {
     var cartCount = document.getElementById('cartCount');
     var cartTotal = document.getElementById('cartTotal');
@@ -93,27 +85,30 @@ function updateCartCount() {
     }
 }
 
+// === MODIFIED: Simplified and more robust toggleCart function ===
 function toggleCart() {
- const sidebar = document.getElementById('cartSidebar');
- const overlay = document.getElementById('cartOverlay');
- const isOpening = !sidebar.classList.contains('open');
- 
- if (isOpening) {
-   sidebar.classList.add('open');
-   overlay.classList.add('active');
-   renderCartItems();
- } else {
-   sidebar.classList.remove('open');
-   overlay.classList.remove('active');
- }
+    const sidebar = document.getElementById('cartSidebar');
+    const overlay = document.getElementById('cartOverlay');
+    
+    const isOpening = !sidebar.classList.contains('open');
 
- overlay.onclick = function() {
-   if (sidebar.classList.contains('open')) {
-     sidebar.classList.remove('open');
-     overlay.classList.remove('active');
-   }
- };
+    if (isOpening) {
+        // Render items before opening to ensure content is ready
+        renderCartItems();
+        sidebar.classList.add('open');
+        overlay.classList.add('active');
+    } else {
+        sidebar.classList.remove('open');
+        overlay.classList.remove('active');
+    }
+
+    // Always ensure the overlay can close the cart
+    overlay.onclick = function() {
+        sidebar.classList.remove('open');
+        overlay.classList.remove('active');
+    };
 }
+// === END OF MODIFICATION ===
 
 // renderCartItems function to show empty state properly
 function renderCartItems() {
@@ -155,7 +150,7 @@ function renderCartItems() {
 // Get cart summary for order
 function getCartSummary() {
     return {
-        items: cart.slice(), // Create a copy
+        items: cart.slice(),
         totalItems: getTotalCartItems(),
         itemCount: cart.length
     };

@@ -520,33 +520,8 @@
    animation: textIn 1.5s ease-in-out forwards;
 }
 
-/* Cart Button Bounce Animation */
-@keyframes cartBounce {
-   0% { transform: scale(1); }
-   30% { transform: scale(1.25); }
-   50% { transform: scale(1.1); }
-   70% { transform: scale(1.15); }
-   100% { transform: scale(1); }
-}
-
 .cart-button.bounce {
    animation: cartBounce 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-}
-
-/* Cart Count Animation */
-@keyframes countUp {
-   0% { 
-       transform: scale(0) rotate(180deg);
-       opacity: 0;
-   }
-   50% { 
-       transform: scale(1.3) rotate(0deg);
-       opacity: 1;
-   }
-   100% { 
-       transform: scale(1) rotate(0deg);
-       opacity: 1;
-   }
 }
 
 .cart-count.updated {
@@ -565,15 +540,12 @@
    }
 }
 
-
-
-/* cart sidebar */
-
+/* === MODIFIED: Cart Sidebar styles and animation fix === */
 .cart-sidebar {
     position: fixed;
     top: 0;
     right: 0;
-    width: 360px; /* MODIFIED: Reduced width from 400px for a more compact feel */
+    width: 360px;
     height: 100vh;
     background: white;
     box-shadow: -4px 0 20px rgba(0, 0, 0, 0.1);
@@ -581,7 +553,12 @@
     transform: translateX(100%);
     display: flex;
     flex-direction: column;
+    /* Animation properties moved here from animation.css for better performance */
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform; /* Hint to the browser to optimize this animation */
 }
+/* === END OF MODIFICATION === */
+
 
 .cart-sidebar.open {
     transform: translateX(0);
@@ -629,7 +606,6 @@
     min-height: 300px;
 }
 
-/* === MODIFIED: COMPLETE CART ITEM REDESIGN FOR COMPACTNESS === */
 .cart-sidebar .cart-item {
     display: flex;
     align-items: center;
@@ -683,7 +659,7 @@
 }
 
 .cart-sidebar .cart-item-description {
-    display: none; /* Hide description to save space */
+    display: none;
 }
 
 .cart-sidebar .cart-item-actions {
@@ -729,10 +705,10 @@
 }
 
 .cart-sidebar .remove-item {
-    color: #A0AEC0; /* Muted color */
+    color: #A0AEC0;
     background: none;
     border: none;
-    font-size: 20px; /* Larger for icon feel */
+    font-size: 20px;
     font-weight: normal;
     cursor: pointer;
     padding: 0;
@@ -745,8 +721,6 @@
     color: #EA3B52;
     text-decoration: none;
 }
-/* === END OF MODIFICATION === */
-
 
 .cart-sidebar .cart-footer {
     padding: 20px 24px;
