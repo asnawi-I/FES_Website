@@ -294,7 +294,7 @@ scrollToTopBtn.addEventListener("click", () => {
   });
 });
 
-// === MODIFIED: Testimonial Carousel Logic with Swipe and no Autoplay ===
+// Testimonial Carousel Logic
 function initializeTestimonialCarousel() {
     const slider = document.getElementById('testimonialSlider');
     const dotsContainer = document.getElementById('testimonialDots');
@@ -356,4 +356,3 @@ function initializeTestimonialCarousel() {
     // Ensure initial state is correct
     goToSlide(0);
 }
-// === END OF MODIFICATION ===

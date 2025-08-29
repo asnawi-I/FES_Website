@@ -758,9 +758,10 @@ body {
     transition: transform 0.5s ease-in-out;
 }
 
+/* MODIFIED: Shortened testimonial card */
 .testimonial-card {
     background: white;
-    padding: 32px;
+    padding: 24px; /* Reduced padding */
     border-radius: 16px;
     border: 1px solid #E2E8F0;
     text-align: center;
@@ -770,26 +771,27 @@ body {
 }
 
 .testimonial-avatar {
-    width: 60px;
-    height: 60px;
+    width: 50px; /* Reduced size */
+    height: 50px;
     background: #00693e;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 auto 16px;
+    margin: 0 auto 12px; /* Reduced margin */
     color: white;
-    font-size: 20px;
+    font-size: 18px; /* Reduced font size */
     font-weight: 600;
 }
 
 .testimonial-text {
-    font-size: 16px;
+    font-size: 15px; /* Reduced font size */
     color: #4A5568;
     margin-bottom: 16px;
-    line-height: 1.6;
-    min-height: 100px;
+    line-height: 1.5;
+    min-height: 80px; /* Reduced min-height */
 }
+/* END OF MODIFICATION */
 
 .testimonial-name {
     font-size: 14px;
