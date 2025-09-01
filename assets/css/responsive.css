@@ -533,7 +533,7 @@
     }
 
     /* === MODIFIED: Revert Cart Sidebar to full-height on mobile === */
-@media (max-width: 480px) {
+@media (max-width: 250px) {
     .cart-sidebar {
         width: 90%;
         max-width: 320px;
