@@ -378,7 +378,7 @@
 }
 
 /* Mobile Portrait - 480px and down */
-@media (max-width: 480px) {
+@media (max-width: 250px) {
     /* Very small mobile screens */
     .hero-title {
         font-size: 28px;
