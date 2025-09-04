@@ -668,29 +668,27 @@
     }
 }
 
+/* Scroll to Top Button in responsive.css */
 #scrollToTopBtn {
-  display: none; /* Hide the button by default */
-  position: fixed; /* Keep the button in a fixed position on the screen */
-  bottom: 20px; /* Position it 20 pixels from the bottom */
-  right: 20px; /* Position it 20 pixels from the right */
-  z-index: 99; /* Make sure it's on top of other elements */
-  border: none;
-  outline: none;
-  background-color: #555; /* A subtle dark background color */
-  color: white;
-  cursor: pointer;
-  padding: 15px;
-  border-radius: 10px;
-  font-size: 18px;
-  opacity: 0.8;
-  transition: opacity 0.3s;
+  position: fixed;
+  bottom: 30px;
+  right: 30px;  /* Correctly positioned on the right */
+  z-index: 100;
+  background-color: #EA3B52;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%; /* Makes it circular */
+  display: none; 
+  justify-content: center;
+  align-items: center;
+}
+
+#scrollToTopBtn.show {
+  display: flex; /* Use 'flex' to show the button and apply centering */
 }
 
 #scrollToTopBtn:hover {
-  opacity: 1;
-}
-
-/* Show the button when the user scrolls down */
-.show-scroll-btn {
-  display: block;
+  background-color: #86BE4E; /* Use theme's hover green */
+  transform: translateY(-4px); /* Lift effect on hover */
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
 }
