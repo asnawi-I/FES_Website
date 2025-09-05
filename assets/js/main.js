@@ -274,26 +274,6 @@ function scrollToSection(selector) {
     }
 }
 
-// Get the button
-const scrollToTopBtn = document.getElementById("scrollToTopBtn");
-
-// When user scrolls down 20px from the top of the document, show the button
-window.onscroll = function() {
-  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-    scrollToTopBtn.classList.add("show");
-  } else {
-    scrollToTopBtn.classList.remove("show");
-  }
-};
-
-// When user clicks on the button, scroll to the top of the document
-scrollToTopBtn.addEventListener("click", () => {
-  window.scrollTo({
-    top: 0,
-    behavior: 'smooth'
-  });
-});
-
 // Testimonial Carousel Logic
 function initializeTestimonialCarousel() {
     const slider = document.getElementById('testimonialSlider');
