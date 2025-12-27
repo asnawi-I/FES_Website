@@ -873,6 +873,95 @@
             visibility: visible;
         }
 
+        /* Clear Cart Popup */
+.clear-cart-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    border-radius: 12px;
+    padding: 32px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    z-index: 2001;
+    max-width: 400px;
+    width: 90%;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.clear-cart-popup.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.popup-icon {
+    width: 60px;
+    height: 60px;
+    background: #FEF2F2;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    color: #EF4444;
+    font-size: 28px;
+}
+
+.popup-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #111827;
+    text-align: center;
+    margin-bottom: 12px;
+}
+
+.popup-message {
+    font-size: 14px;
+    color: #6B7280;
+    text-align: center;
+    margin-bottom: 24px;
+    line-height: 1.5;
+}
+
+.popup-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.popup-btn-cancel {
+    flex: 1;
+    background: white;
+    color: #6B7280;
+    border: 1px solid #E5E7EB;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.popup-btn-cancel:hover {
+    background: #F9FAFB;
+}
+
+.popup-btn-confirm {
+    flex: 1;
+    background: #EF4444;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.popup-btn-confirm:hover {
+    background: #DC2626;
+}
+
         /* Responsive */
         @media (max-width: 1200px) {
             .hero-container {
@@ -1389,6 +1478,20 @@
         </div>
     </div>
 
+    <!-- Clear Cart Popup -->
+    <div class="overlay" id="clearCartOverlay" onclick="hideClearCartPopup()"></div>
+    <div class="clear-cart-popup" id="clearCartPopup">
+        <div class="popup-icon">
+            <i class="fas fa-trash-alt"></i>
+        </div>
+        <h3 class="popup-title">Clear Cart?</h3>
+        <p class="popup-message">Are you sure you want to remove all items from your cart? This action cannot be undone.</p>
+        <div class="popup-actions">
+            <button class="popup-btn-cancel" onclick="hideClearCartPopup()">Cancel</button>
+            <button class="popup-btn-confirm" onclick="confirmClearCart()">Clear Cart</button>
+        </div>
+    </div>
+
     <script>
         // Cart and product management
         let cart = [];
@@ -1591,11 +1694,26 @@
         }
 
         function clearCart() {
-            if (confirm('Are you sure you want to clear all items from your cart?')) {
-                cart = [];
-                updateCartUI();
-            }
-        }
+    showClearCartPopup();
+    }
+
+    function showClearCartPopup() {
+        document.getElementById('clearCartPopup').classList.add('active');
+        document.getElementById('clearCartOverlay').classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function hideClearCartPopup() {
+        document.getElementById('clearCartPopup').classList.remove('active');
+        document.getElementById('clearCartOverlay').classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    function confirmClearCart() {
+        cart = [];
+        updateCartUI();
+        hideClearCartPopup();
+    }
 
         function toggleCart() {
             const sidebar = document.getElementById('cartSidebar');
