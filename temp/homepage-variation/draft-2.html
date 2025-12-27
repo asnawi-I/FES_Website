@@ -618,8 +618,37 @@
             color: #111827;
         }
 
+        .cart-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .clear-cart-btn {
+            background: white;
+            color: #EF4444;
+            border: 1px solid #FEE2E2;
+            padding: 16px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .clear-cart-btn:hover {
+            background: #FEF2F2;
+            border-color: #EF4444;
+        }
+
+        .clear-cart-btn:disabled {
+            background: #F9FAFB;
+            color: #D1D5DB;
+            border-color: #E5E7EB;
+            cursor: not-allowed;
+        }
+
         .checkout-btn {
-            width: 100%;
+            flex: 1;
             background: #10B981;
             color: white;
             border: none;
@@ -1030,6 +1059,15 @@
                 padding: 20px 16px;
             }
 
+            .cart-actions {
+                flex-direction: column;
+            }
+
+            .clear-cart-btn,
+            .checkout-btn {
+                width: 100%;
+            }
+
             /* Order form adjustments */
             .order-modal {
                 padding: 0;
@@ -1248,9 +1286,14 @@
                 <span>Total Items:</span>
                 <span id="cartTotal">0</span>
             </div>
-            <button class="checkout-btn" id="checkoutBtn" onclick="showOrderForm()" disabled>
-                Proceed to Checkout
-            </button>
+            <div class="cart-actions">
+                <button class="clear-cart-btn" id="clearCartBtn" onclick="clearCart()" disabled>
+                    Clear Cart
+                </button>
+                <button class="checkout-btn" id="checkoutBtn" onclick="showOrderForm()" disabled>
+                    Proceed to Checkout
+                </button>
+            </div>
         </div>
     </div>
 
@@ -1317,7 +1360,7 @@
                                     </optgroup>
                                 </select>
                             </div>
-                            <div class="form-group full-width">
+                            <!--  <div class="form-group full-width">
                                 <label class="form-label">Order Priority *</label>
                                 <select class="form-select" name="urgencyLevel" required>
                                     <option value="">Select priority level</option>
@@ -1325,7 +1368,7 @@
                                     <option value="urgent">Urgent (1 hour preparation) - Priority handling</option>
                                     <option value="express">Express (30 minutes preparation) - Immediate priority</option>
                                 </select>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
 
@@ -1500,6 +1543,7 @@
             const cartCount = document.getElementById('cartCount');
             const cartTotal = document.getElementById('cartTotal');
             const checkoutBtn = document.getElementById('checkoutBtn');
+            const clearCartBtn = document.getElementById('clearCartBtn');
             const cartItems = document.getElementById('cartItems');
             
             const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
@@ -1508,9 +1552,11 @@
                 cartCount.textContent = totalItems;
                 cartCount.style.display = 'flex';
                 checkoutBtn.disabled = false;
+                clearCartBtn.disabled = false;
             } else {
                 cartCount.style.display = 'none';
                 checkoutBtn.disabled = true;
+                clearCartBtn.disabled = true;
             }
             
             cartTotal.textContent = totalItems;
@@ -1542,6 +1588,13 @@
                     </div>
                 </div>
             `).join('');
+        }
+
+        function clearCart() {
+            if (confirm('Are you sure you want to clear all items from your cart?')) {
+                cart = [];
+                updateCartUI();
+            }
         }
 
         function toggleCart() {
