@@ -27,8 +27,8 @@ function setupEventListeners() {
     // Close modal when clicking outside
     window.addEventListener('click', function(e) {
         var orderModal = document.getElementById('orderModal');
-        if (e.target === cartModal) {
-            cartModal.style.display = 'none';
+        if (e.target === orderModal) {
+            orderModal.style.display = 'none';
         }
     });
 
