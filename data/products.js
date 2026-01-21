@@ -353,14 +353,14 @@ var products = [
 
 // Category definitions
 var categories = [
-    { id: 'all', name: 'All Products', icon: '🛍️' },
-    { id: 'fresh', name: 'Fresh Produce', icon: '🥬' },
-    { id: 'dairy', name: 'Dairy & Eggs', icon: '🥛' },
-    { id: 'meat', name: 'Meat & Seafood', icon: '🥩' },
-    { id: 'pantry', name: 'Pantry', icon: '🍚' },
-    { id: 'frozen', name: 'Frozen', icon: '🧊' },
-    { id: 'snacks', name: 'Snacks', icon: '🍿' },
-    { id: 'household', name: 'Household', icon: '🧽' }
+    { id: 'all', name: 'All Products', icon: '' },
+    { id: 'fresh', name: 'Fresh Produce', icon: '' },
+    { id: 'dairy', name: 'Dairy & Eggs', icon: '' },
+    { id: 'meat', name: 'Meat & Seafood', icon: '' },
+    { id: 'pantry', name: 'Pantry', icon: '' },
+    { id: 'frozen', name: 'Frozen', icon: '' },
+    { id: 'snacks', name: 'Snacks', icon: '' },
+    { id: 'household', name: 'Household', icon: '' }
 ];
 
 // Store locations
