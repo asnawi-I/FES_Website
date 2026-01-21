@@ -109,7 +109,7 @@ function createProductCard(product) {
     html += '<div class="product-image">';
     html += `<img src="${product.image}" alt="${product.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">`;
     html += '<div class="placeholder" style="display: none;">';
-    html += '<div>📦</div>';
+    html += '<div></div>';
     html += '<div>img</div>';
     html += '</div>';
     html += '<div class="price-badge">Price on Inquiry</div>';
