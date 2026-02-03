@@ -16,11 +16,11 @@
 <body>
     <div class="floating-categories" id="floatingCategories">
         <div class="floating-category-scroll">
-            <div class="floating-category-pill active" onclick="filterProductsFloating('all')">🛍️ All</div>
+            <div class="floating-category-pill active" onclick="filterProductsFloating('all')">🛒 All</div>
             <div class="floating-category-pill" onclick="filterProductsFloating('fresh')">🥬 Fresh</div>
             <div class="floating-category-pill" onclick="filterProductsFloating('dairy')">🥛 Dairy</div>
             <div class="floating-category-pill" onclick="filterProductsFloating('meat')">🥩 Meat</div>
-            <div class="floating-category-pill" onclick="filterProductsFloating('pantry')">🍚 Pantry</div>
+            <div class="floating-category-pill" onclick="filterProductsFloating('pantry')">🌾 Pantry</div>
             <div class="floating-category-pill" onclick="filterProductsFloating('frozen')">🧊 Frozen</div>
             <div class="floating-category-pill" onclick="filterProductsFloating('snacks')">🍿 Snacks</div>
             <div class="floating-category-pill" onclick="filterProductsFloating('household')">🧽 Household</div>
@@ -109,7 +109,7 @@
             
             <div class="categories-grid">
                 <div class="category-card active" onclick="filterProducts('all')">
-                    <span class="category-icon">🛍️</span>
+                    <span class="category-icon">🛒</span>
                     <div class="category-name">All Products</div>
                 </div>
                 <div class="category-card" onclick="filterProducts('fresh')">
@@ -125,7 +125,7 @@
                     <div class="category-name">Meat & Seafood</div>
                 </div>
                 <div class="category-card" onclick="filterProducts('pantry')">
-                    <span class="category-icon">🍚</span>
+                    <span class="category-icon">🌾</span>
                     <div class="category-name">Pantry</div>
                 </div>
                 <div class="category-card" onclick="filterProducts('frozen')">
@@ -157,7 +157,7 @@
             </div>
             
             <div class="products-grid" id="productsGrid">
-                </div>
+            </div>
         </div>
     </section>
 
@@ -286,43 +286,44 @@
         </div>
     </section>
 
-<section class="how-it-works">
-    <div class="how-container">
-        <div class="section-header">
-            <h2 class="section-title">How It Works</h2>
-            <p class="section-subtitle">Simple steps to get fresh groceries delivered to you</p>
+    <section class="how-it-works">
+        <div class="how-container">
+            <div class="section-header">
+                <h2 class="section-title">How It Works</h2>
+                <p class="section-subtitle">Simple steps to get fresh groceries delivered to you</p>
+            </div>
+            <div class="collections-grid">
+                <div class="collection-card">
+                    <div class="collection-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3 class="collection-title">Browse & Select</h3>
+                    <p class="collection-description">Browse our catalog and add items to your inquiry cart</p>
+                </div>
+                <div class="collection-card">
+                    <div class="collection-icon">
+                        <i class="fas fa-paper-plane"></i>
+                    </div>
+                    <h3 class="collection-title">Submit Order</h3>
+                    <p class="collection-description">Fill out your details and submit your order inquiry</p>
+                </div>
+                <div class="collection-card">
+                    <div class="collection-icon">
+                        <i class="fab fa-whatsapp"></i>
+                    </div>
+                    <h3 class="collection-title">Get Pricing</h3>
+                    <p class="collection-description">Receive pricing and availability via WhatsApp</p>
+                </div>
+                <div class="collection-card">
+                    <div class="collection-icon">
+                        <i class="fas fa-shopping-bag"></i>
+                    </div>
+                    <h3 class="collection-title">Pay & Pickup</h3>
+                    <p class="collection-description">Make payment and pickup your fresh groceries</p>
+                </div>
+            </div>
         </div>
-        <div class="collections-grid"> <div class="collection-card"> <div class="collection-icon">
-                    <i class="fas fa-search"></i>
-                </div>
-                <h3 class="collection-title">Browse & Select</h3>
-                <p class="collection-description">Browse our catalog and add items to your inquiry cart</p>
-            </div>
-            <div class="collection-card">
-                <div class="collection-icon">
-                    <i class="fas fa-paper-plane"></i>
-                </div>
-                <h3 class="collection-title">Submit Order</h3>
-                <p class="collection-description">Fill out your details and submit your order inquiry</p>
-            </div>
-            <div class="collection-card">
-                <div class="collection-icon">
-                    <i class="fab fa-whatsapp"></i>
-                </div>
-                <h3 class="collection-title">Get Pricing</h3>
-                <p class="collection-description">Receive pricing and availability via WhatsApp</p>
-            </div>
-            <div class="collection-card">
-                <div class="collection-icon">
-                    <i class="fas fa-shopping-bag"></i>
-                </div>
-                <h3 class="collection-title">Pay & Pickup</h3>
-                <p class="collection-description">Make payment and pickup your fresh groceries</p>
-            </div>
-        </div>
-    </div>
-</section>
-
+    </section>
 
     <div class="order-modal" id="orderModal">
         <div class="order-form">
@@ -335,7 +336,7 @@
                     <div class="form-section">
                         <h3 class="form-section-title">Order Summary</h3>
                         <div class="order-summary" id="orderSummary">
-                            </div>
+                        </div>
                     </div>
 
                     <div class="form-section">
@@ -443,32 +444,32 @@
 
     <div class="overlay" id="cartOverlay"></div>
 
-<div class="cart-sidebar" id="cartSidebar">
-    <div class="cart-header">
-        <h3 class="cart-title">Your Order Inquiry</h3>
-        <button class="close-cart" onclick="toggleCart()">
-            <i class="fas fa-times"></i>
-        </button>
-    </div>
-    
-    <div class="cart-items" id="cartItems">
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h3 class="cart-title">Your Order Inquiry</h3>
+            <button class="close-cart" onclick="toggleCart()">
+                <i class="fas fa-times"></i>
+            </button>
         </div>
-    
-    <div class="cart-footer">
-        <div class="cart-actions">
-            <div class="cart-total">
-                Total Items: <span id="cartTotal">0</span>
+        
+        <div class="cart-items" id="cartItems">
+        </div>
+        
+        <div class="cart-footer">
+            <div class="cart-actions">
+                <div class="cart-total">
+                    Total Items: <span id="cartTotal">0</span>
+                </div>
+                <button class="clear-cart" onclick="clearCart()">Clear All</button>
             </div>
-            <button class="clear-cart" onclick="clearCart()">Clear All</button>
+            <button class="checkout-btn" id="checkoutBtn" onclick="showOrderForm()" disabled>
+                Proceed to Checkout
+            </button>
         </div>
-        <button class="checkout-btn" id="checkoutBtn" onclick="showOrderForm()" disabled>
-            Proceed to Checkout
-        </button>
     </div>
-</div>
 
-    
-
+    <!-- Script -->
+    <script src="assets/js/shared-image-store.js"></script>
     <script src="data/products.js"></script>
     <script src="assets/js/cart.js"></script>
     <script src="assets/js/orders.js"></script>
