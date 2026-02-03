@@ -277,18 +277,18 @@ function handleImageFallback(imgElement, productId, category) {
  */
 function updatePlaceholderIcon(placeholder, category) {
     const categoryIcons = {
-        'fresh': '🥬',
-        'dairy': '🥛',
-        'meat': '🥩',
-        'pantry': '🍚',
-        'frozen': '🧊',
-        'snacks': '🍿',
-        'household': '🧽'
+        'fresh': '',
+        'dairy': '',
+        'meat': '',
+        'pantry': '',
+        'frozen': '',
+        'snacks': '',
+        'household': ''
     };
 
     const iconElement = placeholder.querySelector('div:first-child');
     if (iconElement) {
-        iconElement.textContent = categoryIcons[category] || '📦';
+        iconElement.textContent = categoryIcons[category] || '';
     }
 }
 

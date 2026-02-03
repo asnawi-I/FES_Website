@@ -62,8 +62,8 @@ function setupEventListeners() {
     // Close modal when clicking outside
     window.addEventListener('click', function(e) {
         var orderModal = document.getElementById('orderModal');
-        if (e.target === cartModal) {
-            cartModal.style.display = 'none';
+        if (e.target === orderModal) {
+            orderModal.style.display = 'none';
         }
     });
 
@@ -159,6 +159,7 @@ function createProductCard(product) {
 
     var html = `<div class="product-card" data-product-id="${product.id}">`;
     html += '<div class="product-image">';
+<<<<<<< HEAD
     
     // Check if product has image from SharedImageStore
     const hasImage = (typeof SharedImageStore !== 'undefined' && SharedImageStore.hasImage(product.id)) || (product.image && product.image.startsWith('data:'));
@@ -172,6 +173,11 @@ function createProductCard(product) {
     }
     
     html += '<div>📦</div>';
+=======
+    html += `<img src="${product.image}" alt="${product.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">`;
+    html += '<div class="placeholder" style="display: none;">';
+    html += '<div></div>';
+>>>>>>> fd70bf57c50523af8e3f4f2dc485ff18fd21220a
     html += '<div>img</div>';
     html += '</div>';
     html += '<div class="price-badge">Price on Inquiry</div>';
