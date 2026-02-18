@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - First Emporium</title>
+    <style>
+        /* temp css */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            padding: 40px 20px;
+            background: #ffffff;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            border: 2px solid #000;
+            padding: 30px;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+            color: #000;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+            color: #000;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #000;
+            background: #fff;
+            font-size: 14px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .checkbox-group label {
+            margin-bottom: 0;
+        }
+
+        .forgot-password {
+            text-align: right;
+            margin-top: -10px;
+            margin-bottom: 15px;
+        }
+
+        .forgot-password a {
+            font-size: 12px;
+            color: #000;
+            text-decoration: underline;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #000;
+            color: #fff;
+            border: 2px solid #000;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #333;
+        }
+
+        button:disabled {
+            background: #ccc;
+            border-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .error-message,
+        .success-message,
+        .warning-message,
+        .locked-message {
+            padding: 12px;
+            border: 2px solid #000;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .error-message {
+            background: #fff;
+        }
+
+        .success-message {
+            background: #fff;
+        }
+
+        .warning-message {
+            background: #fff;
+        }
+
+        .locked-message {
+            background: #fff;
+            text-align: center;
+        }
+
+        .show {
+            display: block;
+        }
+
+        .required {
+            color: #000;
+        }
+
+        .signup-link {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        a {
+            color: #000;
+            text-decoration: underline;
+        }
+
+        small {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .countdown-timer {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .form-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .signup-link p {
+            margin-bottom: 10px;
+        }
+
+        .signup-link p:last-child a {
+            font-size: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>First Emporium Admin</h1>
+        <p class="subtitle">Login to Admin Dashboard</p>
+
+        <!-- Error Message (Incorrect credentials) -->
+        <div id="errorMessage" class="error-message">
+            The email-password you entered is incorrect, try again.
+        </div>
+
+        <!-- attempts remaining message appear after 2 fail attemps -->
+        <div id="attemptsWarning" class="error-message">
+            Warning: You have <strong id="remainingAttempts">3</strong> attempts remaining before your account will be locked for 10 minutes.
+        </div>
+
+        <!-- Warning Message (Second attempt) -->
+        <div id="warningMessage" class="warning-message">
+            Your account has been temporarily disabled. Please wait 10 minutes before trying again. If this wasn't you, please contact the superadmin for support.
+        </div>
+
+        <!-- Account Locked Message (Third attempt) -->
+        <div id="lockedMessage" class="locked-message">
+            <p><strong>Account Disabled</strong></p>
+            <p>Your account has been permanently disabled due to suspicious activity. Please contact superadmin for support.</p>
+        </div>
+
+        <!-- Temporary Lock Countdown -->
+        <div id="tempLockMessage" class="locked-message">
+            <p><strong>Account Temporarily Locked</strong></p>
+            <p>Too many failed login attempts. Please wait:</p>
+            <div class="countdown-timer" id="countdownTimer">10:00</div>
+            <p><small>Your account will be unlocked automatically after the countdown.</small></p>
+        </div>
+
+        <!-- Login Form -->
+        <form id="adminLoginForm">
+            <!-- Username/Email -->
+            <div class="form-group">
+                <label for="email">Username/Email <span class="required">*</span></label>
+                <input 
+                    type="email" 
+                    id="email" 
+                    name="email" 
+                    placeholder="Enter your email address/username"
+                    required
+                >
+            </div>
+
+            <!-- password -->
+            <div class="form-group">
+                <label for="password">Password <span class="required">*</span></label>
+                <input 
+                    type="password" 
+                    id="password" 
+                    name="password" 
+                    placeholder="Enter your password"
+                    required
+                >
+            </div>
+
+            <!-- forgot password link -->
+            <div class="forgot-password">
+                <a href="admin-forgot-password.html">Forgot Password?</a>
+            </div>
+
+            <!-- remember me -->
+            <div class="form-footer">
+                <div class="checkbox-group">
+                    <input 
+                        type="checkbox" 
+                        id="rememberMe" 
+                        name="rememberMe"
+                    >
+                    <label for="rememberMe">Remember me</label>
+                </div>
+            </div>
+
+            <!-- submit button -->
+            <button type="submit" id="loginBtn">
+                Login
+            </button>
+        </form>
+
+        <!-- sign up and t&c -->
+        <div class="signup-link">
+            <p>Don't have an account? <a href="admin-signup.html">Sign up here</a></p>
+            <p><a id="tc" href="#">Terms and Conditions</a></p>
+        </div>
+
+
+    </div>
+
+    <script>
+    // Get form and elements
+    const form = document.getElementById('adminLoginForm');
+    const errorMessage = document.getElementById('errorMessage');
+    const attemptsWarning = document.getElementById('attemptsWarning');
+    const warningMessage = document.getElementById('warningMessage');
+    const lockedMessage = document.getElementById('lockedMessage');
+    const tempLockMessage = document.getElementById('tempLockMessage');
+    const loginBtn = document.getElementById('loginBtn');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+
+    // Track login attempts and lock periods
+    let failedAttempts = parseInt(localStorage.getItem('failedAttempts') || '0');
+    let lockPeriod = parseInt(localStorage.getItem('lockPeriod') || '0'); // 0, 1, or 2
+    let lockoutTime = parseInt(localStorage.getItem('lockoutTime') || '0');
+    let isAccountDisabled = localStorage.getItem('accountDisabled') === 'true';
+
+    // Check if account is permanently disabled
+    if (isAccountDisabled) {
+        showAccountDisabled();
+    }
+
+    // Check if account is temporarily locked
+    if (lockoutTime > Date.now()) {
+        showTemporaryLock(lockoutTime);
+    }
+
+    // Handle form submission
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        // Check if account is disabled or locked
+        if (isAccountDisabled) {
+            showAccountDisabled();
+            return;
+        }
+
+        if (lockoutTime > Date.now()) {
+            showTemporaryLock(lockoutTime);
+            return;
+        }
+
+        // Hide all messages
+        hideAllMessages();
+
+        // Get form values
+        const email = emailInput.value.trim();
+        const password = passwordInput.value;
+
+        // Validation
+        if (!email || !password) {
+            alert('Please fill in all required fields.');
+            return;
+        }
+
+        // Disable submit button
+        loginBtn.disabled = true;
+        loginBtn.textContent = 'Logging in...';
+
+        // SIMULATED: Login attempt
+        attemptLogin(email, password);
+    });
+
+    // SIMULATED: Attempt login
+    function attemptLogin(email, password) {
+        // Replace this with actual API call
+        setTimeout(() => {
+            // SIMULATED: Check credentials (replace with real API)
+            const isValidLogin = checkCredentials(email, password);
+
+            if (isValidLogin) {
+                // Successful login - reset everything
+                failedAttempts = 0;
+                lockPeriod = 0;
+                localStorage.setItem('failedAttempts', '0');
+                localStorage.setItem('lockPeriod', '0');
+                localStorage.removeItem('lockoutTime');
+                
+                // Redirect to dashboard
+                console.log('Login successful! Redirecting to dashboard...');
+                alert('Login successful! (Would redirect to dashboard)');
+                
+            } else {
+                // Failed login
+                handleFailedLogin(email);
+            }
+
+            // Re-enable button
+            loginBtn.disabled = false;
+            loginBtn.textContent = 'Login';
+
+        }, 1000);
+    }
+
+    // SIMULATED: Check credentials
+    function checkCredentials(email, password) {
+        // Replace with actual backend authentication
+        // For demo: correct login is admin@firstemporium.com / password123
+        return email === 'admin@firstemporium.com' && password === 'password123';
+    }
+
+    
+// Handle failed login attempts
+function handleFailedLogin(email) {
+    failedAttempts++;
+    localStorage.setItem('failedAttempts', failedAttempts.toString());
+
+    console.log(`Failed login attempt ${failedAttempts} (Lock Period ${lockPeriod})`);
+
+    // Check if we've reached 5 failed attempts
+    if (failedAttempts >= 5) {
+        
+        if (lockPeriod === 0) {
+            // First lock period - 10 minute lock
+            console.log('First lock period triggered');
+            lockPeriod = 1;
+            localStorage.setItem('lockPeriod', '1');
+            
+            const lockDuration = 10 * 60 * 1000; // 10 minutes
+            lockoutTime = Date.now() + lockDuration;
+            localStorage.setItem('lockoutTime', lockoutTime.toString());
+            
+            // Reset failed attempts for next period
+            failedAttempts = 0;
+            localStorage.setItem('failedAttempts', '0');
+            
+            sendEmailNotification(email, 'first_lock');
+            showTemporaryLock(lockoutTime);
+            
+        } else if (lockPeriod === 1) {
+            // Second lock period - another 10 minute lock
+            console.log('Second lock period triggered');
+            lockPeriod = 2;
+            localStorage.setItem('lockPeriod', '2');
+            
+            const lockDuration = 10 * 60 * 1000; // 10 minutes
+            lockoutTime = Date.now() + lockDuration;
+            localStorage.setItem('lockoutTime', lockoutTime.toString());
+            
+            // Reset failed attempts for next period
+            failedAttempts = 0;
+            localStorage.setItem('failedAttempts', '0');
+            
+            sendEmailNotification(email, 'second_lock');
+            showTemporaryLock(lockoutTime);
+            
+        } else if (lockPeriod >= 2) {
+            // Third lock period - permanent disable
+            console.log('Account permanently disabled');
+            isAccountDisabled = true;
+            localStorage.setItem('accountDisabled', 'true');
+            
+            sendEmailNotification(email, 'account_disabled');
+            showAccountDisabled();
+        }
+        
+    } else {
+        // Less than 5 attempts - show error
+        errorMessage.classList.add('show');
+        
+        // Show attempts warning after 2 failures
+        if (failedAttempts >= 2) {
+            const remaining = 5 - failedAttempts;
+            document.getElementById('remainingAttempts').textContent = remaining;
+            attemptsWarning.classList.add('show');
+        }
+        
+        console.log(`${5 - failedAttempts} attempts remaining before lock`);
+    }
+}
+
+    // Show temporary lock with countdown
+    function showTemporaryLock(unlockTime) {
+        hideAllMessages();
+        form.style.display = 'none';
+        tempLockMessage.classList.add('show');
+
+        // Start countdown timer
+        const countdownInterval = setInterval(() => {
+            const remaining = unlockTime - Date.now();
+
+            if (remaining <= 0) {
+                clearInterval(countdownInterval);
+                
+                // Lock expired - show form again
+                localStorage.removeItem('lockoutTime');
+                
+                tempLockMessage.classList.remove('show');
+                form.style.display = 'block';
+                
+                console.log(`Lock period ${lockPeriod} expired. Can attempt login again.`);
+            } else {
+                // Display remaining time
+                const minutes = Math.floor(remaining / 60000);
+                const seconds = Math.floor((remaining % 60000) / 1000);
+                document.getElementById('countdownTimer').textContent = 
+                    `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            }
+        }, 1000);
+    }
+
+    // Show account disabled message
+    function showAccountDisabled() {
+        hideAllMessages();
+        form.style.display = 'none';
+        lockedMessage.classList.add('show');
+    }
+
+    // Hide all messages
+    function hideAllMessages() {
+        errorMessage.classList.remove('show');
+        attemptsWarning.classList.remove('show');
+        warningMessage.classList.remove('show');
+        lockedMessage.classList.remove('show');
+        tempLockMessage.classList.remove('show');
+    }
+
+    // SIMULATED: Send email notification
+    function sendEmailNotification(email, type) {
+        console.log(`Sending ${type} email notification to ${email}`);
+        
+        // Replace with actual email API call
+        const emailMessages = {
+            'first_lock': 'Your account has been temporarily disabled for 10 minutes due to multiple failed login attempts. This is your first warning.',
+            'second_lock': 'Your account has been temporarily disabled for 10 minutes again. This is your second warning. One more lockout will result in permanent account disable.',
+            'account_disabled': 'Your account has been permanently disabled due to suspicious activity. Please contact superadmin for support.'
+        };
+
+        // TODO: Implement actual email sending
+    }
+
+    // Clear lockout for testing (remove in production)
+    // Uncomment to reset: localStorage.clear();
+</script>
+</body>
+</html>
