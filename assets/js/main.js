@@ -13,10 +13,45 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Initialize the application
 function initializePage() {
+    // Initialize SharedImageStore with products data
+    if (typeof SharedImageStore !== 'undefined' && typeof products !== 'undefined') {
+        SharedImageStore.init(products);
+        
+        // Sync images from store to products array
+        SharedImageStore.syncToProducts(products);
+        
+        // Subscribe to image changes
+        SharedImageStore.subscribe(handleProductImageChange);
+        
+        console.log('✅ Main page connected to SharedImageStore');
+        console.log('📊 Store stats:', SharedImageStore.getStats());
+    }
+    
     renderProducts();
     updateCartCount();
-    initializeTestimonialCarousel(); // Initialize the carousel on page load
+    initializeTestimonialCarousel();
     console.log('First Emporium initialized successfully');
+}
+
+// Handle image changes from admin or other pages
+function handleProductImageChange(event) {
+    console.log('📥 Main page received image change:', event.type, 'for product', event.productId);
+    
+    if (typeof products === 'undefined') return;
+    
+    const product = products.find(p => p.id === event.productId);
+    if (!product) return;
+    
+    if (event.type === 'image-updated') {
+        product.image = event.imageData;
+        console.log('✅ Updated product image in main page');
+    } else if (event.type === 'image-deleted') {
+        product.image = null;
+        console.log('🗑️ Deleted product image in main page');
+    }
+    
+    // Re-render products to show the change
+    renderProducts();
 }
 
 // Setup event listeners
@@ -68,6 +103,15 @@ function renderProducts() {
 
     for (var i = 0; i < filteredProducts.length; i++) {
         var product = filteredProducts[i];
+        
+        // Get image from SharedImageStore if available
+        if (typeof SharedImageStore !== 'undefined') {
+            const storedImage = SharedImageStore.getImage(product.id);
+            if (storedImage) {
+                product.image = storedImage;
+            }
+        }
+        
         html += createProductCard(product);
     }
 
@@ -84,10 +128,18 @@ function getFilteredProducts() {
     });
 }
 
-
 function createProductCard(product) {
     const existingItem = findCartItem(product.id);
     const quantity = existingItem ? existingItem.quantity : 1;
+    
+    // *** CRITICAL: Always check SharedImageStore for the latest image ***
+    if (typeof SharedImageStore !== 'undefined') {
+        const storedImage = SharedImageStore.getImage(product.id);
+        if (storedImage) {
+            product.image = storedImage;
+            console.log(`📸 Using image from SharedImageStore for product ${product.id}`);
+        }
+    }
     
     const actionButtonHtml = !existingItem
         ? `<button class="add-to-cart" onclick="addToCart(${product.id})">Add to Cart</button>`
@@ -107,9 +159,25 @@ function createProductCard(product) {
 
     var html = `<div class="product-card" data-product-id="${product.id}">`;
     html += '<div class="product-image">';
+<<<<<<< HEAD
+    
+    // Check if product has image from SharedImageStore
+    const hasImage = (typeof SharedImageStore !== 'undefined' && SharedImageStore.hasImage(product.id)) || (product.image && product.image.startsWith('data:'));
+    
+    if (hasImage) {
+        html += `<img src="${product.image}" alt="${product.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">`;
+        html += '<div class="placeholder" style="display: none;">';
+    } else {
+        html += `<img src="${product.image}" alt="${product.name}" style="display:none" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">`;
+        html += '<div class="placeholder" style="display: flex;">';
+    }
+    
+    html += '<div>📦</div>';
+=======
     html += `<img src="${product.image}" alt="${product.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">`;
     html += '<div class="placeholder" style="display: none;">';
     html += '<div></div>';
+>>>>>>> fd70bf57c50523af8e3f4f2dc485ff18fd21220a
     html += '<div>img</div>';
     html += '</div>';
     html += '<div class="price-badge">Price on Inquiry</div>';
@@ -174,7 +242,6 @@ function updateQuantityOnCard(productId, change) {
     }
 }
 
-
 // Filter products by category
 function filterProducts(category) {
     currentFilter = category;
@@ -205,7 +272,6 @@ function updateActiveCategory(isFloating) {
     document.querySelector(`.floating-category-pill[onclick*="('${currentFilter}')"]`)?.classList.add('active');
 }
 
-
 // Search products
 function searchProducts(searchTerm) {
     var grid = document.getElementById('productsGrid');
@@ -223,6 +289,15 @@ function searchProducts(searchTerm) {
     var html = '';
     for (var i = 0; i < filteredProducts.length; i++) {
         var product = filteredProducts[i];
+        
+        // Get image from SharedImageStore if available
+        if (typeof SharedImageStore !== 'undefined') {
+            const storedImage = SharedImageStore.getImage(product.id);
+            if (storedImage) {
+                product.image = storedImage;
+            }
+        }
+        
         html += createProductCard(product);
     }
 
@@ -256,7 +331,6 @@ function focusSearch() {
     }
 }
 
-
 // Utility function to get total cart items
 function getTotalCartItems() {
     var total = 0;
@@ -288,7 +362,7 @@ function initializeTestimonialCarousel() {
     let endX = 0;
 
     // Create dots
-    dotsContainer.innerHTML = ''; // Clear existing dots
+    dotsContainer.innerHTML = '';
     slides.forEach((_, i) => {
         const dot = document.createElement('div');
         dot.classList.add('testimonial-dot');
@@ -318,14 +392,12 @@ function initializeTestimonialCarousel() {
         endX = e.changedTouches[0].clientX;
         const diff = startX - endX;
 
-        if (Math.abs(diff) > 50) { // Swipe threshold
+        if (Math.abs(diff) > 50) {
             if (diff > 0) {
-                // Swiped left
                 if (currentIndex < slides.length - 1) {
                     goToSlide(currentIndex + 1);
                 }
             } else {
-                // Swiped right
                 if (currentIndex > 0) {
                     goToSlide(currentIndex - 1);
                 }
@@ -333,6 +405,5 @@ function initializeTestimonialCarousel() {
         }
     });
 
-    // Ensure initial state is correct
     goToSlide(0);
 }

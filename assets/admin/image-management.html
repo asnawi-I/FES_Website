@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Image Management - Admin Interface</title>
+    <title>Product Image Management - Synced</title>
     
     <link rel="stylesheet" href="assets/css/image-management.css">
 </head>
@@ -11,7 +11,26 @@
     <div class="admin-container">
         <div class="admin-header">
             <h1>Product Image Management</h1>
-            <p>Upload, optimize, and manage product images for First Emporium</p>
+            <p>Upload, manage, and organize product images for First Emporium</p>
+            <p style="font-size: 12px; color: #86BE4E; margin-top: 10px;">
+                ✅ <strong>Real-time Sync Active:</strong> Changes will automatically appear on the main website
+            </p>
+        </div>
+
+        <!-- Stats Section -->
+        <div class="stats-bar">
+            <div class="stat">
+                <div class="stat-number" id="totalProducts">0</div>
+                <div class="stat-label">Total Products</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number" id="withImages">0</div>
+                <div class="stat-label">With Images</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number" id="missingImages">0</div>
+                <div class="stat-label">Missing Images</div>
+            </div>
         </div>
 
         <!-- Image Upload Section -->
@@ -26,10 +45,14 @@
             </div>
 
             <div class="upload-area" id="uploadArea">
-                <div class="upload-icon"></div>
+                <div class="upload-icon">📁</div>
                 <p><strong>Click to upload</strong> or drag and drop image here</p>
                 <p>Supports JPG, PNG, WebP up to 5MB</p>
                 <input type="file" id="fileInput" class="file-input" accept="image/*">
+            </div>
+
+            <div class="preview-container" id="previewContainer">
+                <img id="previewImage" class="preview-image" alt="Preview">
             </div>
 
             <div class="progress-bar" id="progressBar">
@@ -37,8 +60,8 @@
             </div>
 
             <div style="display: flex; justify-content: center; margin-top: 20px;">
-                <button class="btn" style="width: 100%;" onclick="uploadSelectedImage()" id="uploadBtn" disabled>
-                    Upload Image
+                <button class="btn" style="width: 100%;" onclick="uploadImage()" id="uploadBtn" disabled>
+                    Upload Image & Sync to Website
                 </button>
             </div>
         </div>
@@ -48,71 +71,26 @@
             <h2>Product Image Status</h2>
             <div style="margin-bottom: 15px;">
                 <button class="btn btn-secondary" onclick="refreshProductStatus()">
-                    Refresh Status
+                    🔄 Refresh Status
                 </button>
-                <button class="btn" onclick="preloadAllImages()">
-                    Check All Images
+                <button class="btn" onclick="filterMissing()">
+                    📋 Show Only Missing
+                </button>
+                <button class="btn" onclick="filterAll()">
+                    🗂️ Show All
+                </button>
+                <button class="btn" style="background: #63CBD8;" onclick="debugSync()">
+                    🔍 Debug Sync
                 </button>
             </div>
             <div class="product-grid" id="productGrid">
                 <!-- Products will be populated by JavaScript -->
             </div>
         </div>
-
-        <!-- Management Tools Section -->
-        <div class="admin-section">
-            <h2>Management Tools</h2>
-            <div class="tools-section">
-                
-                <div class="tool-card">
-                    <div class="tool-icon"></div>
-                    <h3>Lazy Loading</h3>
-                    <p>Enable/disable lazy loading for better performance</p>
-                    <button class="btn" onclick="toggleLazyLoading()">
-                        Toggle Lazy Loading
-                    </button>
-                </div>
-
-                <div class="tool-card">
-                    <div class="tool-icon"></div>
-                    <h3>Image Optimization</h3>
-                    <p>Optimize all existing images for web</p>
-                    <button class="btn" onclick="optimizeAllImages()">
-                        Optimize Images
-                    </button>
-                </div>
-
-                <div class="tool-card">
-                    <div class="tool-icon"></div>
-                    <h3>Missing Images</h3>
-                    <p>View products without images</p>
-                    <button class="btn btn-secondary" onclick="showMissingImages()">
-                        Show Missing
-                    </button>
-                </div>
-
-                <div class="tool-card">
-                    <div class="tool-icon"></div>
-                    <h3>Clear Cache</h3>
-                    <p>Clear image cache and reload</p>
-                    <button class="btn btn-secondary" onclick="clearImageCache()">
-                        Clear Cache
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Missing Images List -->
-        <div class="admin-section" id="missingImagesSection" style="display: none;">
-            <h2>Missing Product Images</h2>
-            <div class="missing-images-list" id="missingImagesList">
-                <!-- Missing images will be populated here -->
-            </div>
-        </div>
     </div>
 
-    <!-- JavaScript Files -->
+    <!-- JScript -->
+    <script src="assets/js/shared-image-store.js"></script>
     <script src="assets/js/image-management.js"></script>
-    <script src="../assets/js/product-image-system.js"></script>
 </body>
 </html>
